@@ -1,14 +1,13 @@
 import { authStore } from '$stores/authStore';
 import { redirect } from '@sveltejs/kit';
-import { get } from 'svelte/store';
+import type { RequestEvent } from '../routes/$types';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://acc-api.jurmanovic.com/v1';
 
-async function fetchAPI(endpoint: string, method: string = 'GET', body?: object) {
-	const { token } = get(authStore);
+async function fetchAPI(endpoint: string, method: string = 'GET', body?: object, hdr?: object) {
 	const headers = {
 		'Content-Type': 'application/json',
-		Authorization: `Basic ${token}`
+		...(hdr ?? {})
 	};
 
 	const response = await fetch(`${BASE_URL}${endpoint}`, {
@@ -32,6 +31,17 @@ async function fetchAPI(endpoint: string, method: string = 'GET', body?: object)
 
 	if (response.headers.get('Content-Type') == 'application/json') return response.json();
 	return response.text();
+}
+
+export async function fetchAPIEvent(
+	event: object,
+	endpoint: string,
+	method: string = 'GET',
+	body?: object
+) {
+	const token = event.cookies.get('token');
+
+	return fetchAPI(endpoint, method, body, { Authorization: `Basic ${token}` });
 }
 
 export default fetchAPI;

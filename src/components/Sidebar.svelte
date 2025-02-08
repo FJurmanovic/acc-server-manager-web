@@ -1,11 +1,5 @@
 <script>
-	import { logout } from '$api/authService';
 	import { goto } from '$app/navigation';
-
-	function handleLogout() {
-		logout();
-		goto('/login');
-	}
 </script>
 
 <aside
@@ -36,13 +30,13 @@
 				</a>
 			</li>
 			<li>
-				<a
-					href="#"
-					onclick={handleLogout}
-					class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-				>
-					<span class="ms-3">Logout</span>
-				</a>
+				<form method="POST" action="/logout">
+					<button
+						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+					>
+						<span class="ms-3">Logout</span>
+					</button>
+				</form>
 			</li>
 		</ul>
 	</div>

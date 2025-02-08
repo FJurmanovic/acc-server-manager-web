@@ -1,21 +1,21 @@
-import fetchAPI from "$api/apiService";
+import { fetchAPIEvent } from '$api/apiService';
 
-export const getCarModels = async () => {
-  return fetchAPI("/lookup/car-models");
+export const getCarModels = async (event: object) => {
+	return fetchAPIEvent(event, '/lookup/car-models');
 };
 
-export const getCupCategories = async () => {
-  return fetchAPI("/lookup/cup-categories");
+export const getCupCategories = async (event: object) => {
+	return fetchAPIEvent(event, '/lookup/cup-categories');
 };
 
-export const getDriverCategories = async () => {
-  return fetchAPI("/lookup/driver-categories");
+export const getDriverCategories = async (event: object) => {
+	return fetchAPIEvent(event, '/lookup/driver-categories');
 };
 
-export const getSessionTypes = async () => {
-  return fetchAPI("/lookup/session-types");
+export const getSessionTypes = async (event: object) => {
+	return fetchAPIEvent(event, '/lookup/session-types');
 };
 
-export const getTracks = async () => {
-  return fetchAPI("/lookup/tracks");
+export const getTracks = async (event: object) => {
+	return fetchAPIEvent(event, '/lookup/tracks');
 };

@@ -1,43 +1,45 @@
-import fetchAPI from '$api/apiService';
+import { fetchAPIEvent } from '$api/apiService';
 
-export const getServers = async () => {
-	return fetchAPI('/server');
+export const getServers = async (event: object) => {
+	return fetchAPIEvent(event, '/server');
 };
 
-export const getConfigFiles = async (serverId = '') => {
-	return fetchAPI(`/server/${serverId}/config`);
+export const getConfigFiles = async (event: object, serverId = '') => {
+	return fetchAPIEvent(event, `/server/${serverId}/config`);
 };
 
-export const getConfigFile = async (serverId = '', file = '') => {
-	return fetchAPI(`/server/${serverId}/config/${file}`);
+export const getConfigFile = async (event: object, serverId = '', file = '') => {
+	return fetchAPIEvent(event, `/server/${serverId}/config/${file}`);
 };
 
 export const updateConfig = async (
+	event: object,
 	serverId: string,
 	file: string,
 	newConfig?: object,
 	override = false,
 	restart = true
 ) => {
-	return fetchAPI(
+	return fetchAPIEvent(
+		event,
 		`/server/${serverId}/config/${file}?override=${override}&restart=${restart}`,
 		'PUT',
 		newConfig
 	);
 };
 
-export const restartService = async (serverId: number) => {
-	return fetchAPI('/api/restart', 'POST', { serverId });
+export const restartService = async (event: object, serverId: number) => {
+	return fetchAPIEvent(event, '/api/restart', 'POST', { serverId });
 };
 
-export const startService = async (serverId: number) => {
-	return fetchAPI('/api/start', 'POST', { serverId });
+export const startService = async (event: object, serverId: number) => {
+	return fetchAPIEvent(event, '/api/start', 'POST', { serverId });
 };
 
-export const stopService = async (serverId: number) => {
-	return fetchAPI('/api/stop', 'POST', { serverId });
+export const stopService = async (event: object, serverId: number) => {
+	return fetchAPIEvent(event, '/api/stop', 'POST', { serverId });
 };
 
-export const getServiceStatus = async (serviceName: number) => {
-	return fetchAPI(`/api/${serviceName}`);
+export const getServiceStatus = async (event: object, serviceName: number) => {
+	return fetchAPIEvent(event, `/api/${serviceName}`);
 };
