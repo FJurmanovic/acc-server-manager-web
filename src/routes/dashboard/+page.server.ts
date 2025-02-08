@@ -16,7 +16,6 @@ export const actions = {
 	},
 	restart: async ({ request }) => {
 		const id = (await request.formData()).get('id') as string;
-		console.log(id);
 		await restartService(+id);
 	},
 	stop: async ({ request }) => {

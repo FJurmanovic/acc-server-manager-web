@@ -17,8 +17,6 @@ async function fetchAPI(endpoint: string, method: string = 'GET', body?: object)
 		body: body ? JSON.stringify(body) : null
 	});
 
-	console.log(`${BASE_URL}${endpoint}`, body, method, token);
-
 	if (!response.ok) {
 		if (endpoint != '/api' && response.status == 401) {
 			authStore.set({

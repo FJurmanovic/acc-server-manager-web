@@ -2,7 +2,6 @@
 	let { config, tracks, id } = $props();
 	let editedConfig = { ...config['event'] };
 	editedConfig.sessions = JSON.stringify(editedConfig.sessions);
-	console.log(editedConfig);
 </script>
 
 <form method="POST" action="?/event">
