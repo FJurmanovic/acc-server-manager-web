@@ -32,7 +32,7 @@ export const actions = {
 					object[key] = !Number.isNaN(+value) ? +value : value;
 			}
 		});
-		await updateConfig(id, 'event.json', object, false, true);
+		await updateConfig(id, 'event.json', object, true, true);
 		redirect(303, '/dashboard');
 	}
 } satisfies Actions;
