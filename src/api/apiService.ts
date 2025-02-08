@@ -2,7 +2,7 @@ import { authStore } from '$stores/authStore';
 import { redirect } from '@sveltejs/kit';
 import { get } from 'svelte/store';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://acc.jurmanovic.com/v1';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://acc-api.jurmanovic.com/v1';
 
 async function fetchAPI(endpoint: string, method: string = 'GET', body?: object) {
 	const { token } = get(authStore);
