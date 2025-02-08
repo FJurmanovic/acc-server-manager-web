@@ -29,7 +29,7 @@ export const actions = {
 					object[key] = tryParse(value as string);
 					break;
 				default:
-					object[key] = !Number.isNaN(+value) ? +value : value;
+					object[key] = value != '' && !Number.isNaN(+value) ? +value : value;
 			}
 		});
 		await updateConfig(id, 'event.json', object, true, true);
