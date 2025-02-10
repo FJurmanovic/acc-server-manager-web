@@ -4,7 +4,7 @@ import { env } from '$env/dynamic/private';
 
 // Now we will create new Instance for RedisSessionStore
 const options = {
-	redisClient: new Redis(env.REDIS_URL),
+	redisClient: new Redis(env.REDIS_URL, { lazyConnect: true }),
 	secret: env.SECRET
 };
 // These are the required options to use RedisSessionStore.
