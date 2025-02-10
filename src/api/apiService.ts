@@ -1,8 +1,9 @@
 import { authStore } from '$stores/authStore';
 import { redirect } from '@sveltejs/kit';
-import type { RequestEvent } from '../routes/$types';
+import { redisSessionManager } from '$stores/redisSessionManager';
+import { API_BASE_URL } from '$env/static/private';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://acc-api.jurmanovic.com/v1';
+const BASE_URL = API_BASE_URL;
 
 async function fetchAPI(endpoint: string, method: string = 'GET', body?: object, hdr?: object) {
 	const headers = {
@@ -39,7 +40,9 @@ export async function fetchAPIEvent(
 	method: string = 'GET',
 	body?: object
 ) {
-	const token = event.cookies.get('token');
+	const {
+		data: { token }
+	} = await redisSessionManager.getSession(event.cookies);
 
 	return fetchAPI(endpoint, method, body, { Authorization: `Basic ${token}` });
 }

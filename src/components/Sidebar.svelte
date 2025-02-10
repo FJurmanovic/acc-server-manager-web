@@ -30,7 +30,7 @@
 				</a>
 			</li>
 			<li>
-				<form method="POST" action="/logout">
+				<form method="POST" action="?/logout">
 					<button
 						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
 					>

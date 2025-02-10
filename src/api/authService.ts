@@ -1,10 +1,11 @@
 import fetchAPI, { fetchAPIEvent } from '$api/apiService';
 import { authStore } from '$stores/authStore';
-import type { RequestEvent } from '../routes/$types';
+import { redisSessionManager } from '$stores/redisSessionManager';
+import { v4 as uuidv4 } from 'uuid';
 
 export const login = async (event: object, username: string, password: string) => {
 	const token = btoa(`${username}:${password}`);
-	event.cookies.set('token', token, { path: '/' });
+	await redisSessionManager.createSession(event.cookies, { token }, uuidv4());
 	if (!(await checkAuth(event))) {
 		{
 			authStore.set({ token: undefined, error: 'Invalid username or password.' });
@@ -15,7 +16,7 @@ export const login = async (event: object, username: string, password: string) =
 };
 
 export const logout = (event) => {
-	event.cookies.delete('token', { path: '/' });
+	return redisSessionManager.deleteCookie(event.cookies);
 };
 
 export const checkAuth = async (event: object) => {

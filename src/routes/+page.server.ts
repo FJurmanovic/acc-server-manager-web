@@ -1,4 +1,4 @@
-import { checkAuth } from '$api/authService';
+import { checkAuth, logout } from '$api/authService';
 import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
@@ -10,7 +10,7 @@ export const load = async (event) => {
 
 export const actions = {
 	logout: async (event) => {
-		event.cookies.delete('token', { path: '/' });
+		await logout(event);
 		redirect(303, '/login');
 	}
 } satisfies Actions;

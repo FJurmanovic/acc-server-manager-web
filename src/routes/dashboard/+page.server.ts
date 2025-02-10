@@ -1,3 +1,4 @@
+import { logout } from '$api/authService';
 import { checkAuth } from '$api/authService';
 import { getServers, restartService, startService, stopService } from '$api/serverService';
 import { redirect, type Actions } from '@sveltejs/kit';
@@ -21,5 +22,9 @@ export const actions = {
 	stop: async (event) => {
 		const id = (await event.request.formData()).get('id') as string;
 		await stopService(event, +id);
+	},
+	logout: async (event) => {
+		await logout(event);
+		redirect(303, '/login');
 	}
 } satisfies Actions;
