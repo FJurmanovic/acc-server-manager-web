@@ -1,9 +1,9 @@
 import { authStore } from '$stores/authStore';
 import { redirect } from '@sveltejs/kit';
 import { redisSessionManager } from '$stores/redisSessionManager';
-import { API_BASE_URL } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
-const BASE_URL = API_BASE_URL;
+const BASE_URL = env.API_BASE_URL;
 
 async function fetchAPI(endpoint: string, method: string = 'GET', body?: object, hdr?: object) {
 	const headers = {
