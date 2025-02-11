@@ -1,16 +1,9 @@
-import { checkAuth, logout } from '$api/authService';
+import { checkAuth } from '$api/authService';
+import type { RequestEvent } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
 
-export const load = async (event) => {
+export const load = async (event: RequestEvent) => {
 	const isAuth = await checkAuth(event);
 	if (isAuth) redirect(308, '/dashboard');
 	redirect(308, '/login');
 };
-
-export const actions = {
-	logout: async (event) => {
-		await logout(event);
-		redirect(303, '/login');
-	}
-} satisfies Actions;

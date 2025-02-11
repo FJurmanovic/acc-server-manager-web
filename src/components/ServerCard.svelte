@@ -1,5 +1,7 @@
-<script>
-	let { server } = $props();
+<script lang="ts">
+	import type { Server } from '$models/server';
+
+	let { server }: { server: Server } = $props();
 </script>
 
 <a
@@ -13,19 +15,19 @@
 			<form method="POST" action="?/start">
 				<input type="hidden" name="id" value={server.id} />
 				<button
-					class="mx-2 inline-flex items-center rounded-lg bg-blue-700 px-4 py-1 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					class="btn btn-blue"
 					disabled={server.status.startsWith('SERVICE_RUNNING')}
 					onclick={(e) => e.stopPropagation()}
 					type="submit">Start</button
 				>
 				<button
-					class="mx-2 inline-flex items-center rounded-lg bg-blue-700 px-4 py-1 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					class="btn btn-blue"
 					disabled={server.status.startsWith('SERVICE_STOPPED')}
 					onclick={(e) => e.stopPropagation()}
 					formaction="?/stop">Stop</button
 				>
 				<button
-					class="mx-2 inline-flex items-center rounded-lg bg-blue-700 px-4 py-1 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					class="btn btn-blue"
 					disabled={server.status.startsWith('SERVICE_STOPPED')}
 					onclick={(e) => e.stopPropagation()}
 					formaction="?/restart">Restart</button

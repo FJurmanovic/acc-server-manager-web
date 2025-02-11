@@ -17,7 +17,9 @@ const config = {
 			'$lib/*': './src/lib/*',
 			'$routes/*': './src/routes/*',
 			'$stores/*': './src/stores/*',
-			'$api/*': './src/api/*'
+			'$api/*': './src/api/*',
+			'$models/*': './src/models/*',
+			'$styles/*': './src/styles/*'
 		}
 	}
 };

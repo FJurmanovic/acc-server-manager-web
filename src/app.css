@@ -1,1 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import './styles/button.css';
+@import './styles/loader.css';
+@import './styles/inputs.css';

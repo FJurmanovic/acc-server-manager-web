@@ -1,5 +1,5 @@
 import { authStore } from '$stores/authStore';
-import { redirect } from '@sveltejs/kit';
+import { redirect, type RequestEvent } from '@sveltejs/kit';
 import { redisSessionManager } from '$stores/redisSessionManager';
 import { env } from '$env/dynamic/private';
 
@@ -35,7 +35,7 @@ async function fetchAPI(endpoint: string, method: string = 'GET', body?: object,
 }
 
 export async function fetchAPIEvent(
-	event: object,
+	event: RequestEvent,
 	endpoint: string,
 	method: string = 'GET',
 	body?: object

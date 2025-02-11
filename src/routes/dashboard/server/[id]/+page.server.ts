@@ -1,13 +1,16 @@
-import { updateConfig, getConfigFiles } from '$api/serverService';
-import type { Actions, RequestEvent } from './$types';
+import { updateConfig, getConfigFiles, getEventFile } from '$api/serverService';
+import type { Actions } from './$types';
 import { checkAuth } from '$api/authService';
 import { getTracks } from '$api/lookupService';
 import { redirect } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit';
+import { configFile } from '$models/config';
 
-export const load = async (event) => {
+export const load = async (event: RequestEvent) => {
 	const isAuth = await checkAuth(event);
 	if (!isAuth) return redirect(308, '/login');
-	const config = await getConfigFiles(event, event.params.id);
+	if (!event.params.id) return redirect(308, '/dashboard');
+	const config = await getEventFile(event, event.params.id);
 	const tracks = await getTracks(event);
 	return {
 		id: event.params.id,
@@ -32,7 +35,7 @@ export const actions = {
 					object[key] = value != '' && !Number.isNaN(+value) ? +value : value;
 			}
 		});
-		await updateConfig(event, id, 'event.json', object, true, true);
+		await updateConfig(event, id, configFile.event, object, true, true);
 		redirect(303, '/dashboard');
 	}
 } satisfies Actions;

@@ -1,10 +1,11 @@
-import { checkAuth, login } from '$api/authService';
+import { login } from '$api/authService';
 import { authStore } from '$stores/authStore';
+import type { RequestEvent } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 
 export const actions = {
-	login: async (event) => {
+	login: async (event: RequestEvent) => {
 		const formData = await event.request.formData();
 		const username = formData.get('username') as string;
 		const password = formData.get('password') as string;

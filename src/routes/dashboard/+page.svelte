@@ -1,19 +1,15 @@
 <script lang="ts">
 	import ServerCard from '$components/ServerCard.svelte';
-	import { invalidateAll } from '$app/navigation';
+	import type { Server } from '$models/server';
 
 	const { data } = $props();
-	let servers: Array<Object> = data.servers;
-
-	const refresh = async () => {
-		invalidateAll();
-	};
+	let servers: Server[] = data.servers;
 </script>
 
 <h1>Dashboard</h1>
 <div class="server-grid">
 	{#each servers as server}
-		<ServerCard {refresh} {server} />
+		<ServerCard {server} />
 	{/each}
 </div>
 

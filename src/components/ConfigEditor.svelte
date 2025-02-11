@@ -1,10 +1,21 @@
-<script>
-	let { config, tracks, id } = $props();
-	let editedConfig = { ...config['event'] };
-	editedConfig.sessions = JSON.stringify(editedConfig.sessions);
+<script lang="ts">
+	import { enhance } from '$app/forms';
+	import type { EventConfig } from '$models/config';
+	import type { Track } from '$models/lookups';
+
+	const { config, tracks, id }: { config: EventConfig; tracks: Track[]; id: string } = $props();
+	const editedConfig = $state({ ...config });
+	let sessions = $state(JSON.stringify(editedConfig.sessions));
+	let formLoading = $state(false);
 </script>
 
-<form method="POST" action="?/event">
+<form
+	method="POST"
+	action="?/event"
+	use:enhance={() => {
+		formLoading = true;
+	}}
+>
 	<input type="hidden" name="id" value={id} />
 	<div class="sm:mx-auto sm:w-full sm:max-w-7xl">
 		<div class="border-b border-gray-900/10 pb-12">
@@ -16,8 +27,9 @@
 						<div class="mt-2 grid grid-cols-1">
 							<select
 								bind:value={editedConfig.track}
+								disabled={formLoading}
 								name="track"
-								class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+								class="form form-select"
 							>
 								{#each tracks as track}
 									<option value={track.track}>{track.track}</option>
@@ -30,13 +42,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Pre-Race waiting time seconds:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="preRaceWaitingTimeSeconds"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.preRaceWaitingTimeSeconds}
 								/>
 							</div>
@@ -47,13 +58,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Session over time seconds:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="sessionOverTimeSeconds"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.sessionOverTimeSeconds}
 								/>
 							</div>
@@ -64,13 +74,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Ambient temp:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="ambientTemp"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.ambientTemp}
 								/>
 							</div>
@@ -81,13 +90,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Cloud level:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="cloudLevel"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.cloudLevel}
 									step=".01"
 								/>
@@ -99,13 +107,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Rain:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="rain"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.rain}
 									step=".01"
 								/>
@@ -117,13 +124,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Weather randomness:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="weatherRandomness"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.weatherRandomness}
 								/>
 							</div>
@@ -134,13 +140,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Post-Qualy seconds:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="postQualySeconds"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.postQualySeconds}
 								/>
 							</div>
@@ -151,13 +156,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Post-Race seconds:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="postRaceSeconds"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.postRaceSeconds}
 								/>
 							</div>
@@ -168,13 +172,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Simracer weather conditions:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="simracerWeatherConditions"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.simracerWeatherConditions}
 								/>
 							</div>
@@ -185,13 +188,12 @@
 					<label class="block text-sm/6 font-medium text-gray-900">
 						Is fixed condition qualification:
 						<div class="mt-2">
-							<div
-								class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600"
-							>
+							<div class="input-block">
 								<input
+									disabled={formLoading}
 									name="isFixedConditionQualification"
 									type="number"
-									class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+									class="form form-input"
 									bind:value={editedConfig.isFixedConditionQualification}
 								/>
 							</div>
@@ -203,10 +205,11 @@
 						Sessions:
 						<div class="mt-2">
 							<textarea
+								disabled={formLoading}
 								name="sessions"
 								rows="3"
-								class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-								bind:value={editedConfig.sessions}
+								class="form form-textarea"
+								bind:value={sessions}
 							></textarea>
 						</div>
 					</label>
@@ -214,11 +217,7 @@
 			</div>
 		</div>
 		<div class="mt-6 flex items-center justify-end gap-x-6">
-			<button
-				type="submit"
-				class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-				>Save</button
-			>
+			<button disabled={formLoading} type="submit" class="btn btn-blue">Save</button>
 		</div>
 	</div>
 </form>
