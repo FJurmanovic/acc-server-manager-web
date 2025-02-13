@@ -1,9 +1,7 @@
 <script lang="ts">
 </script>
 
-<aside
-	class="fixed top-0 left-0 z-40 h-screen w-64 -translate-x-full transition-transform sm:translate-x-0"
->
+<aside class="fixed top-0 left-0 z-40 h-screen w-64">
 	<div class="h-full overflow-y-auto bg-gray-50 px-3 py-4 dark:bg-gray-800">
 		<ul class="space-y-2 font-medium">
 			<li>

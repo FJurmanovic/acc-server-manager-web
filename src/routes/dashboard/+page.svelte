@@ -6,7 +6,6 @@
 	let servers: Server[] = data.servers;
 </script>
 
-<h1>Dashboard</h1>
 <div class="server-grid">
 	{#each servers as server}
 		<ServerCard {server} />

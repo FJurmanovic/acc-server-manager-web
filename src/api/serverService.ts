@@ -17,6 +17,10 @@ export const getServers = async (event: RequestEvent): Promise<Server[]> => {
 	return fetchAPIEvent(event, '/server');
 };
 
+export const getServerById = async (event: RequestEvent, serverId: string): Promise<Server> => {
+	return fetchAPIEvent(event, `/server/${serverId}`);
+};
+
 export const getConfigFiles = async (
 	event: RequestEvent,
 	serverId: string
