@@ -14,6 +14,10 @@
 	let tab = $state(configFile.event);
 </script>
 
+<svelte:head>
+	<title>{server.name}</title>
+</svelte:head>
+
 <aside class="fixed top-0 left-64 z-40 h-screen w-48">
 	<div class="h-full overflow-y-auto bg-gray-50 px-1 py-4 dark:bg-gray-700">
 		<div class="flex items-center justify-center">

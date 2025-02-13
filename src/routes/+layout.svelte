@@ -7,4 +7,8 @@
 	{@render children()}
 </div>
 
+<svelte:head>
+	<title>ACC Server Manager</title>
+</svelte:head>
+
 <style></style>

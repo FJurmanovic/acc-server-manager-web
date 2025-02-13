@@ -12,6 +12,10 @@
 	{/each}
 </div>
 
+<svelte:head>
+	<title>ACC Server Manager - Dashboard</title>
+</svelte:head>
+
 <style>
 	.server-grid {
 		display: grid;

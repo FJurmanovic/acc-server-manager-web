@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import type { EventConfig } from '$models/config';
+	import { configFile, type EventConfig } from '$models/config';
 	import type { Track } from '$models/lookups';
 
 	const { config, tracks, id }: { config: EventConfig; tracks: Track[]; id: string } = $props();
@@ -11,12 +11,17 @@
 
 <form
 	method="POST"
-	action="?/event"
+	action="?/update"
 	use:enhance={() => {
 		formLoading = true;
+		return async ({ update }) => {
+			await update({ invalidateAll: true, reset: false });
+			formLoading = false;
+		};
 	}}
 >
 	<input type="hidden" name="id" value={id} />
+	<input type="hidden" name="file" value={configFile.event} />
 	<div class="sm:mx-auto sm:w-full sm:max-w-7xl">
 		<div class="border-b border-gray-900/10 pb-12">
 			<h2 class="text-base/7 font-semibold text-gray-900">Event</h2>
@@ -215,7 +220,7 @@
 													<div class="input-block">
 														<input
 															bind:value={session.hourOfDay}
-															name={`sessions[${index}][hourOfDay]`}
+															name={`sessions[${index}].hourOfDay`}
 															disabled={formLoading}
 															type="number"
 															class="form form-input"
@@ -232,7 +237,7 @@
 													<div class="input-block">
 														<input
 															bind:value={session.dayOfWeekend}
-															name={`sessions[${index}][dayOfWeekend]`}
+															name={`sessions[${index}].dayOfWeekend`}
 															disabled={formLoading}
 															type="number"
 															class="form form-input"
@@ -249,7 +254,7 @@
 													<div class="input-block">
 														<input
 															bind:value={session.timeMultiplier}
-															name={`sessions[${index}][timeMultiplier]`}
+															name={`sessions[${index}].timeMultiplier`}
 															disabled={formLoading}
 															type="number"
 															class="form form-input"
@@ -265,7 +270,7 @@
 												<div class="mt-2 grid grid-cols-1">
 													<select
 														bind:value={session.sessionType}
-														name={`sessions[${index}][sessionType]`}
+														name={`sessions[${index}].sessionType`}
 														disabled={formLoading}
 														class="form form-select"
 													>
@@ -284,7 +289,7 @@
 													<div class="input-block">
 														<input
 															bind:value={session.sessionDurationMinutes}
-															name={`sessions[${index}][sessionDurationMinutes]`}
+															name={`sessions[${index}].sessionDurationMinutes`}
 															disabled={formLoading}
 															type="number"
 															class="form form-input"

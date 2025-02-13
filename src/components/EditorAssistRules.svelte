@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import type { AssistRules } from '$models/config';
+	import { configFile, type AssistRules } from '$models/config';
 
 	const { config, id }: { config: AssistRules; id: string } = $props();
 	const editedConfig = $state({ ...config });
@@ -9,12 +9,17 @@
 
 <form
 	method="POST"
-	action="?/assistRules"
+	action="?/update"
 	use:enhance={() => {
 		formLoading = true;
+		return async ({ update }) => {
+			await update({ invalidateAll: true, reset: false });
+			formLoading = false;
+		};
 	}}
 >
 	<input type="hidden" name="id" value={id} />
+	<input type="hidden" name="file" value={configFile.assistRules} />
 	<div class="sm:mx-auto sm:w-full sm:max-w-7xl">
 		<div class="border-b border-gray-900/10 pb-12">
 			<h2 class="text-base/7 font-semibold text-gray-900">Assist Rules</h2>
