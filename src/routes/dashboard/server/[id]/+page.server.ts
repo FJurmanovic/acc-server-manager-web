@@ -43,11 +43,10 @@ export const actions = {
 
 async function destructureFormData(
 	event: RequestEvent
-): Promise<{ id: string; restart: string; data: Config; file: configFile }> {
+): Promise<{ id: string; restart: boolean; data: Config; file: configFile }> {
 	const formData = await event.request.formData();
 	const id = formData.get('id') as string;
-	const restart = formData.get('restart') as string;
-	console.log(restart);
+	const restart = formData.get('restart');
 	const file = formData.get('file') as configFile;
 	const object: any = {};
 	formData.forEach((value, key) => {
@@ -60,7 +59,12 @@ async function destructureFormData(
 				set(object, key, parseFormField(value));
 		}
 	});
-	return { id, restart, data: object, file };
+	return {
+		id,
+		restart: restart == 'on' || restart == 'true',
+		data: object,
+		file
+	};
 }
 
 function parseFormField(value: FormDataEntryValue): string | number {
