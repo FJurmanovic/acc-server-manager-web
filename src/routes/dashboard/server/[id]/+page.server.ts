@@ -47,6 +47,7 @@ async function destructureFormData(
 	const formData = await event.request.formData();
 	const id = formData.get('id') as string;
 	const restart = formData.get('restart') as string;
+	console.log(restart);
 	const file = formData.get('file') as configFile;
 	const object: any = {};
 	formData.forEach((value, key) => {

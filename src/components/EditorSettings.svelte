@@ -5,6 +5,7 @@
 	const { config, id }: { config: ServerSettings; id: string } = $props();
 	const editedConfig = $state({ ...config });
 	let formLoading = $state(false);
+	let restart = $state(true);
 	const carGroups = ['FreeForAll', 'GT3', 'GT4', 'GT2', 'GTC', 'TCX'];
 </script>
 
@@ -342,7 +343,7 @@
 					type="checkbox"
 					id="restart"
 					name="restart"
-					checked
+					bind:checked={restart}
 				/></label
 			>
 			<button disabled={formLoading} type="submit" class="btn btn-blue">Save</button>

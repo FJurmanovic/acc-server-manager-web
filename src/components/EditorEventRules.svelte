@@ -5,6 +5,7 @@
 	const { config, id }: { config: EventRules; id: string } = $props();
 	const editedConfig = $state({ ...config });
 	let formLoading = $state(false);
+	let restart = $state(true);
 </script>
 
 <form
@@ -229,7 +230,7 @@
 					type="checkbox"
 					id="restart"
 					name="restart"
-					checked
+					bind:checked={restart}
 				/></label
 			>
 			<button disabled={formLoading} type="submit" class="btn btn-blue">Save</button>
