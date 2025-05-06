@@ -73,8 +73,8 @@ export const updateConfig = async (
 	serverId: string,
 	file: ConfigFile,
 	newConfig?: Config,
-	override = false,
-	restart = true
+	override: boolean | string = false,
+	restart: boolean | string = true
 ) => {
 	return fetchAPIEvent(
 		event,

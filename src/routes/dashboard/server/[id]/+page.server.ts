@@ -43,10 +43,10 @@ export const actions = {
 
 async function destructureFormData(
 	event: RequestEvent
-): Promise<{ id: string; restart: boolean; data: Config; file: configFile }> {
+): Promise<{ id: string; restart: string; data: Config; file: configFile }> {
 	const formData = await event.request.formData();
 	const id = formData.get('id') as string;
-	const restart = formData.get('restart') === 'true';
+	const restart = formData.get('restart') as string;
 	const file = formData.get('file') as configFile;
 	const object: any = {};
 	formData.forEach((value, key) => {

@@ -27,7 +27,7 @@ async function fetchAPI(endpoint: string, method: string = 'GET', body?: object,
 			});
 			redirect(303, '/login');
 		}
-		throw new Error(`API Error: ${response.statusText}`);
+		throw new Error(`API Error: ${response.statusText} - ${method} - ${endpoint}`);
 	}
 
 	if (response.headers.get('Content-Type') == 'application/json') return response.json();
