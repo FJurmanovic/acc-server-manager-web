@@ -18,107 +18,96 @@
 			formLoading = false;
 		};
 	}}
+	class="space-y-6 max-w-3xl"
 >
 	<input type="hidden" name="id" value={id} />
 	<input type="hidden" name="file" value={configFile.configuration} />
-	<div class="sm:mx-auto sm:w-full sm:max-w-7xl">
-		<div class="border-b border-gray-900/10 pb-12">
-			<h2 class="text-base/7 font-semibold text-gray-900">Configuration</h2>
-			<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-				<div class="sm:col-span-2">
-					<label class="block text-sm/6 font-medium text-gray-900">
-						UDP Port:
-						<div class="mt-2">
-							<div class="input-block">
-								<input
-									disabled={formLoading}
-									name="udpPort"
-									type="number"
-									class="form form-input"
-									bind:value={editedConfig.udpPort}
-								/>
-							</div>
-						</div></label
-					>
-				</div>
-				<div class="sm:col-span-2">
-					<label class="block text-sm/6 font-medium text-gray-900">
-						TCP Port:
-						<div class="mt-2">
-							<div class="input-block">
-								<input
-									disabled={formLoading}
-									name="tcpPort"
-									type="number"
-									class="form form-input"
-									bind:value={editedConfig.tcpPort}
-								/>
-							</div>
-						</div></label
-					>
-				</div>
-				<div class="sm:col-span-2">
-					<label class="block text-sm/6 font-medium text-gray-900">
-						Max Connections:
-						<div class="mt-2">
-							<div class="input-block">
-								<input
-									disabled={formLoading}
-									name="maxConnections"
-									type="number"
-									class="form form-input"
-									bind:value={editedConfig.maxConnections}
-								/>
-							</div>
-						</div></label
-					>
-				</div>
-				<div class="sm:col-span-2">
-					<label class="block text-sm/6 font-medium text-gray-900">
-						Lan Discovery:
-						<div class="mt-2 grid grid-cols-1">
-							<select
-								bind:value={editedConfig.lanDiscovery}
-								disabled={formLoading}
-								name="lanDiscovery"
-								class="form form-select"
-							>
-								<option value={0}>No</option>
-								<option value={1}>Yes</option>
-							</select>
-						</div>
-					</label>
-				</div>
-				<div class="sm:col-span-2">
-					<label class="block text-sm/6 font-medium text-gray-900">
-						Register To Lobby:
-						<div class="mt-2 grid grid-cols-1">
-							<select
-								bind:value={editedConfig.registerToLobby}
-								disabled={formLoading}
-								name="registerToLobby"
-								class="form form-select"
-							>
-								<option value={0}>No</option>
-								<option value={1}>Yes</option>
-							</select>
-						</div>
-					</label>
-				</div>
-				<input type="hidden" name="configVersion" value={1} />
-			</div>
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+		<div>
+			<label class="block text-sm font-medium text-gray-300 mb-1">
+				UDP Port:
+				<input
+					disabled={formLoading}
+					name="udpPort"
+					type="number"
+					class="form form-input"
+					bind:value={editedConfig.udpPort}
+				/>
+			</label>
 		</div>
-		<div class="mt-6 flex items-center justify-end gap-x-6">
-			<label
-				><span class="mx-3">Restart server</span><input
-					type="checkbox"
-					id="restart"
-					name="restart"
-					bind:checked={restart}
-				/></label
-			>
-			<button disabled={formLoading} type="submit" class="btn btn-blue">Save</button>
+		<div>
+			<label class="block text-sm font-medium text-gray-300 mb-1">
+				TCP Port:
+				<input
+					disabled={formLoading}
+					name="tcpPort"
+					type="number"
+					class="form form-input"
+					bind:value={editedConfig.tcpPort}
+				/>
+			</label>
 		</div>
+		<div>
+			<label class="block text-sm font-medium text-gray-300 mb-1">
+				Max Connections:
+				<input
+					disabled={formLoading}
+					name="maxConnections"
+					type="number"
+					class="form form-input"
+					bind:value={editedConfig.maxConnections}
+				/>
+			</label>
+		</div>
+		<div>
+			<label class="block text-sm font-medium text-gray-300 mb-1">
+				Lan Discovery:
+				<select
+					bind:value={editedConfig.lanDiscovery}
+					disabled={formLoading}
+					name="lanDiscovery"
+					class="form form-select"
+				>
+					<option value={0}>No</option>
+					<option value={1}>Yes</option>
+				</select>
+			</label>
+		</div>
+		<div>
+			<label class="block text-sm font-medium text-gray-300 mb-1">
+				Register To Lobby:
+				<select
+					bind:value={editedConfig.registerToLobby}
+					disabled={formLoading}
+					name="registerToLobby"
+					class="form form-select"
+				>
+					<option value={0}>No</option>
+					<option value={1}>Yes</option>
+				</select>
+			</label>
+		</div>
+		<input type="hidden" name="configVersion" value={1} />
+	</div>
+	<div class="pt-4 border-t border-gray-700">
+		<label class="flex items-center">
+			<input 
+			type="checkbox" 
+			bind:checked={restart}
+			class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-600 rounded bg-gray-700"
+			/>
+			<span class="ml-2 text-sm text-gray-300">Restart server after saving</span>
+		</label>
+		</div>
+		
+		<div class="flex justify-end">
+		<button 
+			type="submit"  
+			disabled={formLoading}
+			class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md text-sm font-medium"
+		>
+			Save Changes
+		</button>
 	</div>
 </form>
 
