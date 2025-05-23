@@ -166,24 +166,24 @@
 		</div>
 	</div>
 	<div class="pt-4 border-t border-gray-700">
-	<label class="flex items-center">
-		<input 
-		type="checkbox" 
-		bind:checked={restart}
-		class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-600 rounded bg-gray-700"
-		/>
-		<span class="ml-2 text-sm text-gray-300">Restart server after saving</span>
-	</label>
-	</div>
-	
-	<div class="flex justify-end">
-	<button 
-		type="submit"  
-		disabled={formLoading}
-		class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md text-sm font-medium"
-	>
-		Save Changes
-	</button>
+		<label class="flex items-center">
+			<input 
+			type="checkbox" 
+			bind:checked={restart}
+			class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-600 rounded bg-gray-700"
+			/>
+			<span class="ml-2 text-sm text-gray-300">Restart server after saving</span>
+		</label>
+		</div>
+		
+		<div class="flex justify-end">
+		<button 
+			type="submit"  
+			disabled={formLoading}
+			class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md text-sm font-medium"
+		>
+			Save Changes
+		</button>
 	</div>
 </form>
 
