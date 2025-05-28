@@ -4,7 +4,7 @@
 	import EditorEvent from '$components/EditorEvent.svelte';
 	import EditorEventRules from '$components/EditorEventRules.svelte';
 	import EditorSettings from '$components/EditorSettings.svelte';
-	import { getStatusColor } from '$lib/types/serviceStatus.js';
+	import { getStatusColor, serviceStatusToString } from '$lib/types/serviceStatus.js';
 	import { configFile } from '$models/config.js';
 
 	let { data } = $props();
@@ -28,9 +28,8 @@
 				<h2 class="truncate text-lg font-semibold">{server.name}</h2>
 			</a>
 			<div class="mt-1 flex items-center">
-				<span class={`inline-block h-2 w-2 rounded-full ${getStatusColor(server.status)} mr-2`}
-				></span>
-				<span class="text-sm capitalize">{server.status}</span>
+				<span class={`inline-block h-2 w-2 rounded-full ${getStatusColor(server.status)} mr-2`} />
+				<span class="text-sm capitalize">{serviceStatusToString(server.status)}</span>
 			</div>
 		</div>
 
