@@ -7,12 +7,13 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { configFile, type Config, type Session } from '$models/config';
 import { set } from 'lodash-es';
 import { subDays, formatISO } from 'date-fns';
+import { UTCDate } from '@date-fns/utc';
 
 export const load = async (event: RequestEvent) => {
 	const isAuth = await checkAuth(event);
 	if (!isAuth) return redirect(308, '/login');
 	if (!event.params.id) return redirect(308, '/dashboard');
-	const today = new Date();
+	const today = new UTCDate();
 	const endDate = formatISO(today);
 	const startDate = formatISO(subDays(today, 30));
 

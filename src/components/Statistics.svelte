@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Chart from 'chart.js/auto';
 	import { onMount, onDestroy } from 'svelte';
-	import { compareAsc } from 'date-fns';
+	import { compareAsc, isSameDay } from 'date-fns';
 	import { formatInTimeZone } from 'date-fns-tz';
 	import 'chartjs-adapter-date-fns';
 	import type { StateHistory } from '$models/config';
@@ -230,16 +230,18 @@
 				if (!acc[date]) {
 					acc[date] = {
 						count: 0,
-						sessions: [session]
+						sessions: []
 					};
 				}
 
 				// Check if this session is part of a sequence
 				if (index > 0) {
 					const prevSession = stateHistory[index - 1];
-					const prevDate = formatDate(prevSession.dateCreated, 'yyyy-MM-dd');
 
-					if (date === prevDate && prevSession.session === session.session) {
+					if (
+						isSameDay(session.dateCreated, prevSession.dateCreated) &&
+						prevSession.session === session.session
+					) {
 						return acc;
 					}
 				}
@@ -261,6 +263,7 @@
 		const sortedEntries = Object.entries(dailyActivity).sort(
 			([a], [b]) => new Date(a).getTime() - new Date(b).getTime()
 		);
+		console.log(sortedEntries);
 
 		return {
 			labels: sortedEntries.map(([date]) => formatDate(date, 'MMM dd')),
