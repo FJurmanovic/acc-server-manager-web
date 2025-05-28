@@ -39,9 +39,9 @@
 			<ul class="space-y-1">
 				<li>
 					<button
-						class={`w-full rounded-md px-3 py-2 text-left ${tab === serverTab.event ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
-						disabled={tab === serverTab.event || !configs.event}
-						onclick={() => (tab = serverTab.event)}
+						class={`w-full rounded-md px-3 py-2 text-left ${tab === serverTab.statistics ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+						disabled={tab === serverTab.statistics}
+						onclick={() => (tab = serverTab.statistics)}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
