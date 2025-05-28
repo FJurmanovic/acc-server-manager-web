@@ -44,33 +44,16 @@ export const parseServiceStatus = (status: string): ServiceStatus => {
 export const getStatusColor = (status: ServiceStatus): string => {
 	switch (status) {
 		case ServiceStatus.Running:
-			return 'text-green-500';
+			return 'bg-green-500';
 		case ServiceStatus.Stopped:
-			return 'text-red-500';
+			return 'bg-red-500';
 		case ServiceStatus.Starting:
-			return 'text-blue-500';
+			return 'bg-blue-500';
 		case ServiceStatus.Stopping:
-			return 'text-yellow-500';
+			return 'bg-yellow-500';
 		case ServiceStatus.Restarting:
-			return 'text-purple-500';
+			return 'bg-purple-500';
 		default:
-			return 'text-gray-500';
-	}
-};
-
-export const getStatusIcon = (status: ServiceStatus): string => {
-	switch (status) {
-		case ServiceStatus.Running:
-			return '🟢'; // or use an icon library like 'play-circle'
-		case ServiceStatus.Stopped:
-			return '🔴'; // or 'stop-circle'
-		case ServiceStatus.Starting:
-			return '🔵'; // or 'arrow-up-circle'
-		case ServiceStatus.Stopping:
-			return '🟡'; // or 'arrow-down-circle'
-		case ServiceStatus.Restarting:
-			return '🟣'; // or 'refresh-circle'
-		default:
-			return '⚪'; // or 'help-circle'
+			return 'bg-gray-500';
 	}
 };

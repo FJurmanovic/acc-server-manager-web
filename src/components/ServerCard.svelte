@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Server } from '$models/server';
-	import { getStatusColor, ServiceStatus } from '$lib/types/serviceStatus';
+	import { getStatusColor, ServiceStatus, serviceStatusToString } from '$lib/types/serviceStatus';
 
 	let { server }: { server: Server } = $props();
 </script>
@@ -14,7 +14,7 @@
 					<div class="mt-1 flex items-center">
 						<span class={`inline-block h-2 w-2 rounded-full ${getStatusColor(server.status)} mr-2`}
 						></span>
-						<span class="text-sm capitalize">{server.status}</span>
+						<span class="text-sm capitalize">{serviceStatusToString(server.status)}</span>
 					</div>
 				</div>
 				<button class="text-gray-400 hover:text-white">
