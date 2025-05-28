@@ -8,7 +8,8 @@ import {
 	type Configurations,
 	type EventConfig,
 	type EventRules,
-	type ServerSettings
+	type ServerSettings,
+	type StateHistory
 } from '$models/config';
 import type { Server } from '$models/server';
 import type { RequestEvent } from '@sveltejs/kit';
@@ -34,6 +35,18 @@ export const getConfigFile = async (
 	file: ConfigFile
 ): Promise<Config> => {
 	return fetchAPIEvent(event, `/server/${serverId}/config/${file}`);
+};
+
+export const getStateHistory = async (
+	event: RequestEvent,
+	serverId: string,
+	startDate: string,
+	endDate: string
+): Promise<Array<StateHistory>> => {
+	return fetchAPIEvent(
+		event,
+		`/server/${serverId}/state-history?start_date=${startDate}&end_date=${endDate}`
+	);
 };
 
 export const getEventFile = async (event: RequestEvent, serverId: string): Promise<EventConfig> => {

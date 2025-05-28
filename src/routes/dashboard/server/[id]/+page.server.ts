@@ -1,4 +1,4 @@
-import { updateConfig, getConfigFiles, getServerById } from '$api/serverService';
+import { updateConfig, getConfigFiles, getServerById, getStateHistory } from '$api/serverService';
 import type { Actions } from './$types';
 import { checkAuth } from '$api/authService';
 import { getTracks } from '$api/lookupService';
@@ -6,21 +6,30 @@ import { redirect } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import { configFile, type Config, type Session } from '$models/config';
 import { set } from 'lodash-es';
+import { format } from 'date-fns-tz';
+import { subDays } from 'date-fns';
 
 export const load = async (event: RequestEvent) => {
 	const isAuth = await checkAuth(event);
 	if (!isAuth) return redirect(308, '/login');
 	if (!event.params.id) return redirect(308, '/dashboard');
-	const [server, configs, tracks] = await Promise.all([
+	const today = format(new Date(), 'yyyy-MM-ddTHH:mm:ssZ');
+	const thirtyDaysAgo = format(subDays(new Date(), 30), 'yyyy-MM-ddTHH:mm:ssZ');
+
+	const endDate = today;
+	const startDate = thirtyDaysAgo;
+	const [server, configs, tracks, stateHistory] = await Promise.all([
 		getServerById(event, event.params.id),
 		getConfigFiles(event, event.params.id),
-		getTracks(event)
+		getTracks(event),
+		getStateHistory(event, event.params.id, startDate, endDate)
 	]);
 	return {
 		id: event.params.id,
 		configs,
 		tracks,
-		server
+		server,
+		stateHistory
 	};
 };
 

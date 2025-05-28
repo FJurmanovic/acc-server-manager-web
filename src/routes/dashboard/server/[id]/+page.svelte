@@ -4,15 +4,17 @@
 	import EditorEvent from '$components/EditorEvent.svelte';
 	import EditorEventRules from '$components/EditorEventRules.svelte';
 	import EditorSettings from '$components/EditorSettings.svelte';
+	import Statistics from '$components/Statistics.svelte';
 	import { getStatusColor, serviceStatusToString } from '$lib/types/serviceStatus.js';
-	import { configFile } from '$models/config.js';
+	import { serverTab } from '$models/config.js';
 
 	let { data } = $props();
 	const configs = data.configs;
 	const tracks = data.tracks;
 	const id = data.id;
 	const server = data.server;
-	let tab = $state(configFile.event);
+	const stateHistory = data.stateHistory;
+	let tab = $state(serverTab.statistics);
 </script>
 
 <svelte:head>
@@ -37,27 +39,50 @@
 			<ul class="space-y-1">
 				<li>
 					<button
-						class={`w-full rounded-md px-3 py-2 text-left ${tab === configFile.event ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
-						disabled={tab === configFile.event || !configs.event}
-						onclick={() => (tab = configFile.event)}
+						class={`w-full rounded-md px-3 py-2 text-left ${tab === serverTab.event ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+						disabled={tab === serverTab.event || !configs.event}
+						onclick={() => (tab = serverTab.event)}
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="mr-2 inline h-4 w-4"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+							/>
+						</svg>
+						Statistics
+					</button>
+				</li>
+				<li>
+					<button
+						class={`w-full rounded-md px-3 py-2 text-left ${tab === serverTab.event ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+						disabled={tab === serverTab.event || !configs.event}
+						onclick={() => (tab = serverTab.event)}
 					>
 						Event
 					</button>
 				</li>
 				<li>
 					<button
-						class={`w-full rounded-md px-3 py-2 text-left ${tab === configFile.configuration ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
-						disabled={tab === configFile.configuration || !configs.configuration}
-						onclick={() => (tab = configFile.configuration)}
+						class={`w-full rounded-md px-3 py-2 text-left ${tab === serverTab.configuration ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+						disabled={tab === serverTab.configuration || !configs.configuration}
+						onclick={() => (tab = serverTab.configuration)}
 					>
 						Configuration
 					</button>
 				</li>
 				<li>
 					<button
-						class={`w-full rounded-md px-3 py-2 text-left ${tab === configFile.settings ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
-						disabled={tab === configFile.settings || !configs.settings}
-						onclick={() => (tab = configFile.settings)}
+						class={`w-full rounded-md px-3 py-2 text-left ${tab === serverTab.settings ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+						disabled={tab === serverTab.settings || !configs.settings}
+						onclick={() => (tab = serverTab.settings)}
 					>
 						Settings
 					</button>
@@ -65,9 +90,9 @@
 				{#if configs.assistRules}
 					<li>
 						<button
-							class={`w-full rounded-md px-3 py-2 text-left ${tab === configFile.assistRules ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
-							disabled={tab === configFile.assistRules || !configs.assistRules}
-							onclick={() => (tab = configFile.assistRules)}
+							class={`w-full rounded-md px-3 py-2 text-left ${tab === serverTab.assistRules ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+							disabled={tab === serverTab.assistRules || !configs.assistRules}
+							onclick={() => (tab = serverTab.assistRules)}
 						>
 							Assist Rules
 						</button>
@@ -76,9 +101,9 @@
 				{#if configs.eventRules}
 					<li>
 						<button
-							class={`w-full rounded-md px-3 py-2 text-left ${tab === configFile.eventRules ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
-							disabled={tab === configFile.eventRules || !configs.eventRules}
-							onclick={() => (tab = configFile.eventRules)}
+							class={`w-full rounded-md px-3 py-2 text-left ${tab === serverTab.eventRules ? 'bg-green-600 text-white' : 'text-gray-300 hover:bg-gray-700'}`}
+							disabled={tab === serverTab.eventRules || !configs.eventRules}
+							onclick={() => (tab = serverTab.eventRules)}
 						>
 							Event Rules
 						</button>
@@ -91,15 +116,17 @@
 	<main class="flex-1 overflow-auto">
 		<header class="flex items-center justify-between bg-gray-800 p-4 shadow-md">
 			<h1 class="text-xl font-semibold">
-				{#if tab === configFile.event}
+				{#if tab === serverTab.statistics}
+					Statistics
+				{:else if tab === serverTab.event}
 					Event
-				{:else if tab === configFile.configuration}
+				{:else if tab === serverTab.configuration}
 					Configuration
-				{:else if tab === configFile.settings}
+				{:else if tab === serverTab.settings}
 					Settings
-				{:else if tab === configFile.assistRules}
+				{:else if tab === serverTab.assistRules}
 					Assist Rules
-				{:else if tab === configFile.eventRules}
+				{:else if tab === serverTab.eventRules}
 					Event Rules
 				{/if}
 			</h1>
@@ -147,15 +174,17 @@
 			</div>
 		</header>
 		<div class="p-6">
-			{#if tab === configFile.event}
+			{#if tab === serverTab.statistics}
+				<Statistics {stateHistory} />
+			{:else if tab === serverTab.event}
 				<EditorEvent config={configs.event} {tracks} {id} />
-			{:else if tab === configFile.configuration}
+			{:else if tab === serverTab.configuration}
 				<EditorConfiguration config={configs.configuration} {id} />
-			{:else if tab === configFile.settings}
+			{:else if tab === serverTab.settings}
 				<EditorSettings config={configs.settings} {id} />
-			{:else if tab === configFile.assistRules}
+			{:else if tab === serverTab.assistRules}
 				<EditorAssistRules config={configs.assistRules} {id} />
-			{:else if tab === configFile.eventRules}
+			{:else if tab === serverTab.eventRules}
 				<EditorEventRules config={configs.eventRules} {id} />
 			{:else}
 				<div class="rounded-lg bg-gray-800 p-6 text-center">

@@ -13,6 +13,23 @@ export enum configFile {
 	eventRules = 'eventRules.json',
 	settings = 'settings.json'
 }
+export enum serverTab {
+	statistics = 'statistics',
+	configuration = 'configuration',
+	assistRules = 'assistRules',
+	event = 'event',
+	eventRules = 'eventRules',
+	settings = 'settings'
+}
+
+export interface StateHistory {
+	dateCreated: string;
+	sessionStart: string;
+	playerCount: number;
+	track: string;
+	sessionDurationMinutes: number;
+	session: string;
+}
 
 export type Config = Configuration | AssistRules | EventConfig | EventRules | ServerSettings;
 export type ConfigFile =
