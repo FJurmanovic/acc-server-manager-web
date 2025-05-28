@@ -6,18 +6,16 @@ import { redirect } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import { configFile, type Config, type Session } from '$models/config';
 import { set } from 'lodash-es';
-import { format } from 'date-fns-tz';
-import { subDays } from 'date-fns';
+import { subDays, formatISO } from 'date-fns';
 
 export const load = async (event: RequestEvent) => {
 	const isAuth = await checkAuth(event);
 	if (!isAuth) return redirect(308, '/login');
 	if (!event.params.id) return redirect(308, '/dashboard');
-	const today = format(new Date(), 'yyyy-MM-ddTHH:mm:ssZ');
-	const thirtyDaysAgo = format(subDays(new Date(), 30), 'yyyy-MM-ddTHH:mm:ssZ');
+	const today = new Date();
+	const endDate = formatISO(today);
+	const startDate = formatISO(subDays(today, 30));
 
-	const endDate = today;
-	const startDate = thirtyDaysAgo;
 	const [server, configs, tracks, stateHistory] = await Promise.all([
 		getServerById(event, event.params.id),
 		getConfigFiles(event, event.params.id),
