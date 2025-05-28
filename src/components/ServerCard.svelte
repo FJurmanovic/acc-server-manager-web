@@ -1,20 +1,8 @@
 <script lang="ts">
 	import type { Server } from '$models/server';
+	import { getStatusColor, ServiceStatus } from '$lib/types/serviceStatus';
 
 	let { server }: { server: Server } = $props();
-
-	function getStatusColor(status: string) {
-		switch (status) {
-			case 'SERVICE_RUNNING\r\n':
-				return 'bg-green-500';
-			case 'SERVICE_STOPPED\r\n':
-				return 'bg-red-500';
-			case 'SERVICE_RESTARTING\r\n':
-				return 'bg-yellow-500';
-			default:
-				return 'bg-gray-500';
-		}
-	}
 </script>
 
 <div class="overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow-lg">
@@ -61,14 +49,14 @@
 			<input type="hidden" name="id" value={server.id} />
 			<button
 				type="submit"
-				disabled={server.status.startsWith('SERVICE_RUNNING')}
+				disabled={server.status === ServiceStatus.Running}
 				onclick={(e) => e.stopPropagation()}
 				class="rounded-md bg-green-600 px-3 py-1 text-xs font-medium hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
 			>
 				Start
 			</button>
 			<button
-				disabled={server.status.startsWith('SERVICE_STOPPED')}
+				disabled={server.status === ServiceStatus.Stopped}
 				onclick={(e) => e.stopPropagation()}
 				class="rounded-md bg-yellow-600 px-3 py-1 text-xs font-medium hover:bg-yellow-700 disabled:cursor-not-allowed disabled:opacity-50"
 				formaction="?/restart"
@@ -76,7 +64,7 @@
 				Restart
 			</button>
 			<button
-				disabled={server.status.startsWith('SERVICE_STOPPED')}
+				disabled={server.status === ServiceStatus.Stopped}
 				onclick={(e) => e.stopPropagation()}
 				class="rounded-md bg-red-600 px-3 py-1 text-xs font-medium hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
 				formaction="?/stop"
