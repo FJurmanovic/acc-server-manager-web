@@ -4,16 +4,16 @@
 	import { compareAsc, isSameDay } from 'date-fns';
 	import { formatInTimeZone } from 'date-fns-tz';
 	import 'chartjs-adapter-date-fns';
-	import type { StateHistory } from '$models/config';
+	import type { StateHistoryStats } from '$models/config';
 	import { flatMap } from 'lodash-es';
 
 	const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	interface Props {
 		// Props
-		stateHistory?: Array<StateHistory>;
+		statistics: StateHistoryStats;
 	}
 
-	let { stateHistory = [] }: Props = $props();
+	let { statistics }: Props = $props();
 
 	// Chart instances
 	let playerCountChart: Chart | null = null;
@@ -25,21 +25,8 @@
 	let sessionTypeCanvas: HTMLCanvasElement | undefined = $state();
 	let dailyActivityCanvas: HTMLCanvasElement | undefined = $state();
 
-	let totalSessions = $state(0);
-	let averagePlayerCount = $state(0);
-	let peakPlayerCount = $state(0);
-	let totalPlaytime = $state(0);
-	let dailyActivityData = $state<{
-		labels: string[];
-		data: {
-			count: number;
-			sessions: StateHistory[];
-		}[];
-	} | null>(null);
-
 	// Initialize date range (last 30 days by default)
 	onMount(() => {
-		processData();
 		createCharts();
 	});
 
@@ -50,43 +37,19 @@
 		if (dailyActivityChart) dailyActivityChart.destroy();
 	});
 
-	function processData() {
-		calculateSummaryStats();
-	}
-
-	function calculateSummaryStats() {
-		totalSessions = stateHistory.length;
-
-		if (stateHistory.length > 0) {
-			const playerCounts = stateHistory.map((item) => item.playerCount);
-			averagePlayerCount = Math.round(
-				playerCounts.reduce((a, b) => a + b, 0) / playerCounts.length
-			);
-			peakPlayerCount = Math.max(...playerCounts);
-			totalPlaytime = stateHistory.reduce(
-				(total, session) => total + session.sessionDurationMinutes,
-				0
-			);
-		} else {
-			averagePlayerCount = 0;
-			peakPlayerCount = 0;
-			totalPlaytime = 0;
-		}
-	}
-
 	function createCharts() {
-		if (!playerCountCanvas || !sessionTypeCanvas || !dailyActivityCanvas) return;
+		if (!statistics || !playerCountCanvas || !sessionTypeCanvas || !dailyActivityCanvas) return;
 
-		// Player Count Over Time Chart
-		const playerCountData = preparePlayerCountData();
 		playerCountChart = new Chart(playerCountCanvas, {
 			type: 'line',
 			data: {
-				labels: playerCountData.map(({ x }) => x),
+				labels: statistics.playerCountOverTime.map(({ timestamp }) =>
+					formatDate(timestamp, 'MMM dd kk:mm')
+				),
 				datasets: [
 					{
 						label: 'Player Count',
-						data: playerCountData.map(({ y }) => y),
+						data: statistics.playerCountOverTime.map(({ count }) => count),
 						borderColor: '#10b981',
 						backgroundColor: 'rgba(16, 185, 129, 0.1)',
 						fill: true,
@@ -107,15 +70,13 @@
 			}
 		});
 
-		// Session Types Pie Chart
-		const sessionTypeData = prepareSessionTypeData();
 		sessionTypeChart = new Chart(sessionTypeCanvas, {
 			type: 'doughnut',
 			data: {
-				labels: sessionTypeData.labels,
+				labels: statistics.sessionTypes.map(({ name }) => name),
 				datasets: [
 					{
-						data: sessionTypeData.data,
+						data: statistics.sessionTypes.map(({ count }) => count),
 						backgroundColor: ['#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4']
 					}
 				]
@@ -135,16 +96,14 @@
 			}
 		});
 
-		// Daily Activity Bar Chart
-		dailyActivityData = prepareDailyActivityData();
 		dailyActivityChart = new Chart(dailyActivityCanvas, {
 			type: 'bar',
 			data: {
-				labels: dailyActivityData.labels,
+				labels: statistics.dailyActivity.map(({ date }) => date),
 				datasets: [
 					{
 						label: 'Sessions',
-						data: dailyActivityData.data.map(({ count }) => count),
+						data: statistics.dailyActivity.map(({ sessionsCount }) => sessionsCount),
 						backgroundColor: '#10b981',
 						borderColor: '#059669',
 						borderWidth: 1
@@ -184,93 +143,6 @@
 		});
 	}
 
-	function preparePlayerCountData() {
-		// Group by date and get average player count per day
-		const dailyData = stateHistory.reduce(
-			(acc, item) => {
-				const date = formatDate(item.dateCreated, 'MMM dd kk:mm');
-				if (!acc[date]) {
-					acc[date] = { total: 0, count: 0 };
-				}
-				acc[date].total = acc[date].total > item.playerCount ? acc[date].total : item.playerCount;
-				return acc;
-			},
-			{} as Record<string, { total: number; count: number }>
-		);
-
-		return Object.entries(dailyData)
-			.map(([date, data]) => ({
-				x: date,
-				y: data.total
-			}))
-			.sort((a, b) => compareAsc(a.x, b.x));
-	}
-
-	function prepareSessionTypeData() {
-		const sessionCounts = stateHistory.reduce(
-			(acc, session) => {
-				acc[session.session] = (acc[session.session] || 0) + 1;
-				return acc;
-			},
-			{} as Record<string, number>
-		);
-
-		return {
-			labels: Object.keys(sessionCounts),
-			data: Object.values(sessionCounts)
-		};
-	}
-
-	function prepareDailyActivityData() {
-		const dailyActivity = stateHistory.reduce(
-			(acc, session, index) => {
-				const date = formatDate(session.dateCreated, 'yyyy-MM-dd');
-
-				// Initialize counter for this date if not exists
-				if (!acc[date]) {
-					acc[date] = {
-						count: 0,
-						sessions: []
-					};
-				}
-
-				// Check if this session is part of a sequence
-				if (index > 0) {
-					const prevSession = stateHistory[index - 1];
-
-					if (
-						isSameDay(session.dateCreated, prevSession.dateCreated) &&
-						prevSession.session === session.session
-					) {
-						return acc;
-					}
-				}
-
-				// Increment counter for non-sequential sessions
-				acc[date].count++;
-				acc[date].sessions.push(session);
-				return acc;
-			},
-			{} as Record<
-				string,
-				{
-					count: number;
-					sessions: StateHistory[];
-				}
-			>
-		);
-
-		const sortedEntries = Object.entries(dailyActivity).sort(
-			([a], [b]) => new Date(a).getTime() - new Date(b).getTime()
-		);
-		console.log(sortedEntries);
-
-		return {
-			labels: sortedEntries.map(([date]) => formatDate(date, 'MMM dd')),
-			data: sortedEntries.map(([, count]) => count)
-		};
-	}
-
 	function formatDate(dateString: string, formatString: string) {
 		return formatInTimeZone(dateString, localTimeZone, formatString, {
 			timeZone: 'utc'
@@ -306,7 +178,7 @@
 			</div>
 			<div class="ml-4">
 				<p class="text-sm font-medium text-gray-400">Average Players</p>
-				<p class="text-2xl font-bold text-white">{averagePlayerCount}</p>
+				<p class="text-2xl font-bold text-white">{Math.round(statistics.averagePlayers)}</p>
 			</div>
 		</div>
 	</div>
@@ -331,7 +203,7 @@
 			</div>
 			<div class="ml-4">
 				<p class="text-sm font-medium text-gray-400">Peak Players</p>
-				<p class="text-2xl font-bold text-white">{peakPlayerCount}</p>
+				<p class="text-2xl font-bold text-white">{statistics.peakPlayers}</p>
 			</div>
 		</div>
 	</div>
@@ -356,7 +228,7 @@
 			</div>
 			<div class="ml-4">
 				<p class="text-sm font-medium text-gray-400">Total Sessions</p>
-				<p class="text-2xl font-bold text-white">{totalSessions}</p>
+				<p class="text-2xl font-bold text-white">{statistics.totalSessions}</p>
 			</div>
 		</div>
 	</div>
@@ -381,7 +253,7 @@
 			</div>
 			<div class="ml-4">
 				<p class="text-sm font-medium text-gray-400">Total Playtime</p>
-				<p class="text-2xl font-bold text-white">{formatDuration(totalPlaytime)}</p>
+				<p class="text-2xl font-bold text-white">{formatDuration(statistics.totalPlaytime)}</p>
 			</div>
 		</div>
 	</div>
@@ -439,32 +311,32 @@
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-700 bg-gray-800">
-				{#each flatMap(dailyActivityData?.data, ({ sessions }) => sessions) as session}
+				{#each statistics.recentSessions as session}
 					<tr>
 						<td class="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
-							{formatDate(session.dateCreated, 'MMM dd kk:mm')}
+							{formatDate(session.date, 'MMM dd kk:mm')}
 						</td>
 						<td class="px-6 py-4 whitespace-nowrap">
 							<span
 								class={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-									session.session === 'Race'
+									session.type === 'Race'
 										? 'bg-red-100 text-red-800'
-										: session.session === 'Qualifying'
+										: session.type === 'Qualifying'
 											? 'bg-yellow-100 text-yellow-800'
 											: 'bg-green-100 text-green-800'
 								}`}
 							>
-								{session.session}
+								{session.type}
 							</span>
 						</td>
 						<td class="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
 							{session.track}
 						</td>
 						<td class="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
-							{formatDuration(session.sessionDurationMinutes)}
+							{formatDuration(session.duration)}
 						</td>
 						<td class="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
-							{session.playerCount}
+							{session.players}
 						</td>
 					</tr>
 				{/each}

@@ -13,7 +13,7 @@
 	const tracks = data.tracks;
 	const id = data.id;
 	const server = data.server;
-	const stateHistory = data.stateHistory;
+	const statistics = data.statistics;
 	let tab = $state(serverTab.statistics);
 </script>
 
@@ -175,7 +175,7 @@
 		</header>
 		<div class="p-6">
 			{#if tab === serverTab.statistics}
-				<Statistics {stateHistory} />
+				<Statistics {statistics} />
 			{:else if tab === serverTab.event}
 				<EditorEvent config={configs.event} {tracks} {id} />
 			{:else if tab === serverTab.configuration}

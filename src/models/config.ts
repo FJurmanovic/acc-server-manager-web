@@ -15,6 +15,7 @@ export enum configFile {
 }
 export enum serverTab {
 	statistics = 'statistics',
+	statistics2 = 'statistics2',
 	configuration = 'configuration',
 	assistRules = 'assistRules',
 	event = 'event',
@@ -29,6 +30,41 @@ export interface StateHistory {
 	track: string;
 	sessionDurationMinutes: number;
 	session: string;
+}
+
+interface SessionCount {
+	name: string;
+	count: number;
+}
+
+interface DailyActivity {
+	date: string; // ISO 8601 date string
+	sessionsCount: number;
+}
+
+interface PlayerCountPoint {
+	timestamp: string; // ISO 8601 datetime string
+	count: number;
+}
+
+interface RecentSession {
+	id: number;
+	date: string;
+	type: string;
+	track: string;
+	duration: number;
+	players: number;
+}
+
+export interface StateHistoryStats {
+	averagePlayers: number;
+	peakPlayers: number;
+	totalSessions: number;
+	totalPlaytime: number; // in minutes
+	playerCountOverTime: PlayerCountPoint[];
+	sessionTypes: SessionCount[];
+	dailyActivity: DailyActivity[];
+	recentSessions: RecentSession[];
 }
 
 export type Config = Configuration | AssistRules | EventConfig | EventRules | ServerSettings;

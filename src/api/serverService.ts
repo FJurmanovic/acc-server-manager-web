@@ -9,7 +9,8 @@ import {
 	type EventConfig,
 	type EventRules,
 	type ServerSettings,
-	type StateHistory
+	type StateHistory,
+	type StateHistoryStats
 } from '$models/config';
 import type { Server } from '$models/server';
 import type { RequestEvent } from '@sveltejs/kit';
@@ -46,6 +47,18 @@ export const getStateHistory = async (
 	return fetchAPIEvent(
 		event,
 		`/server/${serverId}/state-history?start_date=${startDate}&end_date=${endDate}`
+	);
+};
+
+export const getStateHistoryStats = async (
+	event: RequestEvent,
+	serverId: string,
+	startDate: string,
+	endDate: string
+): Promise<StateHistoryStats> => {
+	return fetchAPIEvent(
+		event,
+		`/server/${serverId}/state-history/statistics?start_date=${startDate}&end_date=${endDate}`
 	);
 };
 

@@ -1,4 +1,10 @@
-import { updateConfig, getConfigFiles, getServerById, getStateHistory } from '$api/serverService';
+import {
+	updateConfig,
+	getConfigFiles,
+	getServerById,
+	getStateHistory,
+	getStateHistoryStats
+} from '$api/serverService';
 import type { Actions } from './$types';
 import { checkAuth } from '$api/authService';
 import { getTracks } from '$api/lookupService';
@@ -17,18 +23,18 @@ export const load = async (event: RequestEvent) => {
 	const endDate = formatISO(today);
 	const startDate = formatISO(subDays(today, 30));
 
-	const [server, configs, tracks, stateHistory] = await Promise.all([
+	const [server, configs, tracks, statistics] = await Promise.all([
 		getServerById(event, event.params.id),
 		getConfigFiles(event, event.params.id),
 		getTracks(event),
-		getStateHistory(event, event.params.id, startDate, endDate)
+		getStateHistoryStats(event, event.params.id, startDate, endDate)
 	]);
 	return {
 		id: event.params.id,
 		configs,
 		tracks,
 		server,
-		stateHistory
+		statistics
 	};
 };
 
