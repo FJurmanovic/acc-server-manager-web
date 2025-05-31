@@ -19,14 +19,14 @@
 			formLoading = false;
 		};
 	}}
-	class="space-y-6 max-w-3xl"
+	class="max-w-3xl space-y-6"
 >
 	<input type="hidden" name="id" value={id} />
 	<input type="hidden" name="file" value={configFile.settings} />
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<!-- Server Name -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Server Name:
 				<input
 					bind:value={editedConfig.serverName}
@@ -40,7 +40,7 @@
 
 		<!-- Admin Password -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Admin Password:
 				<input
 					bind:value={editedConfig.adminPassword}
@@ -54,7 +54,7 @@
 
 		<!-- Car Group -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Car Group:
 				<select
 					bind:value={editedConfig.carGroup}
@@ -71,7 +71,7 @@
 
 		<!-- Track Medals Requirement -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Track Medals Requirement:
 				<input
 					bind:value={editedConfig.trackMedalsRequirement}
@@ -85,7 +85,7 @@
 
 		<!-- Safety Rating Requirement -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Safety Rating Requirement:
 				<input
 					bind:value={editedConfig.safetyRatingRequirement}
@@ -99,7 +99,7 @@
 
 		<!-- Racecraft Rating Requirement -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Racecraft Rating Requirement:
 				<input
 					bind:value={editedConfig.racecraftRatingRequirement}
@@ -113,7 +113,7 @@
 
 		<!-- Password -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Password:
 				<input
 					bind:value={editedConfig.password}
@@ -127,7 +127,7 @@
 
 		<!-- Spectator Password -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Spectator Password:
 				<input
 					bind:value={editedConfig.spectatorPassword}
@@ -141,7 +141,7 @@
 
 		<!-- Max Car Slots -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Max Car Slots:
 				<input
 					bind:value={editedConfig.maxCarSlots}
@@ -155,7 +155,7 @@
 
 		<!-- Dump Leaderboards -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Dump Leaderboards:
 				<select
 					bind:value={editedConfig.dumpLeaderboards}
@@ -171,7 +171,7 @@
 
 		<!-- Is Race Locked -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Is Race Locked:
 				<select
 					bind:value={editedConfig.isRaceLocked}
@@ -187,7 +187,7 @@
 
 		<!-- Randomize Track When Empty -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Randomize Track When Empty:
 				<select
 					bind:value={editedConfig.randomizeTrackWhenEmpty}
@@ -203,7 +203,7 @@
 
 		<!-- Central Entry List Path -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Central Entry List Path:
 				<input
 					bind:value={editedConfig.centralEntryListPath}
@@ -217,7 +217,7 @@
 
 		<!-- Allow Auto DQ -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Allow Auto DQ:
 				<select
 					bind:value={editedConfig.allowAutoDQ}
@@ -233,7 +233,7 @@
 
 		<!-- Short Formation Lap -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Short Formation Lap:
 				<select
 					bind:value={editedConfig.shortFormationLap}
@@ -249,7 +249,7 @@
 
 		<!-- Formation Lap Type -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Formation Lap Type:
 				<select
 					bind:value={editedConfig.formationLapType}
@@ -258,9 +258,7 @@
 					class="form form-select"
 				>
 					<option value={0}>Old Limiter Lap</option>
-					<option value={1}
-						>Free (replaces /manual start), only usable for private servers</option
-					>
+					<option value={1}>Free (replaces /manual start), only usable for private servers</option>
 					<option value={3}>Default formation lap with position control and UI</option>
 				</select>
 			</label>
@@ -268,7 +266,7 @@
 
 		<!-- Ignore Premature Disconnects -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Ignore Premature Disconnects:
 				<select
 					bind:value={editedConfig.ignorePrematureDisconnects}
@@ -282,22 +280,23 @@
 			</label>
 		</div>
 	</div>
-	<div class="pt-4 border-t border-gray-700">
+	<div class="border-t border-gray-700 pt-4">
 		<label class="flex items-center">
-			<input 
-			type="checkbox" 
-			bind:checked={restart}
-			class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-600 rounded bg-gray-700"
+			<input
+				type="checkbox"
+				bind:checked={restart}
+				name="restart"
+				class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-600 focus:ring-green-500"
 			/>
 			<span class="ml-2 text-sm text-gray-300">Restart server after saving</span>
 		</label>
-		</div>
-		
-		<div class="flex justify-end">
-		<button 
-			type="submit"  
+	</div>
+
+	<div class="flex justify-end">
+		<button
+			type="submit"
 			disabled={formLoading}
-			class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md text-sm font-medium"
+			class="rounded-md bg-green-600 px-4 py-2 text-sm font-medium hover:bg-green-700"
 		>
 			Save Changes
 		</button>

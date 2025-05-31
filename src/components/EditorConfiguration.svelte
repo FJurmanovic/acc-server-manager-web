@@ -18,13 +18,13 @@
 			formLoading = false;
 		};
 	}}
-	class="space-y-6 max-w-3xl"
+	class="max-w-3xl space-y-6"
 >
 	<input type="hidden" name="id" value={id} />
 	<input type="hidden" name="file" value={configFile.configuration} />
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				UDP Port:
 				<input
 					disabled={formLoading}
@@ -36,7 +36,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				TCP Port:
 				<input
 					disabled={formLoading}
@@ -48,7 +48,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Max Connections:
 				<input
 					disabled={formLoading}
@@ -60,7 +60,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Lan Discovery:
 				<select
 					bind:value={editedConfig.lanDiscovery}
@@ -74,7 +74,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Register To Lobby:
 				<select
 					bind:value={editedConfig.registerToLobby}
@@ -89,22 +89,23 @@
 		</div>
 		<input type="hidden" name="configVersion" value={1} />
 	</div>
-	<div class="pt-4 border-t border-gray-700">
+	<div class="border-t border-gray-700 pt-4">
 		<label class="flex items-center">
-			<input 
-			type="checkbox" 
-			bind:checked={restart}
-			class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-600 rounded bg-gray-700"
+			<input
+				type="checkbox"
+				name="restart"
+				bind:checked={restart}
+				class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-600 focus:ring-green-500"
 			/>
 			<span class="ml-2 text-sm text-gray-300">Restart server after saving</span>
 		</label>
-		</div>
-		
-		<div class="flex justify-end">
-		<button 
-			type="submit"  
+	</div>
+
+	<div class="flex justify-end">
+		<button
+			type="submit"
 			disabled={formLoading}
-			class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md text-sm font-medium"
+			class="rounded-md bg-green-600 px-4 py-2 text-sm font-medium hover:bg-green-700"
 		>
 			Save Changes
 		</button>

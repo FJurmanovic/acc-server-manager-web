@@ -20,13 +20,13 @@
 			formLoading = false;
 		};
 	}}
-	class="space-y-6 max-w-3xl"
+	class="max-w-3xl space-y-6"
 >
 	<input type="hidden" name="id" value={id} />
 	<input type="hidden" name="file" value={configFile.event} />
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Track:
 				<select
 					bind:value={editedConfig.track}
@@ -41,7 +41,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Pre-Race waiting time seconds:
 				<input
 					disabled={formLoading}
@@ -53,7 +53,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Session over time seconds:
 				<input
 					disabled={formLoading}
@@ -65,7 +65,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Ambient temp:
 				<input
 					disabled={formLoading}
@@ -77,7 +77,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Cloud level:
 				<input
 					disabled={formLoading}
@@ -90,7 +90,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Rain:
 				<input
 					disabled={formLoading}
@@ -103,7 +103,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Weather randomness:
 				<input
 					disabled={formLoading}
@@ -115,7 +115,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Post-Qualy seconds:
 				<input
 					disabled={formLoading}
@@ -127,7 +127,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Post-Race seconds:
 				<input
 					disabled={formLoading}
@@ -139,7 +139,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Simracer weather conditions:
 				<input
 					disabled={formLoading}
@@ -151,7 +151,7 @@
 			</label>
 		</div>
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Is fixed condition qualification:
 				<select
 					bind:value={editedConfig.isFixedConditionQualification}
@@ -166,15 +166,15 @@
 		</div>
 		<div />
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Sessions:
-    			<div class="mt-2 space-y-4">
+				<div class="mt-2 space-y-4">
 					{#each editedConfig.sessions as session, index}
 						<div class="mb-4 rounded-lg border border-gray-700 bg-gray-800 p-4">
-          					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<!-- Hour of Day -->
 								<div>
-									<label class="block text-sm font-medium text-gray-300 mb-1"
+									<label class="mb-1 block text-sm font-medium text-gray-300"
 										>Hour of Day:
 										<input
 											bind:value={session.hourOfDay}
@@ -187,7 +187,7 @@
 								</div>
 								<!-- Day of Weekend -->
 								<div>
-									<label class="block text-sm font-medium text-gray-300 mb-1">
+									<label class="mb-1 block text-sm font-medium text-gray-300">
 										Day of Weekend:
 										<input
 											bind:value={session.dayOfWeekend}
@@ -200,7 +200,7 @@
 								</div>
 								<!-- Time Multiplier -->
 								<div>
-									<label class="block text-sm font-medium text-gray-300 mb-1">
+									<label class="mb-1 block text-sm font-medium text-gray-300">
 										Time Multiplier:
 										<input
 											bind:value={session.timeMultiplier}
@@ -213,7 +213,7 @@
 								</div>
 								<!-- Session Type -->
 								<div>
-									<label class="block text-sm font-medium text-gray-300 mb-1">
+									<label class="mb-1 block text-sm font-medium text-gray-300">
 										Session Type:
 										<select
 											bind:value={session.sessionType}
@@ -229,7 +229,7 @@
 								</div>
 								<!-- Session Duration Minutes -->
 								<div>
-									<label class="block text-sm font-medium text-gray-300 mb-1">
+									<label class="mb-1 block text-sm font-medium text-gray-300">
 										Session Duration (Minutes):
 										<input
 											bind:value={session.sessionDurationMinutes}
@@ -246,10 +246,21 @@
 								onclick={() => {
 									editedConfig.sessions = editedConfig.sessions.filter((_, i) => i !== index);
 								}}
-								class="mt-4 px-3 py-1 bg-red-600 hover:bg-red-700 rounded-md text-xs font-medium text-white flex items-center"
+								class="mt-4 flex items-center rounded-md bg-red-600 px-3 py-1 text-xs font-medium text-white hover:bg-red-700"
 							>
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="mr-1 h-4 w-4"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+									/>
 								</svg>
 								Remove Session
 							</button>
@@ -269,10 +280,21 @@
 								}
 							];
 						}}
-        				class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md text-sm font-medium text-white flex items-center"
+						class="flex items-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="mr-1 h-4 w-4"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M12 4v16m8-8H4"
+							/>
 						</svg>
 						Add Session
 					</button>
@@ -280,22 +302,23 @@
 			</label>
 		</div>
 	</div>
-	<div class="pt-4 border-t border-gray-700">
+	<div class="border-t border-gray-700 pt-4">
 		<label class="flex items-center">
-			<input 
-			type="checkbox" 
-			bind:checked={restart}
-			class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-600 rounded bg-gray-700"
+			<input
+				type="checkbox"
+				name="restart"
+				bind:checked={restart}
+				class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-600 focus:ring-green-500"
 			/>
 			<span class="ml-2 text-sm text-gray-300">Restart server after saving</span>
 		</label>
-		</div>
-		
-		<div class="flex justify-end">
-		<button 
-			type="submit"  
+	</div>
+
+	<div class="flex justify-end">
+		<button
+			type="submit"
 			disabled={formLoading}
-			class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md text-sm font-medium"
+			class="rounded-md bg-green-600 px-4 py-2 text-sm font-medium hover:bg-green-700"
 		>
 			Save Changes
 		</button>

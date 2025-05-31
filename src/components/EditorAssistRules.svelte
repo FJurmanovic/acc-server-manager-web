@@ -18,14 +18,14 @@
 			formLoading = false;
 		};
 	}}
-	class="space-y-6 max-w-3xl"
+	class="max-w-3xl space-y-6"
 >
 	<input type="hidden" name="id" value={id} />
 	<input type="hidden" name="file" value={configFile.assistRules} />
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<!-- Stability Control Level Max -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Stability Control Level Max:
 				<input
 					bind:value={editedConfig.stabilityControlLevelMax}
@@ -39,7 +39,7 @@
 
 		<!-- Disable Autosteer -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Disable Autosteer:
 				<select
 					bind:value={editedConfig.disableAutosteer}
@@ -55,7 +55,7 @@
 
 		<!-- Disable Auto Lights -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Disable Auto Lights:
 				<select
 					bind:value={editedConfig.disableAutoLights}
@@ -71,7 +71,7 @@
 
 		<!-- Disable Auto Wiper -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Disable Auto Wiper:
 				<select
 					bind:value={editedConfig.disableAutoWiper}
@@ -87,7 +87,7 @@
 
 		<!-- Disable Auto Engine Start -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Disable Auto Engine Start:
 				<select
 					bind:value={editedConfig.disableAutoEngineStart}
@@ -103,7 +103,7 @@
 
 		<!-- Disable Auto Pit Limiter -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Disable Auto Pit Limiter:
 				<select
 					bind:value={editedConfig.disableAutoPitLimiter}
@@ -119,7 +119,7 @@
 
 		<!-- Disable Auto Gear -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Disable Auto Gear:
 				<select
 					bind:value={editedConfig.disableAutoGear}
@@ -135,7 +135,7 @@
 
 		<!-- Disable Auto Clutch -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Disable Auto Clutch:
 				<select
 					bind:value={editedConfig.disableAutoClutch}
@@ -151,7 +151,7 @@
 
 		<!-- Disable Ideal Line -->
 		<div>
-			<label class="block text-sm font-medium text-gray-300 mb-1">
+			<label class="mb-1 block text-sm font-medium text-gray-300">
 				Disable Ideal Line:
 				<select
 					bind:value={editedConfig.disableIdealLine}
@@ -165,22 +165,23 @@
 			</label>
 		</div>
 	</div>
-	<div class="pt-4 border-t border-gray-700">
+	<div class="border-t border-gray-700 pt-4">
 		<label class="flex items-center">
-			<input 
-			type="checkbox" 
-			bind:checked={restart}
-			class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-600 rounded bg-gray-700"
+			<input
+				type="checkbox"
+				bind:checked={restart}
+				name="restart"
+				class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-600 focus:ring-green-500"
 			/>
 			<span class="ml-2 text-sm text-gray-300">Restart server after saving</span>
 		</label>
-		</div>
-		
-		<div class="flex justify-end">
-		<button 
-			type="submit"  
+	</div>
+
+	<div class="flex justify-end">
+		<button
+			type="submit"
 			disabled={formLoading}
-			class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md text-sm font-medium"
+			class="rounded-md bg-green-600 px-4 py-2 text-sm font-medium hover:bg-green-700"
 		>
 			Save Changes
 		</button>
