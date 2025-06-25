@@ -5,10 +5,11 @@
 	import EditorEventRules from '$components/EditorEventRules.svelte';
 	import EditorSettings from '$components/EditorSettings.svelte';
 	import Statistics from '$components/Statistics.svelte';
+	import Toast from '$components/Toast.svelte';
 	import { getStatusColor, serviceStatusToString } from '$lib/types/serviceStatus.js';
 	import { serverTab } from '$models/config.js';
 
-	let { data } = $props();
+	let { data, form } = $props();
 	const configs = data.configs;
 	const tracks = data.tracks;
 	const id = data.id;
@@ -16,6 +17,10 @@
 	const statistics = data.statistics;
 	let tab = $state(serverTab.statistics);
 </script>
+
+{#if form?.message}
+	<Toast message={form.message} type={form.success ? 'success' : 'error'} />
+{/if}
 
 <svelte:head>
 	<title>{server.name}</title>
@@ -30,7 +35,7 @@
 				<h2 class="truncate text-lg font-semibold">{server.name}</h2>
 			</a>
 			<div class="mt-1 flex items-center">
-				<span class={`inline-block h-2 w-2 rounded-full ${getStatusColor(server.status)} mr-2`} />
+				<span class={`inline-block h-2 w-2 rounded-full ${getStatusColor(server.status)} mr-2`}></span>
 				<span class="text-sm capitalize">{serviceStatusToString(server.status)}</span>
 			</div>
 		</div>

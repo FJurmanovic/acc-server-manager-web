@@ -1,10 +1,15 @@
 <script lang="ts">
 	import ServerCard from '$components/ServerCard.svelte';
+	import Toast from '$components/Toast.svelte';
 	import type { Server } from '$models/server';
 
-	const { data } = $props();
+	const { data, form } = $props();
 	let servers: Server[] = data.servers;
 </script>
+
+{#if form?.message}
+	<Toast message={form.message} type={form.success ? 'success' : 'error'} />
+{/if}
 
 <div class="min-h-screen bg-gray-900 text-white">
 	<header class="bg-gray-800 shadow-md">
