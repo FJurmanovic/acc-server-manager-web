@@ -3,10 +3,12 @@
 	import { user } from '$stores/user';
 	import type { LayoutData } from './$types';
 
-	let { data } = $props<LayoutData>();
+	let { data, children } = $props<LayoutData>();
 
 	// Set the user store with data from the server
-	$: $user = data.user;
+	$effect(() => {
+		$user = data.user;
+	});
 </script>
 
 <div class="layout">
