@@ -8,13 +8,13 @@
 </script>
 
 <div class="container mx-auto p-4">
-	<h1 class="text-2xl font-bold mb-4">User Management</h1>
+	<h1 class="mb-4 text-2xl font-bold">User Management</h1>
 
 	{#if hasPermission($user, 'membership.create')}
-	<div class="flex justify-end mb-4">
-		<button class="btn btn-primary">Create User</button>
-	</div>
-{/if}
+		<div class="mb-4 flex justify-end">
+			<button class="btn btn-primary">Create User</button>
+		</div>
+	{/if}
 
 	<div class="overflow-x-auto">
 		<table class="table w-full">
@@ -23,8 +23,8 @@
 					<th>Username</th>
 					<th>Role</th>
 					{#if hasPermission($user, 'membership.edit')}
-					<th>Actions</th>
-				{/if}
+						<th>Actions</th>
+					{/if}
 				</tr>
 			</thead>
 			<tbody>
@@ -32,12 +32,12 @@
 					<tr>
 						<td>{user.username}</td>
 						<td>{user.role.name}</td>
-						{#if hasPermission($user, 'membership.edit')}
-						<td>
-							<button class="btn btn-sm">Edit</button>
-							<button class="btn btn-sm btn-error">Delete</button>
-						</td>
-					{/if}
+						{#if hasPermission(user, 'membership.edit')}
+							<td>
+								<button class="btn btn-sm">Edit</button>
+								<button class="btn btn-sm btn-error">Delete</button>
+							</td>
+						{/if}
 					</tr>
 				{/each}
 			</tbody>
