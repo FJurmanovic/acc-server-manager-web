@@ -16,8 +16,14 @@ export const login = async (event: RequestEvent, username: string, password: str
 		});
 
 		if (!response.ok) {
-			const errorData = await response.json().catch(() => ({ error: 'Invalid username or password.' }));
-			authStore.set({ token: undefined, error: errorData.error || 'Invalid username or password.' });
+			console.log(response);
+			const errorData = await response
+				.json()
+				.catch(() => ({ error: 'Invalid username or password.' }));
+			authStore.set({
+				token: undefined,
+				error: errorData.error || 'Invalid username or password.'
+			});
 			return false;
 		}
 
