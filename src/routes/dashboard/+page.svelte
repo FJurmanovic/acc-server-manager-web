@@ -2,6 +2,7 @@
 	import ServerCard from '$components/ServerCard.svelte';
 	import Toast from '$components/Toast.svelte';
 	import type { Server } from '$models/server';
+	import { user, hasPermission } from '$stores/user';
 
 	const { data, form } = $props();
 	let servers: Server[] = data.servers;
@@ -16,6 +17,14 @@
 		<div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
 			<h1 class="text-2xl font-bold">ACC Server Manager</h1>
 			<div class="flex items-center space-x-4">
+				{#if hasPermission($user, 'membership.view')}
+					<a href="/dashboard/membership" class="flex items-center text-gray-300 hover:text-white">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197m0 0A5.975 5.975 0 0112 13a5.975 5.975 0 01-3-1.197" />
+						</svg>
+						<span class="ml-1 hidden sm:inline">Users</span>
+					</a>
+				{/if}
 				<a href="/logout">
 					<button class="flex items-center text-gray-300 hover:text-white">
 						<svg
@@ -67,9 +76,4 @@
 </svelte:head>
 
 <style>
-	.server-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-		gap: 20px;
-	}
 </style>

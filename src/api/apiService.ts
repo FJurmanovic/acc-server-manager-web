@@ -44,7 +44,7 @@ export async function fetchAPIEvent(
 		data: { token }
 	} = await redisSessionManager.getSession(event.cookies);
 
-	return fetchAPI(endpoint, method, body, { Authorization: `Basic ${token}` });
+	return fetchAPI(endpoint, method, body, { Authorization: `Bearer ${token}` });
 }
 
 export default fetchAPI;

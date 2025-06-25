@@ -1,19 +1,35 @@
-import fetchAPI, { fetchAPIEvent } from '$api/apiService';
+import { fetchAPIEvent } from '$api/apiService';
+import { env } from '$env/dynamic/private';
 import { authStore } from '$stores/authStore';
 import { redisSessionManager } from '$stores/redisSessionManager';
 import type { RequestEvent } from '@sveltejs/kit';
 import { v4 as uuidv4 } from 'uuid';
 
 export const login = async (event: RequestEvent, username: string, password: string) => {
-	const token = btoa(`${username}:${password}`);
-	await redisSessionManager.createSession(event.cookies, { token }, uuidv4());
-	if (!(await checkAuth(event))) {
-		{
-			authStore.set({ token: undefined, error: 'Invalid username or password.' });
+	try {
+		const response = await fetch(`${env.API_BASE_URL}/auth/login`, {
+			method: 'POST',
+			body: JSON.stringify({ username, password }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const errorData = await response.json().catch(() => ({ error: 'Invalid username or password.' }));
+			authStore.set({ token: undefined, error: errorData.error || 'Invalid username or password.' });
 			return false;
 		}
+
+		const { token } = await response.json();
+
+		await redisSessionManager.createSession(event.cookies, { token }, uuidv4());
+
+		return true;
+	} catch (err) {
+		authStore.set({ token: undefined, error: 'Login failed. Please try again.' });
+		return false;
 	}
-	return true;
 };
 
 export const logout = (event: RequestEvent) => {
