@@ -17,7 +17,7 @@
 		<div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
 			<h1 class="text-2xl font-bold">ACC Server Manager</h1>
 			<div class="flex items-center space-x-4">
-				{#if false && hasPermission($user, 'membership.view')}
+				{#if hasPermission($user, 'membership.view')}
 					<a href="/dashboard/membership" class="flex items-center text-gray-300 hover:text-white">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"

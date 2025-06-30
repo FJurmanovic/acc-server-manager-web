@@ -34,11 +34,11 @@
 			<div class="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-300">
 				<div>
 					<span class="text-gray-500">Track:</span>
-					{server.state.track}
+					{server.state?.track}
 				</div>
 				<div>
 					<span class="text-gray-500">Players:</span>
-					{server.state.playerCount}
+					{server.state?.playerCount}
 				</div>
 			</div>
 		</div>

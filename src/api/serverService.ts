@@ -110,15 +110,15 @@ export const updateConfig = async (
 	);
 };
 
-export const restartService = async (event: RequestEvent, serverId: number) => {
+export const restartService = async (event: RequestEvent, serverId: string) => {
 	return fetchAPIEvent(event, '/api/restart', 'POST', { serverId });
 };
 
-export const startService = async (event: RequestEvent, serverId: number) => {
+export const startService = async (event: RequestEvent, serverId: string) => {
 	return fetchAPIEvent(event, '/api/start', 'POST', { serverId });
 };
 
-export const stopService = async (event: RequestEvent, serverId: number) => {
+export const stopService = async (event: RequestEvent, serverId: string) => {
 	return fetchAPIEvent(event, '/api/stop', 'POST', { serverId });
 };
 

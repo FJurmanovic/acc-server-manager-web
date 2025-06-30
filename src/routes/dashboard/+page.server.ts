@@ -11,7 +11,7 @@ export const load = async (event: RequestEvent) => {
 
 // Helper function to create a server action with validation and error handling
 const createServerAction = (
-	action: (event: RequestEvent, id: number) => Promise<void>,
+	action: (event: RequestEvent, id: string) => Promise<void>,
 	{ success, failure }: { success: string; failure: string }
 ) => {
 	return async (event: RequestEvent) => {
@@ -22,13 +22,8 @@ const createServerAction = (
 			return fail(400, { message: 'Invalid server ID provided.' });
 		}
 
-		const serverId = Number(id);
-		if (isNaN(serverId)) {
-			return fail(400, { message: 'Server ID must be a number.' });
-		}
-
 		try {
-			await action(event, serverId);
+			await action(event, id);
 			return { success: true, message: success };
 		} catch (err) {
 			const message = err instanceof Error ? err.message : 'Unknown error';

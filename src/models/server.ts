@@ -8,7 +8,7 @@ interface State {
 }
 
 export interface Server {
-	id: number;
+	id: string;
 	name: string;
 	status: ServiceStatus;
 	state: State;
