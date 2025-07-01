@@ -28,8 +28,6 @@ export const load = async (event) => {
 			membershipService.getUsers(event, filter),
 			membershipService.getRoles(event)
 		]);
-
-		console.log(users);
 		// Simple client-side pagination
 		const startIndex = (page - 1) * pageSize;
 		const endIndex = startIndex + pageSize;
