@@ -3,8 +3,6 @@ import { getServers, restartService, startService, stopService } from '$api/serv
 import { fail, redirect, type Actions, type RequestEvent } from '@sveltejs/kit';
 
 export const load = async (event: RequestEvent) => {
-	const isAuth = await checkAuth(event);
-	if (!isAuth) return redirect(308, '/login');
 	const servers = await getServers(event);
 	return { servers };
 };

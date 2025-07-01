@@ -18,7 +18,7 @@ async function fetchAPI(endpoint: string, method: string = 'GET', body?: object,
 	});
 
 	if (!response.ok) {
-		if (endpoint != '/api' && response.status == 401) {
+		if (response.status == 401) {
 			authStore.set({
 				username: undefined,
 				password: undefined,
@@ -40,11 +40,15 @@ export async function fetchAPIEvent(
 	method: string = 'GET',
 	body?: object
 ) {
-	const {
-		data: { token }
-	} = await redisSessionManager.getSession(event.cookies);
+	if (!event.cookies) {
+		redirect(308, '/login');
+	}
+	const session = await redisSessionManager.getSession(event.cookies);
+	if (!session?.data?.token) {
+		redirect(308, '/login');
+	}
 
-	return fetchAPI(endpoint, method, body, { Authorization: `Bearer ${token}` });
+	return fetchAPI(endpoint, method, body, { Authorization: `Bearer ${session.data.token}` });
 }
 
 export default fetchAPI;
