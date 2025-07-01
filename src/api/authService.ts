@@ -16,7 +16,6 @@ export const login = async (event: RequestEvent, username: string, password: str
 		});
 
 		if (!response.ok) {
-			console.log(response);
 			const errorData = await response
 				.json()
 				.catch(() => ({ error: 'Invalid username or password.' }));
