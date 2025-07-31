@@ -1,7 +1,7 @@
 {
 	"name": "acc-server-manager-web",
 	"private": true,
-	"version": "0.10.0",
+	"version": "0.10.2",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
