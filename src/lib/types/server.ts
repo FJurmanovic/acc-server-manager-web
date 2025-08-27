@@ -1,32 +1,56 @@
-import type { ServiceStatus } from './serviceStatus';
+export enum ServiceStatus {
+	Unknown,
+	Stopped,
+	Stopping,
+	Restarting,
+	Starting,
+	Running
+}
 
-export interface ServerState {
+export const serviceStatusToString = (status: ServiceStatus): string => {
+	switch (status) {
+		case ServiceStatus.Running:
+			return 'Running';
+		case ServiceStatus.Stopped:
+			return 'Stopped';
+		case ServiceStatus.Starting:
+			return 'Starting';
+		case ServiceStatus.Stopping:
+			return 'Stopping';
+		case ServiceStatus.Restarting:
+			return 'Restarting';
+		default:
+			return 'Unknown';
+	}
+};
+
+export const getStatusColor = (status: ServiceStatus): string => {
+	switch (status) {
+		case ServiceStatus.Running:
+			return 'bg-green-500';
+		case ServiceStatus.Stopped:
+			return 'bg-red-500';
+		case ServiceStatus.Starting:
+			return 'bg-blue-500';
+		case ServiceStatus.Stopping:
+			return 'bg-yellow-500';
+		case ServiceStatus.Restarting:
+			return 'bg-purple-500';
+		default:
+			return 'bg-gray-500';
+	}
+};
+
+interface State {
 	session: string;
-	sessionStart: string;
 	playerCount: number;
 	track: string;
 	maxConnections: number;
 }
 
 export interface Server {
-	id: number;
+	id: string;
 	name: string;
 	status: ServiceStatus;
-	state: ServerState;
+	state: State;
 }
-
-// Helper function to parse server data from API
-export const parseServer = (data: any): Server => {
-	return {
-		id: data.id,
-		name: data.name,
-		status: data.status,
-		state: {
-			session: data.state.session,
-			sessionStart: data.state.sessionStart,
-			playerCount: data.state.playerCount,
-			track: data.state.track,
-			maxConnections: data.state.maxConnections
-		}
-	};
-};
