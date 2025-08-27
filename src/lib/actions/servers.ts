@@ -18,6 +18,10 @@ export async function startServerAction(serverId: string) {
 	}
 }
 
+export async function startServerEventAction(serverId: string) {
+	await startServerAction(serverId);
+}
+
 export async function stopServerAction(serverId: string) {
 	try {
 		const session = await requireAuth();
@@ -32,6 +36,10 @@ export async function stopServerAction(serverId: string) {
 	}
 }
 
+export async function stopServerEventAction(serverId: string) {
+	await stopServerAction(serverId);
+}
+
 export async function restartServerAction(serverId: string) {
 	try {
 		const session = await requireAuth();
@@ -44,4 +52,8 @@ export async function restartServerAction(serverId: string) {
 			message: error instanceof Error ? error.message : 'Failed to restart server'
 		};
 	}
+}
+
+export async function restartServerEventAction(serverId: string) {
+	await restartServerAction(serverId);
 }

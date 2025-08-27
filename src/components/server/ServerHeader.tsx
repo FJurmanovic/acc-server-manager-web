@@ -1,24 +1,16 @@
 import Link from 'next/link';
 import { Server, getStatusColor, serviceStatusToString, ServiceStatus } from '@/lib/types/server';
-import { startServerAction, stopServerAction, restartServerAction } from '@/lib/actions/servers';
+import {
+	startServerEventAction,
+	restartServerEventAction,
+	stopServerEventAction
+} from '@/lib/actions/servers';
 
 interface ServerHeaderProps {
 	server: Server;
 }
 
 export function ServerHeader({ server }: ServerHeaderProps) {
-	const handleStartServer = () => {
-		startServerAction(server.id);
-	};
-
-	const handleStopServer = () => {
-		stopServerAction(server.id);
-	};
-
-	const handleRestartServer = () => {
-		restartServerAction(server.id);
-	};
-
 	return (
 		<div className="rounded-lg bg-gray-800 p-6">
 			<div className="flex items-center justify-between">
@@ -61,7 +53,7 @@ export function ServerHeader({ server }: ServerHeaderProps) {
 					</div>
 
 					<div className="flex space-x-3">
-						<form action={handleStartServer}>
+						<form action={startServerEventAction.bind(null, server.id)}>
 							<button
 								type="submit"
 								disabled={server.status === ServiceStatus.Running}
@@ -71,7 +63,7 @@ export function ServerHeader({ server }: ServerHeaderProps) {
 							</button>
 						</form>
 
-						<form action={handleRestartServer}>
+						<form action={restartServerEventAction.bind(null, server.id)}>
 							<button
 								type="submit"
 								disabled={server.status === ServiceStatus.Stopped}
@@ -81,7 +73,7 @@ export function ServerHeader({ server }: ServerHeaderProps) {
 							</button>
 						</form>
 
-						<form action={handleStopServer}>
+						<form action={stopServerEventAction.bind(null, server.id)}>
 							<button
 								type="submit"
 								disabled={server.status === ServiceStatus.Stopped}
