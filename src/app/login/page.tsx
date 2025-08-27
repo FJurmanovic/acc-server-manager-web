@@ -1,6 +1,15 @@
-import { loginAction } from '@/lib/actions/auth';
+'use client';
+
+import { loginAction, LoginResult } from '@/lib/actions/auth';
+import { useActionState } from 'react';
+
+const initialState: LoginResult = {
+	message: '',
+	success: true
+};
 
 export default function LoginPage() {
+	const [state, formAction] = useActionState(loginAction, initialState);
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-gray-900 px-4">
 			<div className="w-full max-w-md space-y-8 rounded-lg bg-gray-800 p-8 shadow-lg">
@@ -8,8 +17,13 @@ export default function LoginPage() {
 					<h1 className="text-3xl font-bold text-white">ACC Server Manager</h1>
 					<p className="mt-2 text-gray-400">Sign in to manage your servers</p>
 				</div>
+				{state?.success ? null : (
+					<div className="rounded-md border border-red-700 bg-red-900/50 p-3 text-sm text-red-200">
+						{state?.message}
+					</div>
+				)}
 
-				<form action={loginAction} className="space-y-6">
+				<form action={formAction} className="space-y-6">
 					<div>
 						<label htmlFor="username" className="mb-2 block text-sm font-medium text-gray-300">
 							Username

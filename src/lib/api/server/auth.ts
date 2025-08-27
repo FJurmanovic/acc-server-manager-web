@@ -15,7 +15,11 @@ export async function loginUser(username: string, password: string) {
 	});
 
 	if (!response.ok) {
-		throw new Error(`Login failed: ${response.statusText} - ${BASE_URL}${authRoute}/login`);
+		if (response.status === 401) {
+			throw new Error(`Invalid credentials`);
+		}
+
+		throw new Error(`Login failed: ${response.statusText}`);
 	}
 
 	const { token } = await response.json();
