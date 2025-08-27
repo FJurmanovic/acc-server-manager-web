@@ -40,13 +40,13 @@ export function StatisticsDashboard({ stats }: StatisticsDashboardProps) {
 			</div>
 
 			{/* Charts */}
-			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-				<div className="rounded-lg bg-gray-800 p-6">
+			<div className="grid grid-cols-12 gap-4">
+				<div className="col-span-9 rounded-lg bg-gray-800 p-6">
 					<h3 className="mb-4 text-lg font-medium text-white">Player Count Over Time</h3>
 					<PlayerCountChart data={stats.playerCountOverTime ?? []} />
 				</div>
 
-				<div className="rounded-lg bg-gray-800 p-6">
+				<div className="col-span-3 rounded-lg bg-gray-800 p-6">
 					<h3 className="mb-4 text-lg font-medium text-white">Session Types</h3>
 					<SessionTypesChart data={stats.sessionTypes ?? []} />
 				</div>

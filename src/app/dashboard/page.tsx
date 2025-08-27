@@ -13,7 +13,7 @@ export default async function DashboardPage() {
 	return (
 		<div className="min-h-screen bg-gray-900 text-white">
 			<header className="bg-gray-800 shadow-md">
-				<div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+				<div className="mx-auto flex max-w-[120rem] items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
 					<h1 className="text-2xl font-bold">ACC Server Manager</h1>
 					<div className="flex items-center space-x-4">
 						{hasPermission(session.user!, 'membership.view') && (
@@ -61,7 +61,7 @@ export default async function DashboardPage() {
 				</div>
 			</header>
 
-			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+			<main className="mx-auto max-w-[120rem] px-4 py-8 sm:px-6 lg:px-8">
 				<div className="mb-6 flex items-center justify-between">
 					<h2 className="text-xl font-semibold">Your Servers</h2>
 					<RefreshButton />

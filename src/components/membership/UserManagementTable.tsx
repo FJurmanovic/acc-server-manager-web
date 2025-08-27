@@ -80,7 +80,7 @@ export function UserManagementTable({ initialData, roles, currentUser }: UserMan
 	return (
 		<>
 			<header className="bg-gray-800 shadow-md">
-				<div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+				<div className="mx-auto flex max-w-[120rem] items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
 					<div className="flex items-center space-x-4">
 						<Link href="/dashboard" className="text-gray-300 hover:text-white">
 							<svg
@@ -111,7 +111,7 @@ export function UserManagementTable({ initialData, roles, currentUser }: UserMan
 				</div>
 			</header>
 
-			<main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+			<main className="mx-auto max-w-[120rem] px-4 py-8 sm:px-6 lg:px-8">
 				{/* Filters */}
 				<div className="mb-6 rounded-lg border border-gray-700 bg-gray-800 p-4">
 					<h2 className="mb-3 text-lg font-semibold">Filters</h2>
