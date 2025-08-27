@@ -7,6 +7,18 @@ interface ServerCardProps {
 }
 
 export function ServerCard({ server }: ServerCardProps) {
+	const handleStartServer = () => {
+		startServerAction(server.id);
+	};
+
+	const handleStopServer = () => {
+		stopServerAction(server.id);
+	};
+
+	const handleRestartServer = () => {
+		restartServerAction(server.id);
+	};
+
 	return (
 		<div className="overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow-lg">
 			<Link href={`/dashboard/server/${server.id}`} className="block">
@@ -49,7 +61,7 @@ export function ServerCard({ server }: ServerCardProps) {
 			</Link>
 
 			<div className="flex justify-between gap-2 bg-gray-900 px-4 py-3">
-				<form action={startServerAction.bind(null, server.id)}>
+				<form action={handleStartServer}>
 					<button
 						type="submit"
 						disabled={server.status === ServiceStatus.Running}
@@ -59,7 +71,7 @@ export function ServerCard({ server }: ServerCardProps) {
 					</button>
 				</form>
 
-				<form action={restartServerAction.bind(null, server.id)}>
+				<form action={handleRestartServer}>
 					<button
 						type="submit"
 						disabled={server.status === ServiceStatus.Stopped}
@@ -69,7 +81,7 @@ export function ServerCard({ server }: ServerCardProps) {
 					</button>
 				</form>
 
-				<form action={stopServerAction.bind(null, server.id)}>
+				<form action={handleStopServer}>
 					<button
 						type="submit"
 						disabled={server.status === ServiceStatus.Stopped}

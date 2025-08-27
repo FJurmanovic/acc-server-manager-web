@@ -7,6 +7,18 @@ interface ServerHeaderProps {
 }
 
 export function ServerHeader({ server }: ServerHeaderProps) {
+	const handleStartServer = () => {
+		startServerAction(server.id);
+	};
+
+	const handleStopServer = () => {
+		stopServerAction(server.id);
+	};
+
+	const handleRestartServer = () => {
+		restartServerAction(server.id);
+	};
+
 	return (
 		<div className="rounded-lg bg-gray-800 p-6">
 			<div className="flex items-center justify-between">
@@ -49,7 +61,7 @@ export function ServerHeader({ server }: ServerHeaderProps) {
 					</div>
 
 					<div className="flex space-x-3">
-						<form action={startServerAction.bind(null, server.id)}>
+						<form action={handleStartServer}>
 							<button
 								type="submit"
 								disabled={server.status === ServiceStatus.Running}
@@ -59,7 +71,7 @@ export function ServerHeader({ server }: ServerHeaderProps) {
 							</button>
 						</form>
 
-						<form action={restartServerAction.bind(null, server.id)}>
+						<form action={handleRestartServer}>
 							<button
 								type="submit"
 								disabled={server.status === ServiceStatus.Stopped}
@@ -69,7 +81,7 @@ export function ServerHeader({ server }: ServerHeaderProps) {
 							</button>
 						</form>
 
-						<form action={stopServerAction.bind(null, server.id)}>
+						<form action={handleStopServer}>
 							<button
 								type="submit"
 								disabled={server.status === ServiceStatus.Stopped}
