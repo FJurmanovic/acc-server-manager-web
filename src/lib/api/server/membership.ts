@@ -24,28 +24,35 @@ export async function getUsers(token: string, params: UserListParams = {}): Prom
 	const queryString = searchParams.toString();
 	const endpoint = `${membershipRoute}${queryString ? `?${queryString}` : ''}`;
 
-	return fetchServerAPI(endpoint, token);
+	const response = await fetchServerAPI<User[]>(endpoint, token);
+	return response.data!;
 }
 
 export async function createUser(
 	token: string,
 	userData: { username: string; password: string; role: string }
-) {
-	return fetchServerAPI(membershipRoute, token, 'POST', userData);
+): Promise<void> {
+	await fetchServerAPI(membershipRoute, token, 'POST', userData);
 }
 
 export async function getUserById(token: string, userId: string): Promise<User> {
-	return fetchServerAPI(`${membershipRoute}/${userId}`, token);
+	const response = await fetchServerAPI<User>(`${membershipRoute}/${userId}`, token);
+	return response.data!;
 }
 
-export async function updateUser(token: string, userId: string, userData: Partial<User>) {
-	return fetchServerAPI(`${membershipRoute}/${userId}`, token, 'PUT', userData);
+export async function updateUser(
+	token: string,
+	userId: string,
+	userData: Partial<User>
+): Promise<void> {
+	await fetchServerAPI(`${membershipRoute}/${userId}`, token, 'PUT', userData);
 }
 
-export async function deleteUser(token: string, userId: string) {
-	return fetchServerAPI(`${membershipRoute}/${userId}`, token, 'DELETE');
+export async function deleteUser(token: string, userId: string): Promise<void> {
+	await fetchServerAPI(`${membershipRoute}/${userId}`, token, 'DELETE');
 }
 
 export async function getRoles(token: string): Promise<Role[]> {
-	return fetchServerAPI(`${membershipRoute}/roles`, token);
+	const response = await fetchServerAPI<Role[]>(`${membershipRoute}/roles`, token);
+	return response.data!;
 }

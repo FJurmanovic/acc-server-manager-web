@@ -6,7 +6,8 @@ import type {
 	EventConfig,
 	EventRules,
 	ServerSettings,
-	ConfigFile
+	ConfigFile,
+	Config
 } from '@/lib/types/config';
 
 const serverRoute = '/server';
@@ -15,22 +16,27 @@ export async function getServerConfigurations(
 	token: string,
 	serverId: string
 ): Promise<Configurations> {
-	return fetchServerAPI<Configurations>(`${serverRoute}/${serverId}/config`, token);
+	const response = await fetchServerAPI<Configurations>(`${serverRoute}/${serverId}/config`, token);
+	return response.data!;
 }
 
 export async function getServerConfiguration(
 	token: string,
 	serverId: string,
 	configType: ConfigFile
-): Promise<Configuration | AssistRules | EventConfig | EventRules | ServerSettings> {
-	return fetchServerAPI(`${serverRoute}/${serverId}/config/${configType}`, token);
+): Promise<Config> {
+	const response = await fetchServerAPI<Config>(
+		`${serverRoute}/${serverId}/config/${configType}`,
+		token
+	);
+	return response.data!;
 }
 
 export async function updateServerConfiguration(
 	token: string,
 	serverId: string,
 	configType: ConfigFile,
-	config: Configuration | AssistRules | EventConfig | EventRules | ServerSettings,
+	config: Config,
 	restart = false
 ): Promise<void> {
 	await fetchServerAPI(`${serverRoute}/${serverId}/config/${configType}`, token, 'PUT', {

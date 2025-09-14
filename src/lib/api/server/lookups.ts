@@ -4,21 +4,29 @@ import { Track, CarModel, CupCategory, DriverCategory, SessionType } from '@/lib
 const lookupRoute = '/lookup';
 
 export async function getTracks(token: string): Promise<Track[]> {
-	return fetchServerAPI(`${lookupRoute}/tracks`, token);
+	const response = await fetchServerAPI<Track[]>(`${lookupRoute}/tracks`, token);
+	return response.data!;
 }
 
 export async function getCarModels(token: string): Promise<CarModel[]> {
-	return fetchServerAPI(`${lookupRoute}/car-models`, token);
+	const response = await fetchServerAPI<CarModel[]>(`${lookupRoute}/car-models`, token);
+	return response.data!;
 }
 
 export async function getCupCategories(token: string): Promise<CupCategory[]> {
-	return fetchServerAPI(`${lookupRoute}/cup-categories`, token);
+	const response = await fetchServerAPI<CupCategory[]>(`${lookupRoute}/cup-categories`, token);
+	return response.data!;
 }
 
 export async function getDriverCategories(token: string): Promise<DriverCategory[]> {
-	return fetchServerAPI(`${lookupRoute}/driver-categories`, token);
+	const response = await fetchServerAPI<DriverCategory[]>(
+		`${lookupRoute}/driver-categories`,
+		token
+	);
+	return response.data!;
 }
 
 export async function getSessionTypes(token: string): Promise<SessionType[]> {
-	return fetchServerAPI(`${lookupRoute}/session-types`, token);
+	const response = await fetchServerAPI<SessionType[]>(`${lookupRoute}/session-types`, token);
+	return response.data!;
 }
