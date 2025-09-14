@@ -36,7 +36,7 @@ export async function fetchServerAPI<T>(
 	}
 
 	if (response.headers.get('Content-Type')?.includes('application/json')) {
-		return await response.json();
+		return { data: await response.json() };
 	}
 
 	return { message: await response.text() };
