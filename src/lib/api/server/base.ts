@@ -1,3 +1,6 @@
+import { logout } from '@/lib/auth/server';
+import { redirect } from 'next/navigation';
+
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
 
 export async function fetchServerAPI<T>(
@@ -18,6 +21,10 @@ export async function fetchServerAPI<T>(
 	});
 
 	if (!response.ok) {
+		if (response.status == 401) {
+			await logout();
+			redirect('/login');
+		}
 		throw new Error(
 			`API Error: ${response.statusText} - ${method} - ${BASE_URL}${endpoint} - ${token}`
 		);
