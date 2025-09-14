@@ -1,12 +1,4 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-
-export async function clearAuthAndRedirect(to = '/login') {
-	const c = await cookies();
-	c.delete('session');
-	c.delete('refresh');
-	redirect(to);
-}
 
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
 
@@ -35,7 +27,7 @@ export async function fetchServerAPI<T>(
 
 	if (!response.ok) {
 		if (response.status == 401) {
-			clearAuthAndRedirect();
+			redirect('/logout');
 			return { error: 'unauthorized' };
 		}
 		throw new Error(

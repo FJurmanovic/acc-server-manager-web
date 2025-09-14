@@ -12,7 +12,7 @@ export async function requireAuth() {
 	const session = await getSession();
 
 	if (!session.token || !session.user) {
-		redirect('/login');
+		redirect('/logout');
 	}
 
 	return session;

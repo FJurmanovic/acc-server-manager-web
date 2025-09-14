@@ -1,6 +1,6 @@
 'use server';
 
-import { redirect } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 import { loginUser } from '@/lib/api/server/auth';
 import { login, logout } from '@/lib/auth/server';
 
@@ -42,6 +42,5 @@ export async function loginAction(prevState: LoginResult, formData: FormData) {
 }
 
 export async function logoutAction() {
-	await logout();
-	redirect('/login');
+	redirect('/logout');
 }
