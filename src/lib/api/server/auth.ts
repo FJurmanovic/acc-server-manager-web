@@ -29,6 +29,7 @@ export async function loginUser(username: string, password: string) {
 	return { token, user: userResponse };
 }
 
-export async function getCurrentUser(token: string) {
-	return fetchServerAPI<User>(`${authRoute}/me`, token);
+export async function getCurrentUser(token: string): Promise<User> {
+	const response = await fetchServerAPI<User>(`${authRoute}/me`, token);
+	return response.data!;
 }
