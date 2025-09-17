@@ -1,8 +1,8 @@
 'use server';
 
-import { redirect, RedirectType } from 'next/navigation';
-import { loginUser } from '@/lib/api/server/auth';
-import { login, logout } from '@/lib/auth/server';
+import { redirect } from 'next/navigation';
+import { loginUser, getOpenToken } from '@/lib/api/server/auth';
+import { login } from '@/lib/auth/server';
 
 export type LoginResult = {
 	success: boolean;
@@ -24,7 +24,8 @@ export async function loginAction(prevState: LoginResult, formData: FormData) {
 		const result = await loginUser(username, password);
 
 		if (result.token && result.user) {
-			await login(result.token, result.user);
+			const openToken = await getOpenToken(result.token);
+			await login(result.token, result.user, openToken);
 		} else {
 			return {
 				success: false,

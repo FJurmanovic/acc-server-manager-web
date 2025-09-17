@@ -18,10 +18,11 @@ export async function requireAuth() {
 	return session;
 }
 
-export async function login(token: string, user: SessionData['user']) {
+export async function login(token: string, user: SessionData['user'], openToken?: string) {
 	const session = await getSession();
 	session.token = token;
 	session.user = user;
+	session.openToken = openToken;
 	await session.save();
 }
 

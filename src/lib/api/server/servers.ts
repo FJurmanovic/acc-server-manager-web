@@ -29,3 +29,12 @@ export async function getServiceStatus(token: string, serverId: string): Promise
 	const response = await fetchServerAPI<ServiceStatus>(`${serverRoute}/${serverId}/service`, token);
 	return response.data!;
 }
+
+export async function createServer(token: string, name: string): Promise<Server> {
+	const response = await fetchServerAPI<Server>(serverRoute, token, 'POST', { name });
+	return response.data!;
+}
+
+export async function deleteServer(token: string, serverId: string): Promise<void> {
+	await fetchServerAPI(`${serverRoute}/${serverId}`, token, 'DELETE');
+}

@@ -3,6 +3,7 @@ import { User } from '@/lib/types';
 
 export interface SessionData {
 	token?: string;
+	openToken?: string;
 	user?: User;
 }
 

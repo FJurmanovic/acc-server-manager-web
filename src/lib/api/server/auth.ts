@@ -33,3 +33,12 @@ export async function getCurrentUser(token: string): Promise<User> {
 	const response = await fetchServerAPI<User>(`${authRoute}/me`, token);
 	return response.data!;
 }
+
+export async function getOpenToken(token: string): Promise<string> {
+	const response = await fetchServerAPI<{ token: string }>(
+		`${authRoute}/open-token`,
+		token,
+		'POST'
+	);
+	return response.data!.token;
+}
