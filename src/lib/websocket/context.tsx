@@ -30,9 +30,10 @@ export function useWebSocket() {
 
 interface WebSocketProviderProps {
 	children: ReactNode;
+	websocketURL: string;
 }
 
-export function WebSocketProvider({ children }: WebSocketProviderProps) {
+export function WebSocketProvider({ children, websocketURL }: WebSocketProviderProps) {
 	const [client, setClient] = useState<WebSocketClient | null>(null);
 	const [isConnected, setIsConnected] = useState(false);
 	const [connectionStatus, setConnectionStatus] = useState<
@@ -50,7 +51,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
 				client.disconnect();
 			}
 
-			const newClient = new WebSocketClient(token);
+			const newClient = new WebSocketClient(token, websocketURL);
 
 			const statusHandler: ConnectionStatusHandler = (status, error) => {
 				setConnectionStatus(status);

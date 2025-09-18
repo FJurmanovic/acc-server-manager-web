@@ -57,9 +57,9 @@ export class WebSocketClient {
 	private associatedServerId: string | null = null;
 	private baseUrl: string;
 
-	constructor(token: string) {
+	constructor(token: string, url: string) {
 		this.token = token;
-		this.baseUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:3000/ws';
+		this.baseUrl = url;
 	}
 
 	connect(): Promise<void> {

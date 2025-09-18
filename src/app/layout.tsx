@@ -20,7 +20,9 @@ export default function RootLayout({
 		<html lang="en">
 			<body className="bg-gray-900 text-white antialiased">
 				<QueryProvider>
-					<WebSocketProvider>
+					<WebSocketProvider
+						websocketURL={process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:3000/ws'}
+					>
 						<SteamCMDProvider>
 							<ServerCreationPopupProvider>
 								{children}
