@@ -1,5 +1,3 @@
-const BASE_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:3000/ws';
-
 export interface WebSocketMessage {
 	type: 'step' | 'steam_output' | 'error' | 'complete';
 	server_id: string;
@@ -57,9 +55,11 @@ export class WebSocketClient {
 	private reconnectTimer: NodeJS.Timeout | null = null;
 	private shouldReconnect = true;
 	private associatedServerId: string | null = null;
+	private baseUrl: string;
 
 	constructor(token: string) {
 		this.token = token;
+		this.baseUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:3000/ws';
 	}
 
 	connect(): Promise<void> {
@@ -72,7 +72,7 @@ export class WebSocketClient {
 
 		this.connectionPromise = new Promise((resolve, reject) => {
 			try {
-				this.ws = new WebSocket(`${BASE_URL}?token=${this.token}`);
+				this.ws = new WebSocket(`${this.baseUrl}?token=${this.token}`);
 
 				this.ws.onopen = () => {
 					console.log('WebSocket connected');
