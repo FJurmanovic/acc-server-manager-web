@@ -20,7 +20,7 @@ export function hasPermission(user: User | null, permission: string): boolean {
 	if (!user || !user.role || !user.role.permissions) {
 		return false;
 	}
-	// Super Admins have all permissions
+
 	if (user.role.name === 'Super Admin') {
 		return true;
 	}

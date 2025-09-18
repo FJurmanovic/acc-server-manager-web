@@ -25,7 +25,7 @@ export function DeleteUserModal({ user, onClose }: DeleteUserModalProps) {
 			const result = await deleteUserAction(formDataObj);
 			if (result.success) {
 				onClose();
-				window.location.reload(); // Refresh to remove deleted user
+				window.location.reload();
 			} else {
 				setError(result.message);
 			}

@@ -42,13 +42,16 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
 
 	const connect = useCallback(
 		async (token: string) => {
+			if (client?.isConnected()) {
+				return;
+			}
+
 			if (client) {
 				client.disconnect();
 			}
 
 			const newClient = new WebSocketClient(token);
 
-			// Add connection status handler
 			const statusHandler: ConnectionStatusHandler = (status, error) => {
 				setConnectionStatus(status);
 				setIsConnected(status === 'connected');

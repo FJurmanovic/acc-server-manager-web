@@ -1,7 +1,5 @@
-'use client';
-
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { Server, ServiceStatus, getStatusColor, serviceStatusToString } from '@/lib/types';
 import { User, hasPermission } from '@/lib/types/user';
 import {
@@ -10,7 +8,7 @@ import {
 	stopServerEventAction
 } from '@/lib/actions/servers';
 import { DeleteServerModal } from './DeleteServerModal';
-import { useSteamCMD } from '@/lib/context/SteamCMDContext';
+import { useRouter } from 'next/navigation';
 
 interface ServerCardProps {
 	server: Server;
@@ -19,9 +17,32 @@ interface ServerCardProps {
 
 export function ServerCard({ server, user }: ServerCardProps) {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-	const { isSteamCMDRunning } = useSteamCMD();
+	const [isPending, startTransition] = useTransition();
+	const router = useRouter();
 
 	const canDeleteServer = hasPermission(user, 'server.delete');
+	const startServer = () =>
+		startTransition(async () => {
+			await startServerEventAction(server.id);
+			router.refresh();
+		});
+	const restartServer = () =>
+		startTransition(async () => {
+			await restartServerEventAction(server.id);
+			router.refresh();
+		});
+	const stopServer = () =>
+		startTransition(async () => {
+			await stopServerEventAction(server.id);
+			router.refresh();
+		});
+
+	const disabled = [
+		ServiceStatus.Restarting,
+		ServiceStatus.Starting,
+		ServiceStatus.Stopping,
+		ServiceStatus.Unknown
+	].includes(server.status);
 
 	return (
 		<>
@@ -91,38 +112,32 @@ export function ServerCard({ server, user }: ServerCardProps) {
 				</Link>
 
 				<div className="flex justify-between gap-2 bg-gray-900 px-4 py-3">
-					<form action={startServerEventAction.bind(null, server.id)}>
-						<button
-							type="submit"
-							disabled={server.status === ServiceStatus.Running || isSteamCMDRunning}
-							className="rounded bg-green-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
-							title={isSteamCMDRunning ? 'Server actions disabled while SteamCMD is running' : ''}
-						>
-							Start
-						</button>
-					</form>
+					<button
+						type="button"
+						onClick={startServer}
+						disabled={server.status === ServiceStatus.Running || isPending || disabled}
+						className="rounded bg-green-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+					>
+						Start
+					</button>
 
-					<form action={restartServerEventAction.bind(null, server.id)}>
-						<button
-							type="submit"
-							disabled={server.status === ServiceStatus.Stopped || isSteamCMDRunning}
-							className="rounded bg-yellow-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-yellow-700 disabled:cursor-not-allowed disabled:opacity-50"
-							title={isSteamCMDRunning ? 'Server actions disabled while SteamCMD is running' : ''}
-						>
-							Restart
-						</button>
-					</form>
+					<button
+						type="button"
+						onClick={restartServer}
+						disabled={server.status === ServiceStatus.Stopped || isPending || disabled}
+						className="rounded bg-yellow-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-yellow-700 disabled:cursor-not-allowed disabled:opacity-50"
+					>
+						Restart
+					</button>
 
-					<form action={stopServerEventAction.bind(null, server.id)}>
-						<button
-							type="submit"
-							disabled={server.status === ServiceStatus.Stopped || isSteamCMDRunning}
-							className="rounded bg-red-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
-							title={isSteamCMDRunning ? 'Server actions disabled while SteamCMD is running' : ''}
-						>
-							Stop
-						</button>
-					</form>
+					<button
+						type="button"
+						onClick={stopServer}
+						disabled={server.status === ServiceStatus.Stopped || isPending || disabled}
+						className="rounded bg-red-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+					>
+						Stop
+					</button>
 				</div>
 			</div>
 

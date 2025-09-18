@@ -22,7 +22,8 @@ export async function fetchServerAPI<T>(
 	const response = await fetch(`${BASE_URL}${endpoint}`, {
 		method,
 		headers,
-		body: body ? JSON.stringify(body) : undefined
+		body: body ? JSON.stringify(body) : undefined,
+		next: { tags: [endpoint] }
 	});
 
 	if (!response.ok) {

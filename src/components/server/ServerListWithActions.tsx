@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Server } from '@/lib/types/server';
 import { User, hasPermission } from '@/lib/types/user';
 import { ServerCard } from './ServerCard';
@@ -17,6 +17,7 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 	const { isSteamCMDRunning } = useSteamCMD();
 
+	const handleOnClose = useCallback(() => setIsCreateModalOpen(false), []);
 	const canCreateServer = hasPermission(user, 'server.create');
 
 	return (
@@ -44,7 +45,7 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 				))}
 			</div>
 
-			<CreateServerModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+			<CreateServerModal isOpen={isCreateModalOpen} onClose={handleOnClose} />
 		</>
 	);
 }

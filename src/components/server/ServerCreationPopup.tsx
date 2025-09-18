@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useWebSocket } from '@/lib/websocket/context';
 import {
 	WebSocketMessage,
@@ -65,19 +65,18 @@ export function ServerCreationPopup({
 		addMessageHandler,
 		removeMessageHandler,
 		connectionStatus,
-		connectionError,
 		reconnect
 	} = useWebSocket();
 
 	const consoleRef = useRef<HTMLDivElement>(null);
 
-	const addEntry = (entry: Omit<ConsoleEntry, 'id'>) => {
+	const addEntry = useCallback((entry: Omit<ConsoleEntry, 'id'>) => {
 		const newEntry = {
 			...entry,
 			id: `${Date.now()}-${Math.random()}`
 		};
 		setEntries((prev) => [...prev, newEntry]);
-	};
+	}, []);
 
 	const scrollToBottom = () => {
 		if (consoleRef.current && !isMinimized && isConsoleVisible) {
@@ -95,9 +94,8 @@ export function ServerCreationPopup({
 		}
 	}, [serverId, isOpen, associateWithServer]);
 
-	useEffect(() => {
-		const handleMessage = (message: WebSocketMessage) => {
-			// Only handle messages for this server
+	const handleMessage = useCallback(
+		(message: WebSocketMessage) => {
 			if (message.server_id !== serverId) return;
 
 			const timestamp = message.timestamp;
@@ -105,14 +103,31 @@ export function ServerCreationPopup({
 			switch (message.type) {
 				case 'step': {
 					const data = message.data as StepData;
-					setSteps((prev) => ({
-						...prev,
-						[data.step]: {
+					setSteps((prev) => {
+						const updatedSteps = { ...prev };
+
+						const stepIndex = STEPS.findIndex((step) => step.key === data.step);
+						if (stepIndex > 0) {
+							for (let i = 0; i < stepIndex; i++) {
+								const prevStepKey = STEPS[i].key;
+								if (!updatedSteps[prevStepKey] || updatedSteps[prevStepKey].status === 'pending') {
+									updatedSteps[prevStepKey] = {
+										step: prevStepKey,
+										status: 'completed',
+										message: `${prevStepKey.replace('_', ' ')} completed`
+									};
+								}
+							}
+						}
+
+						updatedSteps[data.step] = {
 							step: data.step,
 							status: data.status,
 							message: data.message
-						}
-					}));
+						};
+
+						return updatedSteps;
+					});
 
 					let level: ConsoleEntry['level'] = 'info';
 					if (data.status === 'completed') level = 'success';
@@ -130,6 +145,43 @@ export function ServerCreationPopup({
 
 				case 'steam_output': {
 					const data = message.data as SteamOutputData;
+
+					setSteps((prev) => {
+						const updatedSteps = { ...prev };
+
+						if (
+							!updatedSteps['steam_download'] ||
+							updatedSteps['steam_download'].status === 'pending'
+						) {
+							updatedSteps['steam_download'] = {
+								step: 'steam_download',
+								status: 'in_progress',
+								message: 'Steam download in progress'
+							};
+						}
+
+						if (!updatedSteps['validation'] || updatedSteps['validation'].status === 'pending') {
+							updatedSteps['validation'] = {
+								step: 'validation',
+								status: 'completed',
+								message: 'Validation completed'
+							};
+						}
+
+						if (
+							!updatedSteps['directory_creation'] ||
+							updatedSteps['directory_creation'].status === 'pending'
+						) {
+							updatedSteps['directory_creation'] = {
+								step: 'directory_creation',
+								status: 'completed',
+								message: 'Directory creation completed'
+							};
+						}
+
+						return updatedSteps;
+					});
+
 					addEntry({
 						timestamp,
 						type: 'steam_output',
@@ -141,6 +193,22 @@ export function ServerCreationPopup({
 
 				case 'error': {
 					const data = message.data as ErrorData;
+
+					setSteps((prev) => {
+						const updatedSteps = { ...prev };
+						const currentStep = Object.values(updatedSteps).find(
+							(step) => step.status === 'in_progress'
+						);
+						if (currentStep) {
+							updatedSteps[currentStep.step] = {
+								...currentStep,
+								status: 'failed',
+								message: `${currentStep.step.replace('_', ' ')} failed: ${data.error}`
+							};
+						}
+						return updatedSteps;
+					});
+
 					addEntry({
 						timestamp,
 						type: 'error',
@@ -166,15 +234,18 @@ export function ServerCreationPopup({
 					break;
 				}
 			}
-		};
+		},
+		[serverId, addEntry, onComplete]
+	);
 
+	useEffect(() => {
 		if (isOpen) {
 			addMessageHandler(handleMessage);
 			return () => {
 				removeMessageHandler(handleMessage);
 			};
 		}
-	}, [addMessageHandler, removeMessageHandler, serverId, isOpen, onComplete]);
+	}, [addMessageHandler, removeMessageHandler, handleMessage, isOpen]);
 
 	const handleReconnect = async () => {
 		try {
@@ -210,19 +281,6 @@ export function ServerCreationPopup({
 		}
 	};
 
-	const getConnectionStatusColor = () => {
-		switch (connectionStatus) {
-			case 'connected':
-				return 'text-green-400';
-			case 'connecting':
-				return 'text-yellow-400';
-			case 'disconnected':
-				return 'text-gray-400';
-			case 'error':
-				return 'text-red-400';
-		}
-	};
-
 	const getConnectionStatusIcon = () => {
 		switch (connectionStatus) {
 			case 'connected':
@@ -246,14 +304,13 @@ export function ServerCreationPopup({
 
 	if (!isOpen) return null;
 
-	// Minimized state - circular icon in bottom corner
 	if (isMinimized) {
 		const progress = getCurrentProgress();
 		const isProgressing =
 			!isCompleted && Object.values(steps).some((step) => step.status === 'in_progress');
 
 		return (
-			<div className="fixed right-4 bottom-4 z-50">
+			<div className="fixed right-4 bottom-4 z-40">
 				<button
 					onClick={() => setIsMinimized(false)}
 					className={`flex h-16 w-16 items-center justify-center rounded-full border-2 shadow-lg transition-all hover:scale-105 ${
@@ -278,7 +335,6 @@ export function ServerCreationPopup({
 						)}
 					</div>
 
-					{/* Progress ring */}
 					{!isCompleted && (
 						<svg className="absolute inset-0 h-16 w-16 -rotate-90 transform">
 							<circle
@@ -307,10 +363,8 @@ export function ServerCreationPopup({
 		);
 	}
 
-	// Expanded popup state
 	return (
-		<div className="fixed right-4 bottom-4 z-50 max-h-[600px] w-96 rounded-lg border border-gray-700 bg-gray-800 shadow-2xl select-none">
-			{/* Header */}
+		<div className="fixed right-4 bottom-4 z-40 max-h-[600px] w-96 rounded-lg border border-gray-700 bg-gray-800 shadow-2xl select-none">
 			<div className="flex items-center justify-between border-b border-gray-700 p-4">
 				<div className="flex items-center space-x-2">
 					<span className="text-lg">🔧</span>
@@ -318,7 +372,6 @@ export function ServerCreationPopup({
 				</div>
 
 				<div className="flex items-center space-x-2">
-					{/* Connection Status */}
 					<div className="flex items-center space-x-1">
 						<span className="text-sm">{getConnectionStatusIcon()}</span>
 						{(connectionStatus === 'disconnected' || connectionStatus === 'error') && (
@@ -332,16 +385,14 @@ export function ServerCreationPopup({
 						)}
 					</div>
 
-					{/* Console Toggle */}
 					<button
 						onClick={() => setIsConsoleVisible(!isConsoleVisible)}
 						className="text-sm text-gray-400 hover:text-white"
 						title={isConsoleVisible ? 'Hide Console' : 'Show Console'}
 					>
-						{isConsoleVisible ? '📋' : '📋'}
+						📋
 					</button>
 
-					{/* Minimize */}
 					<button
 						onClick={() => setIsMinimized(true)}
 						className="text-gray-400 hover:text-white"
@@ -352,35 +403,19 @@ export function ServerCreationPopup({
 						</svg>
 					</button>
 
-					{/* Close */}
-					{isCompleted && (
-						<button onClick={onClose} className="text-gray-400 hover:text-white" title="Close">
-							<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									d="M6 18L18 6M6 6l12 12"
-								/>
-							</svg>
-						</button>
-					)}
+					<button onClick={onClose} className="text-gray-400 hover:text-white" title="Close">
+						<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M6 18L18 6M6 6l12 12"
+							/>
+						</svg>
+					</button>
 				</div>
 			</div>
 
-			{/* Connection Error Banner */}
-			{(connectionStatus === 'disconnected' || connectionStatus === 'error') && (
-				<div className="bg-red-600 p-2 text-xs text-red-50">
-					<div className="flex items-center justify-between">
-						<span>Connection lost - {connectionError || 'Reconnecting...'}</span>
-						<button onClick={handleReconnect} className="underline">
-							Reconnect
-						</button>
-					</div>
-				</div>
-			)}
-
-			{/* Steps Progress */}
 			<div className="border-b border-gray-700 p-4">
 				<div className="grid grid-cols-2 gap-2">
 					{STEPS.map(({ key, label }) => {
@@ -406,7 +441,6 @@ export function ServerCreationPopup({
 				</div>
 			</div>
 
-			{/* Console Output */}
 			{isConsoleVisible && (
 				<div className="h-64 bg-black">
 					<div ref={consoleRef} className="h-full space-y-1 overflow-y-auto p-3 font-mono text-xs">
@@ -427,7 +461,6 @@ export function ServerCreationPopup({
 				</div>
 			)}
 
-			{/* Completion Status */}
 			{isCompleted && (
 				<div
 					className={`p-3 text-center text-sm ${

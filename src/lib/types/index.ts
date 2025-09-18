@@ -1,4 +1,3 @@
-// Re-export all types for easier imports
 export * from './server';
 export * from './user';
 export * from './config';

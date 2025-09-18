@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useWebSocket } from '@/lib/websocket/context';
 
 interface WebSocketInitializerProps {
@@ -8,20 +8,18 @@ interface WebSocketInitializerProps {
 }
 
 export function WebSocketInitializer({ openToken }: WebSocketInitializerProps) {
-	const { connect, disconnect, isConnected } = useWebSocket();
+	const { connect, isConnected } = useWebSocket();
+	const hasInitialized = useRef(false);
 
 	useEffect(() => {
-		console.log({ openToken, connect, disconnect, isConnected });
-		if (openToken && !isConnected) {
+		if (openToken && !isConnected && !hasInitialized.current) {
+			hasInitialized.current = true;
 			connect(openToken).catch((error) => {
 				console.error('Failed to connect WebSocket:', error);
+				hasInitialized.current = false;
 			});
 		}
+	}, [openToken, connect, isConnected]);
 
-		return () => {
-			disconnect();
-		};
-	}, [openToken, connect, disconnect, isConnected]);
-
-	return null; // This component doesn't render anything
+	return null;
 }

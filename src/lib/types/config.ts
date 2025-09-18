@@ -15,7 +15,6 @@ export enum ServerTab {
 	settings = 'settings'
 }
 
-// Configuration interfaces
 export interface Configuration {
 	udpPort: number;
 	tcpPort: number;

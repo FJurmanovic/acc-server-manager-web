@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_WEBSOCKET_BASE_URL || 'ws://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:3000/ws';
 
 export interface WebSocketMessage {
 	type: 'step' | 'steam_output' | 'error' | 'complete';
@@ -52,8 +52,8 @@ export class WebSocketClient {
 	private connectionPromise: Promise<void> | null = null;
 	private reconnectAttempts = 0;
 	private maxReconnectAttempts = 10;
-	private reconnectDelay = 1000; // Start with 1 second
-	private maxReconnectDelay = 30000; // Max 30 seconds
+	private reconnectDelay = 1000; // 1 second
+	private maxReconnectDelay = 30000; // 30 seconds
 	private reconnectTimer: NodeJS.Timeout | null = null;
 	private shouldReconnect = true;
 	private associatedServerId: string | null = null;
@@ -80,7 +80,6 @@ export class WebSocketClient {
 					this.reconnectDelay = 5000;
 					this.notifyStatus('connected');
 
-					// Re-associate with server if we had one
 					if (this.associatedServerId) {
 						this.associateWithServer(this.associatedServerId);
 					}

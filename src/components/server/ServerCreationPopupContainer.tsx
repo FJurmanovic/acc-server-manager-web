@@ -2,28 +2,33 @@
 
 import { useServerCreationPopup } from '@/lib/context/ServerCreationPopupContext';
 import { ServerCreationPopup } from './ServerCreationPopup';
+import { useSteamCMD } from '@/lib/context/SteamCMDContext';
+import { useCallback } from 'react';
 
 export function ServerCreationPopupContainer() {
-  const { popup, hidePopup } = useServerCreationPopup();
+	const { popup, hidePopup } = useServerCreationPopup();
+	const { dissociateServer } = useSteamCMD();
+	const handleClose = useCallback(() => {
+		hidePopup();
+		if (popup) return dissociateServer(popup.serverId);
+	}, [popup, dissociateServer, hidePopup]);
+	if (!popup) return null;
 
-  if (!popup) return null;
+	const handleComplete = (success: boolean) => {
+		if (success) {
+			setTimeout(() => {
+				window.location.reload();
+			}, 2000);
+		}
+	};
 
-  const handleComplete = (success: boolean, message: string) => {
-    // Refresh the page on successful completion to show the new server
-    if (success) {
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000); // Wait 2 seconds to let user see the success message
-    }
-  };
-
-  return (
-    <ServerCreationPopup
-      serverId={popup.serverId}
-      serverName={popup.serverName}
-      isOpen={popup.isOpen}
-      onClose={hidePopup}
-      onComplete={handleComplete}
-    />
-  );
+	return (
+		<ServerCreationPopup
+			serverId={popup.serverId}
+			serverName={popup.serverName}
+			isOpen={popup.isOpen}
+			onClose={handleClose}
+			onComplete={handleComplete}
+		/>
+	);
 }

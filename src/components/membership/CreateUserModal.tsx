@@ -32,7 +32,7 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 			const result = await createUserAction(formDataObj);
 			if (result.success) {
 				onClose();
-				window.location.reload(); // Refresh to show new user
+				window.location.reload();
 			} else {
 				setError(result.message);
 			}

@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { requireAuth } from '@/lib/auth/server';
 import { startService, stopService, restartService } from '@/lib/api/server/servers';
 
@@ -10,6 +10,7 @@ export async function startServerAction(serverId: string) {
 		await startService(session.token!, serverId);
 		revalidatePath('/dashboard');
 		revalidatePath(`/dashboard/server/${serverId}`);
+		revalidateTag('/server');
 	} catch (error) {
 		return {
 			success: false,
@@ -28,6 +29,7 @@ export async function stopServerAction(serverId: string) {
 		await stopService(session.token!, serverId);
 		revalidatePath('/dashboard');
 		revalidatePath(`/dashboard/server/${serverId}`);
+		revalidateTag('/server');
 	} catch (error) {
 		return {
 			success: false,
@@ -46,6 +48,7 @@ export async function restartServerAction(serverId: string) {
 		await restartService(session.token!, serverId);
 		revalidatePath('/dashboard');
 		revalidatePath(`/dashboard/server/${serverId}`);
+		revalidateTag('/server');
 	} catch (error) {
 		return {
 			success: false,

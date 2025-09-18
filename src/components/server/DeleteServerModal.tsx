@@ -34,7 +34,7 @@ export function DeleteServerModal({ isOpen, onClose, server }: DeleteServerModal
 
 	const handleClose = () => {
 		if (isPending) {
-			return; // Prevent closing during deletion
+			return;
 		}
 		onClose();
 		setError(null);
@@ -46,7 +46,7 @@ export function DeleteServerModal({ isOpen, onClose, server }: DeleteServerModal
 
 			<div className="mb-6">
 				<p className="text-gray-300">
-					Are you sure you want to delete the server <strong>"{server.name}"</strong>?
+					Are you sure you want to delete the server <strong>&quot;{server.name}&quot;</strong>?
 				</p>
 				<p className="mt-2 text-sm text-gray-400">This action cannot be undone.</p>
 			</div>
