@@ -1,14 +1,5 @@
 import { fetchServerAPI } from './base';
-import type {
-	Configurations,
-	Configuration,
-	AssistRules,
-	EventConfig,
-	EventRules,
-	ServerSettings,
-	ConfigFile,
-	Config
-} from '@/lib/types/config';
+import type { Configurations, ConfigFile, Config } from '@/lib/types/config';
 
 const serverRoute = '/server';
 

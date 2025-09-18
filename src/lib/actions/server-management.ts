@@ -4,10 +4,14 @@ import { revalidatePath } from 'next/cache';
 import { requireAuth } from '@/lib/auth/server';
 import { createServer, deleteServer } from '@/lib/api/server/servers';
 
+export type ServerActionData = {
+	id: string;
+};
+
 export type ServerActionResult = {
 	success: boolean;
 	message: string;
-	data?: any;
+	data?: ServerActionData;
 };
 
 export async function createServerAction(

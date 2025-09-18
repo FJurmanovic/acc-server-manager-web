@@ -11,7 +11,7 @@ interface CreateServerModalProps {
 	onClose: () => void;
 }
 
-const initialState: ServerActionResult = { success: false, message: '' };
+const initialState: ServerActionResult = { success: false, message: '', data: undefined };
 
 export function CreateServerModal({ isOpen, onClose }: CreateServerModalProps) {
 	const [serverName, setServerName] = useState('');
