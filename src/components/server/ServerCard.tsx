@@ -1,26 +1,21 @@
 import Link from 'next/link';
-import { useState, useTransition } from 'react';
+import { useTransition } from 'react';
 import { Server, ServiceStatus, getStatusColor, serviceStatusToString } from '@/lib/types';
-import { User, hasPermission } from '@/lib/types/user';
 import {
 	startServerEventAction,
 	restartServerEventAction,
 	stopServerEventAction
 } from '@/lib/actions/servers';
-import { DeleteServerModal } from './DeleteServerModal';
 import { useRouter } from 'next/navigation';
 
 interface ServerCardProps {
 	server: Server;
-	user: User;
 }
 
-export function ServerCard({ server, user }: ServerCardProps) {
-	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+export function ServerCard({ server }: ServerCardProps) {
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 
-	const canDeleteServer = hasPermission(user, 'server.delete');
 	const startServer = () =>
 		startTransition(async () => {
 			await startServerEventAction(server.id);
@@ -62,29 +57,6 @@ export function ServerCard({ server, user }: ServerCardProps) {
 								</div>
 							</div>
 							<div className="flex items-center space-x-2">
-								{canDeleteServer && (
-									<button
-										onClick={(e) => {
-											e.preventDefault();
-											setIsDeleteModalOpen(true);
-										}}
-										className="text-gray-400 hover:text-red-400"
-										title="Delete Server"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											className="h-5 w-5"
-											viewBox="0 0 20 20"
-											fill="currentColor"
-										>
-											<path
-												fillRule="evenodd"
-												d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 102 0v3a1 1 0 11-2 0V9zm4 0a1 1 0 10-2 0v3a1 1 0 002 0V9z"
-												clipRule="evenodd"
-											/>
-										</svg>
-									</button>
-								)}
 								<div className="text-gray-400 hover:text-white">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -140,12 +112,6 @@ export function ServerCard({ server, user }: ServerCardProps) {
 					</button>
 				</div>
 			</div>
-
-			<DeleteServerModal
-				isOpen={isDeleteModalOpen}
-				onClose={() => setIsDeleteModalOpen(false)}
-				server={server}
-			/>
 		</>
 	);
 }

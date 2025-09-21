@@ -1,12 +1,9 @@
 import { requireAuth } from '@/lib/auth/server';
 import { getServers } from '@/lib/api/server/servers';
 import { hasPermission } from '@/lib/types';
-import { ServerCard } from '@/components/server/ServerCard';
 import { logoutAction } from '@/lib/actions/auth';
-import RefreshButton from '@/components/ui/RefreshButton';
 import Link from 'next/link';
 import { ServerListWithActions } from '@/components/server/ServerListWithActions';
-import { WebSocketInitializer } from '@/components/websocket/WebSocketInitializer';
 import { SteamCMDNotification } from '@/components/ui/SteamCMDNotification';
 
 export default async function DashboardPage() {
@@ -15,7 +12,6 @@ export default async function DashboardPage() {
 
 	return (
 		<div className="min-h-screen bg-gray-900 text-white">
-			<WebSocketInitializer openToken={session.openToken} />
 			<header className="bg-gray-800 shadow-md">
 				<div className="mx-auto flex max-w-[120rem] items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
 					<h1 className="text-2xl font-bold">ACC Server Manager</h1>

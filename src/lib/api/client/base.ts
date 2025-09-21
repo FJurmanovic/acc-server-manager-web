@@ -1,11 +1,24 @@
 'use client';
 
+import { SessionData } from '@/lib/session/config';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
 
 export type ClientApiResponse<T> = {
 	data?: T;
 	error?: string;
 	message?: string;
+};
+
+const getSession = async (): Promise<SessionData | null> => {
+	const response = await fetch('/api/session');
+	if (response.ok) {
+		return await response.json();
+	}
+	return null;
+};
+const destroySession = async (): Promise<void> => {
+	await fetch('/api/session', { method: 'DELETE' });
 };
 
 export async function fetchClientAPI<T>(
@@ -15,13 +28,11 @@ export async function fetchClientAPI<T>(
 	customToken?: string
 ): Promise<ClientApiResponse<T>> {
 	let token = customToken;
+	let session: SessionData | null = null;
 
 	if (!token) {
-		const response = await fetch('/api/session');
-		if (response.ok) {
-			const session = await response.json();
-			token = session.openToken;
-		}
+		session = await getSession();
+		token = session?.openToken;
 
 		if (!token) {
 			throw new Error('No authentication token available');
@@ -41,7 +52,8 @@ export async function fetchClientAPI<T>(
 
 	if (!response.ok) {
 		if (response.status === 401) {
-			window.location.href = '/logout';
+			await destroySession();
+			window.location.href = '/login';
 			return { error: 'unauthorized' };
 		}
 		throw new Error(`API Error: ${response.statusText} - ${method} - ${BASE_URL}${endpoint}`);

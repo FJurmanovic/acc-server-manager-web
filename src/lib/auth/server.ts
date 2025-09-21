@@ -8,11 +8,12 @@ export async function getSession() {
 	return session;
 }
 
-export async function requireAuth() {
+export async function requireAuth(skipRedirect?: boolean) {
 	const session = await getSession();
 
-	if (!session.token || !session.user) {
-		redirect('/logout');
+	if (!skipRedirect && (!session.token || !session.user)) {
+		session.destroy();
+		redirect('/login');
 	}
 
 	return session;

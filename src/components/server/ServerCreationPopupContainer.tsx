@@ -4,10 +4,12 @@ import { useServerCreationPopup } from '@/lib/context/ServerCreationPopupContext
 import { ServerCreationPopup } from './ServerCreationPopup';
 import { useSteamCMD } from '@/lib/context/SteamCMDContext';
 import { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 
 export function ServerCreationPopupContainer() {
 	const { popup, hidePopup } = useServerCreationPopup();
 	const { dissociateServer } = useSteamCMD();
+	const router = useRouter();
 	const handleClose = useCallback(() => {
 		hidePopup();
 		if (popup) return dissociateServer(popup.serverId);
@@ -17,7 +19,7 @@ export function ServerCreationPopupContainer() {
 	const handleComplete = (success: boolean) => {
 		if (success) {
 			setTimeout(() => {
-				window.location.reload();
+				router.refresh();
 			}, 2000);
 		}
 	};

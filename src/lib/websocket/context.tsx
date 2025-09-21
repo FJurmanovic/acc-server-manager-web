@@ -1,7 +1,16 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import {
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+	ReactNode,
+	useCallback,
+	useRef
+} from 'react';
 import { WebSocketClient, MessageHandler, ConnectionStatusHandler } from './client';
+import { websocketOptions } from './config';
 
 interface WebSocketContextType {
 	client: WebSocketClient | null;
@@ -30,10 +39,10 @@ export function useWebSocket() {
 
 interface WebSocketProviderProps {
 	children: ReactNode;
-	websocketURL: string;
+	openToken: string;
 }
 
-export function WebSocketProvider({ children, websocketURL }: WebSocketProviderProps) {
+export function WebSocketProvider({ children, openToken }: WebSocketProviderProps) {
 	const [client, setClient] = useState<WebSocketClient | null>(null);
 	const [isConnected, setIsConnected] = useState(false);
 	const [connectionStatus, setConnectionStatus] = useState<
@@ -51,7 +60,7 @@ export function WebSocketProvider({ children, websocketURL }: WebSocketProviderP
 				client.disconnect();
 			}
 
-			const newClient = new WebSocketClient(token, websocketURL);
+			const newClient = new WebSocketClient(token, websocketOptions.url);
 
 			const statusHandler: ConnectionStatusHandler = (status, error) => {
 				setConnectionStatus(status);
@@ -82,7 +91,7 @@ export function WebSocketProvider({ children, websocketURL }: WebSocketProviderP
 		}
 	}, [client]);
 
-	const reconnect = async () => {
+	const reconnect = useCallback(async () => {
 		if (client) {
 			try {
 				await client.reconnect();
@@ -91,37 +100,60 @@ export function WebSocketProvider({ children, websocketURL }: WebSocketProviderP
 				throw error;
 			}
 		}
-	};
+	}, [client]);
+	const hasInitialized = useRef(false);
 
-	const associateWithServer = (serverId: string) => {
-		if (client && isConnected) {
-			client.associateWithServer(serverId);
-		}
-	};
+	const associateWithServer = useCallback(
+		(serverId: string) => {
+			if (openToken && !isConnected && !hasInitialized.current) {
+				hasInitialized.current = true;
+				connect(openToken).catch((error) => {
+					console.error('Failed to connect WebSocket:', error);
+					hasInitialized.current = false;
+				});
+			}
+			if (client && isConnected) {
+				client.associateWithServer(serverId);
+			}
+		},
+		[client, isConnected, connect]
+	);
 
-	const addMessageHandler = (handler: MessageHandler) => {
-		if (client) {
-			client.addMessageHandler(handler);
-		}
-	};
+	const addMessageHandler = useCallback(
+		(handler: MessageHandler) => {
+			if (client) {
+				client.addMessageHandler(handler);
+			}
+		},
+		[client]
+	);
 
-	const removeMessageHandler = (handler: MessageHandler) => {
-		if (client) {
-			client.removeMessageHandler(handler);
-		}
-	};
+	const removeMessageHandler = useCallback(
+		(handler: MessageHandler) => {
+			if (client) {
+				client.removeMessageHandler(handler);
+			}
+		},
+		[client]
+	);
 
-	const addConnectionStatusHandler = (handler: ConnectionStatusHandler) => {
-		if (client) {
-			client.addConnectionStatusHandler(handler);
-		}
-	};
+	const addConnectionStatusHandler = useCallback(
+		(handler: ConnectionStatusHandler) => {
+			if (client) {
+				client.addConnectionStatusHandler(handler);
+			}
+		},
+		[client]
+	);
 
-	const removeConnectionStatusHandler = (handler: ConnectionStatusHandler) => {
-		if (client) {
-			client.removeConnectionStatusHandler(handler);
-		}
-	};
+	const removeConnectionStatusHandler = useCallback(
+		(handler: ConnectionStatusHandler) => {
+			if (client) {
+				client.removeConnectionStatusHandler(handler);
+			}
+		},
+		[client]
+	);
 
 	useEffect(() => {
 		return () => {

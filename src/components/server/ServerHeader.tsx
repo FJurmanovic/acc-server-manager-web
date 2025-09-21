@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 import { Server, getStatusColor, serviceStatusToString, ServiceStatus } from '@/lib/types/server';
 import {
@@ -5,12 +6,43 @@ import {
 	restartServerEventAction,
 	stopServerEventAction
 } from '@/lib/actions/servers';
+import { hasPermission, User } from '@/lib/types';
+import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { DeleteServerModal } from './DeleteServerModal';
 
 interface ServerHeaderProps {
 	server: Server;
+	user: User;
 }
 
-export function ServerHeader({ server }: ServerHeaderProps) {
+export function ServerHeader({ server, user }: ServerHeaderProps) {
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [isPending, startTransition] = useTransition();
+	const router = useRouter();
+	const canDeleteServer = hasPermission(user, 'server.delete');
+	const startServer = () =>
+		startTransition(async () => {
+			await startServerEventAction(server.id);
+			router.refresh();
+		});
+	const restartServer = () =>
+		startTransition(async () => {
+			await restartServerEventAction(server.id);
+			router.refresh();
+		});
+	const stopServer = () =>
+		startTransition(async () => {
+			await stopServerEventAction(server.id);
+			router.refresh();
+		});
+
+	const disabled = [
+		ServiceStatus.Restarting,
+		ServiceStatus.Starting,
+		ServiceStatus.Stopping,
+		ServiceStatus.Unknown
+	].includes(server.status);
 	return (
 		<div className="rounded-lg bg-gray-800 p-6">
 			<div className="flex items-center justify-between">
@@ -53,35 +85,45 @@ export function ServerHeader({ server }: ServerHeaderProps) {
 					</div>
 
 					<div className="flex space-x-3">
-						<form action={startServerEventAction.bind(null, server.id)}>
+						{canDeleteServer && (
 							<button
-								type="submit"
-								disabled={server.status === ServiceStatus.Running}
-								className="rounded bg-green-600 px-4 py-2 font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+								type="button"
+								onClick={(e) => {
+									e.preventDefault();
+									setIsDeleteModalOpen(true);
+								}}
+								disabled={disabled || isPending}
+								className="mr-3 rounded bg-red-800 px-4 py-2 font-medium text-white transition-colors hover:bg-red-900 disabled:cursor-not-allowed disabled:opacity-50"
 							>
-								Start
+								Remove Server
 							</button>
-						</form>
+						)}
+						<button
+							type="button"
+							onClick={startServer}
+							disabled={server.status === ServiceStatus.Running || disabled || isPending}
+							className="rounded bg-green-600 px-4 py-2 font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							Start
+						</button>
 
-						<form action={restartServerEventAction.bind(null, server.id)}>
-							<button
-								type="submit"
-								disabled={server.status === ServiceStatus.Stopped}
-								className="rounded bg-yellow-600 px-4 py-2 font-medium text-white transition-colors hover:bg-yellow-700 disabled:cursor-not-allowed disabled:opacity-50"
-							>
-								Restart
-							</button>
-						</form>
+						<button
+							type="button"
+							onClick={restartServer}
+							disabled={server.status === ServiceStatus.Stopped || disabled || isPending}
+							className="rounded bg-yellow-600 px-4 py-2 font-medium text-white transition-colors hover:bg-yellow-700 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							Restart
+						</button>
 
-						<form action={stopServerEventAction.bind(null, server.id)}>
-							<button
-								type="submit"
-								disabled={server.status === ServiceStatus.Stopped}
-								className="rounded bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
-							>
-								Stop
-							</button>
-						</form>
+						<button
+							type="button"
+							onClick={stopServer}
+							disabled={server.status === ServiceStatus.Stopped || disabled || isPending}
+							className="rounded bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							Stop
+						</button>
 					</div>
 				</div>
 
@@ -108,6 +150,12 @@ export function ServerHeader({ server }: ServerHeaderProps) {
 					</div>
 				</div>
 			</div>
+
+			<DeleteServerModal
+				isOpen={isDeleteModalOpen}
+				onClose={() => setIsDeleteModalOpen(false)}
+				server={server}
+			/>
 		</div>
 	);
 }

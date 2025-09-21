@@ -41,7 +41,7 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 				{servers.map((server) => (
-					<ServerCard key={server.id} server={server} user={user} />
+					<ServerCard key={server.id} server={server} />
 				))}
 			</div>
 

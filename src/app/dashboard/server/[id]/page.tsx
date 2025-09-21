@@ -28,7 +28,7 @@ export default async function ServerPage({ params }: ServerPageProps) {
 	return (
 		<div className="min-h-screen bg-gray-900 text-white">
 			<div className="mx-auto max-w-[120rem] px-4 py-8 sm:px-6 lg:px-8">
-				<ServerHeader server={server} />
+				<ServerHeader server={server} user={session.user!} />
 
 				<div className="mt-8">
 					<ServerConfigurationTabs

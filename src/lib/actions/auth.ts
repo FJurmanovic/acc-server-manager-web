@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { loginUser, getOpenToken } from '@/lib/api/server/auth';
-import { login } from '@/lib/auth/server';
+import { login, logout } from '@/lib/auth/server';
 
 export type LoginResult = {
 	success: boolean;
@@ -43,5 +43,5 @@ export async function loginAction(prevState: LoginResult, formData: FormData) {
 }
 
 export async function logoutAction() {
-	redirect('/logout');
+	logout();
 }

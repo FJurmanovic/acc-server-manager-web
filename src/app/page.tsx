@@ -7,6 +7,6 @@ export default async function HomePage() {
 	if (session.token && session.user) {
 		redirect('/dashboard');
 	} else {
-		redirect('/logout');
+		redirect('/login');
 	}
 }

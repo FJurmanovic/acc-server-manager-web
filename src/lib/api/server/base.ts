@@ -1,11 +1,13 @@
-import { redirect } from 'next/navigation';
-
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
 
 type ApiResponse<T> = {
 	data?: T;
 	error?: string;
 	message?: string;
+};
+
+const destroySession = async (): Promise<void> => {
+	await fetch('/api/session', { method: 'DELETE' });
 };
 
 export async function fetchServerAPI<T>(
@@ -28,7 +30,8 @@ export async function fetchServerAPI<T>(
 
 	if (!response.ok) {
 		if (response.status == 401) {
-			redirect('/logout');
+			await destroySession();
+			window.location.href = '/login';
 			return { error: 'unauthorized' };
 		}
 		throw new Error(
