@@ -49,7 +49,7 @@ export async function fetchClientAPI<T>(
 
 	if (!response.ok) {
 		if (response.status === 401) {
-			window.location.href = '/login';
+			window.location.href = '/login?expired=true';
 			return { error: 'unauthorized' };
 		}
 		throw new Error(`API Error: ${response.statusText} - ${method} - ${BASE_URL}${endpoint}`);

@@ -12,7 +12,7 @@ export async function requireAuth(skipRedirect?: boolean) {
 	const session = await getSession();
 
 	if (!skipRedirect && (!session.token || !session.user)) {
-		redirect('/login');
+		redirect('/login?expired=true');
 	}
 
 	return session;
