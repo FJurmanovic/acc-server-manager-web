@@ -12,7 +12,6 @@ export async function requireAuth(skipRedirect?: boolean) {
 	const session = await getSession();
 
 	if (!skipRedirect && (!session.token || !session.user)) {
-		session.destroy();
 		redirect('/login');
 	}
 
@@ -28,6 +27,7 @@ export async function login(token: string, user: SessionData['user'], openToken?
 }
 
 export async function logout() {
+	'use server';
 	const session = await getSession();
 	session.destroy();
 }

@@ -6,8 +6,10 @@ type ApiResponse<T> = {
 	message?: string;
 };
 
+import { logout } from '@/lib/auth/server';
+
 const destroySession = async (): Promise<void> => {
-	await fetch('/api/session', { method: 'DELETE' });
+	await logout();
 };
 
 export async function fetchServerAPI<T>(
@@ -31,7 +33,6 @@ export async function fetchServerAPI<T>(
 	if (!response.ok) {
 		if (response.status == 401) {
 			await destroySession();
-			window.location.href = '/login';
 			return { error: 'unauthorized' };
 		}
 		throw new Error(

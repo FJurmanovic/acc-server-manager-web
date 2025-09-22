@@ -43,5 +43,5 @@ export async function loginAction(prevState: LoginResult, formData: FormData) {
 }
 
 export async function logoutAction() {
-	logout();
+	await logout();
 }

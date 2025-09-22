@@ -17,9 +17,6 @@ const getSession = async (): Promise<SessionData | null> => {
 	}
 	return null;
 };
-const destroySession = async (): Promise<void> => {
-	await fetch('/api/session', { method: 'DELETE' });
-};
 
 export async function fetchClientAPI<T>(
 	endpoint: string,
@@ -52,7 +49,6 @@ export async function fetchClientAPI<T>(
 
 	if (!response.ok) {
 		if (response.status === 401) {
-			await destroySession();
 			window.location.href = '/login';
 			return { error: 'unauthorized' };
 		}
