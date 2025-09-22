@@ -6,11 +6,7 @@ type ApiResponse<T> = {
 	message?: string;
 };
 
-import { logout } from '@/lib/auth/server';
-
-const destroySession = async (): Promise<void> => {
-	await logout();
-};
+import { redirect } from 'next/navigation';
 
 export async function fetchServerAPI<T>(
 	endpoint: string,
@@ -32,8 +28,7 @@ export async function fetchServerAPI<T>(
 
 	if (!response.ok) {
 		if (response.status == 401) {
-			await destroySession();
-			return { error: 'unauthorized' };
+			redirect('/login?expired=true');
 		}
 		throw new Error(
 			`API Error: ${response.statusText} - ${method} - ${BASE_URL}${endpoint} - ${token}`

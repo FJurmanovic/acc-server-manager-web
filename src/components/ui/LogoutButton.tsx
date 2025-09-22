@@ -4,7 +4,7 @@ import { logoutAction } from '@/lib/actions/auth';
 import { useActionState } from 'react';
 
 export default function LogoutButton() {
-	const [_, formAction] = useActionState(logoutAction, null);
+	const [, formAction] = useActionState(logoutAction, null);
 	return (
 		<form action={formAction}>
 			<button type="submit" className="flex items-center text-gray-300 hover:text-white">

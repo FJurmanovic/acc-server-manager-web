@@ -45,3 +45,7 @@ export async function loginAction(prevState: LoginResult, formData: FormData) {
 export async function logoutAction() {
 	await logout();
 }
+
+export async function clearExpiredSessionAction() {
+	await logout();
+}

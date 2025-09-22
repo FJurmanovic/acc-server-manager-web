@@ -1,7 +1,8 @@
 'use client';
 
-import { loginAction, LoginResult } from '@/lib/actions/auth';
-import { useActionState } from 'react';
+import { loginAction, LoginResult, clearExpiredSessionAction } from '@/lib/actions/auth';
+import { useActionState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 const initialState: LoginResult = {
 	message: '',
@@ -9,7 +10,15 @@ const initialState: LoginResult = {
 };
 
 export default function LoginPage() {
+	const searchParams = useSearchParams();
+	const expired = searchParams.get('expired') === 'true';
 	const [state, formAction] = useActionState(loginAction, initialState);
+
+	useEffect(() => {
+		if (expired) {
+			clearExpiredSessionAction();
+		}
+	}, [expired]);
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-gray-900 px-4">
 			<div className="w-full max-w-md space-y-8 rounded-lg bg-gray-800 p-8 shadow-lg">
@@ -17,6 +26,11 @@ export default function LoginPage() {
 					<h1 className="text-3xl font-bold text-white">ACC Server Manager</h1>
 					<p className="mt-2 text-gray-400">Sign in to manage your servers</p>
 				</div>
+				{expired && (
+					<div className="rounded-md border border-yellow-700 bg-yellow-900/50 p-3 text-sm text-yellow-200">
+						Your session has expired. Please sign in again.
+					</div>
+				)}
 				{state?.success ? null : (
 					<div className="rounded-md border border-red-700 bg-red-900/50 p-3 text-sm text-red-200">
 						{state?.message}
