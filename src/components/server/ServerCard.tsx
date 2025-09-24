@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useTransition } from 'react';
-import { Server, ServiceStatus, getStatusColor, serviceStatusToString } from '@/lib/types';
+import { Server, ServiceStatus, getStatusColor, serviceStatusToString } from '@/lib/schemas';
 import {
 	startServerEventAction,
 	restartServerEventAction,

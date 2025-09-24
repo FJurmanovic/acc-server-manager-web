@@ -1,12 +1,12 @@
 'use client';
 import Link from 'next/link';
-import { Server, getStatusColor, serviceStatusToString, ServiceStatus } from '@/lib/types/server';
+import { Server, getStatusColor, serviceStatusToString, ServiceStatus } from '@/lib/schemas/server';
 import {
 	startServerEventAction,
 	restartServerEventAction,
 	stopServerEventAction
 } from '@/lib/actions/servers';
-import { hasPermission, User } from '@/lib/types';
+import { hasPermission, User } from '@/lib/schemas';
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { DeleteServerModal } from './DeleteServerModal';

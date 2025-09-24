@@ -3,14 +3,20 @@
 import { revalidatePath } from 'next/cache';
 import { requireAuth } from '@/lib/auth/server';
 import { updateServerConfiguration } from '@/lib/api/server/configuration';
-import { ConfigFile } from '@/lib/types/config';
+import {
+	assistRulesSchema,
+	ConfigFile,
+	eventConfigSchema,
+	eventRulesSchema,
+	serverSettingsSchema
+} from '@/lib/schemas/config';
 import type {
 	Configuration,
 	AssistRules,
 	EventConfig,
 	EventRules,
 	ServerSettings
-} from '@/lib/types/config';
+} from '@/lib/schemas/config';
 
 export async function updateConfigurationAction(serverId: string, formData: FormData) {
 	try {
@@ -49,7 +55,7 @@ export async function updateAssistRulesAction(serverId: string, formData: FormDa
 		const session = await requireAuth();
 		const restart = formData.get('restart') === 'on';
 
-		const config: AssistRules = {
+		const rawConfig: AssistRules = {
 			stabilityControlLevelMax: parseInt(formData.get('stabilityControlLevelMax') as string),
 			disableAutosteer: parseInt(formData.get('disableAutosteer') as string),
 			disableAutoLights: parseInt(formData.get('disableAutoLights') as string),
@@ -61,11 +67,16 @@ export async function updateAssistRulesAction(serverId: string, formData: FormDa
 			disableIdealLine: parseInt(formData.get('disableIdealLine') as string)
 		};
 
+		const config = assistRulesSchema.safeParse(rawConfig);
+		if (!config.success) {
+			return { success: false, message: config.error.message };
+		}
+
 		await updateServerConfiguration(
 			session.token!,
 			serverId,
 			ConfigFile.assistRules,
-			config,
+			config.data,
 			restart
 		);
 		revalidatePath(`/dashboard/server/${serverId}`);
@@ -84,7 +95,7 @@ export async function updateServerSettingsAction(serverId: string, formData: For
 		const session = await requireAuth();
 		const restart = formData.get('restart') === 'on';
 
-		const config: ServerSettings = {
+		const rawConfig: ServerSettings = {
 			serverName: formData.get('serverName') as string,
 			adminPassword: formData.get('adminPassword') as string,
 			carGroup: formData.get('carGroup') as string,
@@ -103,8 +114,18 @@ export async function updateServerSettingsAction(serverId: string, formData: For
 			formationLapType: parseInt(formData.get('formationLapType') as string),
 			ignorePrematureDisconnects: parseInt(formData.get('ignorePrematureDisconnects') as string)
 		};
+		const config = serverSettingsSchema.safeParse(rawConfig);
+		if (!config.success) {
+			return { success: false, message: config.error.message };
+		}
 
-		await updateServerConfiguration(session.token!, serverId, ConfigFile.settings, config, restart);
+		await updateServerConfiguration(
+			session.token!,
+			serverId,
+			ConfigFile.settings,
+			config.data,
+			restart
+		);
 		revalidatePath(`/dashboard/server/${serverId}`);
 
 		return { success: true, message: 'Server settings updated successfully' };
@@ -124,7 +145,7 @@ export async function updateEventConfigAction(serverId: string, formData: FormDa
 		const sessionsData = formData.get('sessions') as string;
 		const sessions = sessionsData ? JSON.parse(sessionsData) : [];
 
-		const config: EventConfig = {
+		const rawConfig: EventConfig = {
 			track: formData.get('track') as string,
 			preRaceWaitingTimeSeconds: parseInt(formData.get('preRaceWaitingTimeSeconds') as string),
 			sessionOverTimeSeconds: parseInt(formData.get('sessionOverTimeSeconds') as string),
@@ -140,8 +161,18 @@ export async function updateEventConfigAction(serverId: string, formData: FormDa
 			),
 			sessions
 		};
+		const config = eventConfigSchema.safeParse(rawConfig);
+		if (!config.success) {
+			return { success: false, message: config.error.message };
+		}
 
-		await updateServerConfiguration(session.token!, serverId, ConfigFile.event, config, restart);
+		await updateServerConfiguration(
+			session.token!,
+			serverId,
+			ConfigFile.event,
+			config.data,
+			restart
+		);
 		revalidatePath(`/dashboard/server/${serverId}`);
 
 		return {
@@ -161,7 +192,7 @@ export async function updateEventRulesAction(serverId: string, formData: FormDat
 		const session = await requireAuth();
 		const restart = formData.get('restart') === 'on';
 
-		const config: EventRules = {
+		const rawConfig: EventRules = {
 			qualifyStandingType: parseInt(formData.get('qualifyStandingType') as string),
 			pitWindowLengthSec: parseInt(formData.get('pitWindowLengthSec') as string),
 			driverStintTimeSec: parseInt(formData.get('driverStintTimeSec') as string),
@@ -178,11 +209,16 @@ export async function updateEventRulesAction(serverId: string, formData: FormDat
 			tyreSetCount: parseInt(formData.get('tyreSetCount') as string)
 		};
 
+		const config = eventRulesSchema.safeParse(rawConfig);
+		if (!config.success) {
+			return { success: false, message: config.error.message };
+		}
+
 		await updateServerConfiguration(
 			session.token!,
 			serverId,
 			ConfigFile.eventRules,
-			config,
+			config.data,
 			restart
 		);
 		revalidatePath(`/dashboard/server/${serverId}`);

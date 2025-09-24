@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useWebSocket } from '@/lib/websocket/context';
-import {
+import type {
 	WebSocketMessage,
 	StepData,
 	SteamOutputData,
 	ErrorData,
 	CompleteData
-} from '@/lib/websocket/client';
+} from '@/lib/schemas/websocket';
 
 interface ServerCreationPopupProps {
 	serverId: string;

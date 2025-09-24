@@ -1,17 +1,26 @@
-import { User } from '@/lib/types';
+import {
+	Login,
+	LoginResponse,
+	loginResponseSchema,
+	loginSchema,
+	loginTokenSchema,
+	User,
+	userSchema
+} from '@/lib/schemas';
 import { fetchServerAPI } from './base';
 
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
 
 const authRoute = '/auth';
 
-export async function loginUser(username: string, password: string) {
+export async function loginUser(login: Login): Promise<LoginResponse> {
+	const validatedLogin = loginSchema.parse(login);
 	const response = await fetch(`${BASE_URL}${authRoute}/login`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify({ username, password })
+		body: JSON.stringify(validatedLogin)
 	});
 
 	if (!response.ok) {
@@ -22,16 +31,18 @@ export async function loginUser(username: string, password: string) {
 		throw new Error(`Login failed: ${response.statusText}`);
 	}
 
-	const { token } = await response.json();
+	const rawData = await response.json();
+
+	const { token } = loginTokenSchema.parse(rawData);
 
 	const userResponse = await getCurrentUser(token);
 
-	return { token, user: userResponse };
+	return loginResponseSchema.parse({ token, user: userResponse });
 }
 
 export async function getCurrentUser(token: string): Promise<User> {
 	const response = await fetchServerAPI<User>(`${authRoute}/me`, token);
-	return response.data!;
+	return userSchema.parse(response.data);
 }
 
 export async function getOpenToken(token: string): Promise<string> {
@@ -40,5 +51,5 @@ export async function getOpenToken(token: string): Promise<string> {
 		token,
 		'POST'
 	);
-	return response.data!.token;
+	return loginTokenSchema.parse(response.data).token;
 }

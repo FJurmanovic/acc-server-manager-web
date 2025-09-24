@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { deleteServerAction } from '@/lib/actions/server-management';
-import { Server } from '@/lib/types/server';
+import { Server } from '@/lib/schemas/server';
 
 interface DeleteServerModalProps {
 	isOpen: boolean;

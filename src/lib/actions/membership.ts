@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { requireAuth } from '@/lib/auth/server';
 import { createUser, deleteUser } from '@/lib/api/server/membership';
+import { userCreateSchema } from '../schemas';
 
 export async function createUserAction(formData: FormData) {
 	try {
@@ -11,7 +12,13 @@ export async function createUserAction(formData: FormData) {
 		const password = formData.get('password') as string;
 		const role = formData.get('role') as string;
 
-		await createUser(session.token!, { username, password, role });
+		const rawData = { username, password, role };
+		const data = userCreateSchema.safeParse(rawData);
+		if (!data.success) {
+			return { success: false, message: data.error.message };
+		}
+
+		await createUser(session.token!, data.data);
 		revalidatePath('/dashboard/membership');
 
 		return { success: true, message: 'User created successfully' };

@@ -1,6 +1,6 @@
 'use client';
 
-import type { StateHistoryStats } from '@/lib/types/statistics';
+import type { StateHistoryStats } from '@/lib/schemas/statistics';
 import { PlayerCountChart } from './PlayerCountChart';
 import { SessionTypesChart } from './SessionTypesChart';
 import { DailyActivityChart } from './DailyActivityChart';

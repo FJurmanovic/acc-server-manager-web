@@ -1,6 +1,6 @@
 import { requireAuth } from '@/lib/auth/server';
 import { getServers } from '@/lib/api/server/servers';
-import { hasPermission } from '@/lib/types';
+import { hasPermission } from '@/lib/schemas';
 import Link from 'next/link';
 import { ServerListWithActions } from '@/components/server/ServerListWithActions';
 import { SteamCMDNotification } from '@/components/ui/SteamCMDNotification';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Configuration } from '@/lib/types/config';
+import type { Configuration } from '@/lib/schemas/config';
 import { updateConfigurationAction } from '@/lib/actions/configuration';
 
 interface ConfigurationEditorProps {

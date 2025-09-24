@@ -1,13 +1,72 @@
 'use client';
 
 import { useState } from 'react';
-import type { EventRules } from '@/lib/types/config';
+import type { EventRules } from '@/lib/schemas/config';
 import { updateEventRulesAction } from '@/lib/actions/configuration';
 
 interface EventRulesEditorProps {
 	serverId: string;
 	config: EventRules;
 }
+
+const numberFields = [
+	{
+		key: 'qualifyStandingType' as keyof EventRules,
+		label: 'Qualify Standing Type',
+		min: -1,
+		max: 1
+	},
+	{
+		key: 'pitWindowLengthSec' as keyof EventRules,
+		label: 'Pit Window Length (seconds)',
+		min: -1
+	},
+	{
+		key: 'driverStintTimeSec' as keyof EventRules,
+		label: 'Driver Stint Time (seconds)',
+		min: -1
+	},
+	{
+		key: 'mandatoryPitstopCount' as keyof EventRules,
+		label: 'Mandatory Pitstop Count',
+		min: -1,
+		max: 5
+	},
+	{
+		key: 'maxTotalDrivingTime' as keyof EventRules,
+		label: 'Max Total Driving Time (seconds)',
+		min: -1
+	},
+	{
+		key: 'tyreSetCount' as keyof EventRules,
+		label: 'Tyre Set Count',
+		min: 0,
+		max: 50
+	}
+];
+
+const booleanFields = [
+	{
+		key: 'isRefuellingAllowedInRace' as keyof EventRules,
+		label: 'Refuelling Allowed in Race'
+	},
+	{
+		key: 'isRefuellingTimeFixed' as keyof EventRules,
+		label: 'Refuelling Time Fixed'
+	},
+	{
+		key: 'isMandatoryPitstopRefuellingRequired' as keyof EventRules,
+		label: 'Mandatory Pitstop Refuelling Required'
+	},
+	{
+		key: 'isMandatoryPitstopTyreChangeRequired' as keyof EventRules,
+		label: 'Mandatory Pitstop Tyre Change Required'
+	},
+	{
+		key: 'isMandatoryPitstopSwapDriverRequired' as keyof EventRules,
+		label: 'Mandatory Pitstop Swap Driver Required'
+	}
+];
 
 export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
 	const [formData, setFormData] = useState<EventRules>(config);
@@ -42,65 +101,6 @@ export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
 			[key]: value
 		}));
 	};
-
-	const numberFields = [
-		{
-			key: 'qualifyStandingType' as keyof EventRules,
-			label: 'Qualify Standing Type',
-			min: -1,
-			max: 1
-		},
-		{
-			key: 'pitWindowLengthSec' as keyof EventRules,
-			label: 'Pit Window Length (seconds)',
-			min: -1
-		},
-		{
-			key: 'driverStintTimeSec' as keyof EventRules,
-			label: 'Driver Stint Time (seconds)',
-			min: -1
-		},
-		{
-			key: 'mandatoryPitstopCount' as keyof EventRules,
-			label: 'Mandatory Pitstop Count',
-			min: -1,
-			max: 5
-		},
-		{
-			key: 'maxTotalDrivingTime' as keyof EventRules,
-			label: 'Max Total Driving Time (seconds)',
-			min: -1
-		},
-		{
-			key: 'tyreSetCount' as keyof EventRules,
-			label: 'Tyre Set Count',
-			min: 0,
-			max: 50
-		}
-	];
-
-	const booleanFields = [
-		{
-			key: 'isRefuellingAllowedInRace' as keyof EventRules,
-			label: 'Refuelling Allowed in Race'
-		},
-		{
-			key: 'isRefuellingTimeFixed' as keyof EventRules,
-			label: 'Refuelling Time Fixed'
-		},
-		{
-			key: 'isMandatoryPitstopRefuellingRequired' as keyof EventRules,
-			label: 'Mandatory Pitstop Refuelling Required'
-		},
-		{
-			key: 'isMandatoryPitstopTyreChangeRequired' as keyof EventRules,
-			label: 'Mandatory Pitstop Tyre Change Required'
-		},
-		{
-			key: 'isMandatoryPitstopSwapDriverRequired' as keyof EventRules,
-			label: 'Mandatory Pitstop Swap Driver Required'
-		}
-	];
 
 	return (
 		<form onSubmit={handleSubmit} className="max-w-4xl space-y-8">

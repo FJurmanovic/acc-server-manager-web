@@ -1,5 +1,6 @@
+import { use } from 'react';
 import { fetchServerAPI } from './base';
-import { User, Role } from '@/lib/types';
+import { User, Role, userSchema, UserCreate, userCreateSchema, roleSchema } from '@/lib/schemas';
 
 export interface UserListParams {
 	username?: string;
@@ -25,27 +26,29 @@ export async function getUsers(token: string, params: UserListParams = {}): Prom
 	const endpoint = `${membershipRoute}${queryString ? `?${queryString}` : ''}`;
 
 	const response = await fetchServerAPI<User[]>(endpoint, token);
-	return response.data!;
+	return userSchema.array().parse(response.data);
 }
 
-export async function createUser(
-	token: string,
-	userData: { username: string; password: string; role: string }
-): Promise<void> {
-	await fetchServerAPI(membershipRoute, token, 'POST', userData);
+export async function createUser(token: string, userData: UserCreate): Promise<void> {
+	await fetchServerAPI(membershipRoute, token, 'POST', userCreateSchema.parse(userData));
 }
 
 export async function getUserById(token: string, userId: string): Promise<User> {
 	const response = await fetchServerAPI<User>(`${membershipRoute}/${userId}`, token);
-	return response.data!;
+	return userSchema.parse(response.data);
 }
 
 export async function updateUser(
 	token: string,
 	userId: string,
-	userData: Partial<User>
+	userData: Partial<UserCreate>
 ): Promise<void> {
-	await fetchServerAPI(`${membershipRoute}/${userId}`, token, 'PUT', userData);
+	await fetchServerAPI(
+		`${membershipRoute}/${userId}`,
+		token,
+		'PUT',
+		userCreateSchema.parse(userData)
+	);
 }
 
 export async function deleteUser(token: string, userId: string): Promise<void> {
@@ -54,5 +57,5 @@ export async function deleteUser(token: string, userId: string): Promise<void> {
 
 export async function getRoles(token: string): Promise<Role[]> {
 	const response = await fetchServerAPI<Role[]>(`${membershipRoute}/roles`, token);
-	return response.data!;
+	return roleSchema.array().parse(response.data);
 }

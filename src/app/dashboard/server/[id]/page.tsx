@@ -22,7 +22,7 @@ export default async function ServerPage({ params }: ServerPageProps) {
 	const [server, configurations, statistics] = await Promise.all([
 		getServer(session.token!, id),
 		getServerConfigurations(session.token!, id),
-		getServerStatistics(session.token!, id, startDate, endDate)
+		getServerStatistics(session.token!, id, { startDate, endDate })
 	]);
 
 	return (

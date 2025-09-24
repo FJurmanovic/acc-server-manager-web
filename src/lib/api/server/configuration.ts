@@ -1,5 +1,12 @@
 import { fetchServerAPI } from './base';
-import type { Configurations, ConfigFile, Config } from '@/lib/types/config';
+import {
+	type Configurations,
+	type Config,
+	ConfigFile,
+	configurationsSchema,
+	configSchemaMap
+} from '@/lib/schemas/config';
+import * as z from 'zod';
 
 const serverRoute = '/server';
 
@@ -8,7 +15,15 @@ export async function getServerConfigurations(
 	serverId: string
 ): Promise<Configurations> {
 	const response = await fetchServerAPI<Configurations>(`${serverRoute}/${serverId}/config`, token);
-	return response.data!;
+	return configurationsSchema.parse(response.data);
+}
+
+export function validateConfig(
+	configType: ConfigFile,
+	data: unknown
+): z.infer<(typeof configSchemaMap)[typeof configType]> {
+	const schema = configSchemaMap[configType];
+	return schema.parse(data);
 }
 
 export async function getServerConfiguration(
@@ -20,7 +35,7 @@ export async function getServerConfiguration(
 		`${serverRoute}/${serverId}/config/${configType}`,
 		token
 	);
-	return response.data!;
+	return validateConfig(configType, response.data);
 }
 
 export async function updateServerConfiguration(
@@ -31,7 +46,7 @@ export async function updateServerConfiguration(
 	restart = false
 ): Promise<void> {
 	await fetchServerAPI(`${serverRoute}/${serverId}/config/${configType}`, token, 'PUT', {
-		...config,
+		...validateConfig(configType, config),
 		restart
 	});
 }

@@ -1,13 +1,61 @@
 'use client';
 
 import { useState } from 'react';
-import type { AssistRules } from '@/lib/types/config';
+import type { AssistRules } from '@/lib/schemas/config';
 import { updateAssistRulesAction } from '@/lib/actions/configuration';
 
 interface AssistRulesEditorProps {
 	serverId: string;
 	config: AssistRules;
 }
+
+const assistFields = [
+	{
+		key: 'stabilityControlLevelMax' as keyof AssistRules,
+		label: 'Stability Control Level Max',
+		type: 'number'
+	},
+	{
+		key: 'disableAutosteer' as keyof AssistRules,
+		label: 'Disable Autosteer',
+		type: 'select'
+	},
+	{
+		key: 'disableAutoLights' as keyof AssistRules,
+		label: 'Disable Auto Lights',
+		type: 'select'
+	},
+	{
+		key: 'disableAutoWiper' as keyof AssistRules,
+		label: 'Disable Auto Wiper',
+		type: 'select'
+	},
+	{
+		key: 'disableAutoEngineStart' as keyof AssistRules,
+		label: 'Disable Auto Engine Start',
+		type: 'select'
+	},
+	{
+		key: 'disableAutoPitLimiter' as keyof AssistRules,
+		label: 'Disable Auto Pit Limiter',
+		type: 'select'
+	},
+	{
+		key: 'disableAutoGear' as keyof AssistRules,
+		label: 'Disable Auto Gear',
+		type: 'select'
+	},
+	{
+		key: 'disableAutoClutch' as keyof AssistRules,
+		label: 'Disable Auto Clutch',
+		type: 'select'
+	},
+	{
+		key: 'disableIdealLine' as keyof AssistRules,
+		label: 'Disable Ideal Line',
+		type: 'select'
+	}
+];
 
 export function AssistRulesEditor({ serverId, config }: AssistRulesEditorProps) {
 	const [formData, setFormData] = useState<AssistRules>(config);
@@ -42,54 +90,6 @@ export function AssistRulesEditor({ serverId, config }: AssistRulesEditorProps) 
 			[key]: typeof value === 'string' ? parseInt(value) : value
 		}));
 	};
-
-	const assistFields = [
-		{
-			key: 'stabilityControlLevelMax' as keyof AssistRules,
-			label: 'Stability Control Level Max',
-			type: 'number'
-		},
-		{
-			key: 'disableAutosteer' as keyof AssistRules,
-			label: 'Disable Autosteer',
-			type: 'select'
-		},
-		{
-			key: 'disableAutoLights' as keyof AssistRules,
-			label: 'Disable Auto Lights',
-			type: 'select'
-		},
-		{
-			key: 'disableAutoWiper' as keyof AssistRules,
-			label: 'Disable Auto Wiper',
-			type: 'select'
-		},
-		{
-			key: 'disableAutoEngineStart' as keyof AssistRules,
-			label: 'Disable Auto Engine Start',
-			type: 'select'
-		},
-		{
-			key: 'disableAutoPitLimiter' as keyof AssistRules,
-			label: 'Disable Auto Pit Limiter',
-			type: 'select'
-		},
-		{
-			key: 'disableAutoGear' as keyof AssistRules,
-			label: 'Disable Auto Gear',
-			type: 'select'
-		},
-		{
-			key: 'disableAutoClutch' as keyof AssistRules,
-			label: 'Disable Auto Clutch',
-			type: 'select'
-		},
-		{
-			key: 'disableIdealLine' as keyof AssistRules,
-			label: 'Disable Ideal Line',
-			type: 'select'
-		}
-	];
 
 	return (
 		<form onSubmit={handleSubmit} className="max-w-3xl space-y-6">

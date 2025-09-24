@@ -1,13 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import type { EventConfig, Session } from '@/lib/types/config';
+import type { EventConfig, Session } from '@/lib/schemas/config';
 import { updateEventConfigAction } from '@/lib/actions/configuration';
 
 interface EventConfigEditorProps {
 	serverId: string;
 	config: EventConfig;
 }
+
+const sessionTypes = [
+	{ value: 'P', label: 'Practice' },
+	{ value: 'Q', label: 'Qualifying' },
+	{ value: 'R', label: 'Race' }
+];
 
 export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) {
 	const [formData, setFormData] = useState<EventConfig>(config);
@@ -89,12 +95,6 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 			sessions: prev.sessions.filter((_, i) => i !== index)
 		}));
 	};
-
-	const sessionTypes = [
-		{ value: 'P', label: 'Practice' },
-		{ value: 'Q', label: 'Qualifying' },
-		{ value: 'R', label: 'Race' }
-	];
 
 	return (
 		<form onSubmit={handleSubmit} className="max-w-4xl space-y-8">

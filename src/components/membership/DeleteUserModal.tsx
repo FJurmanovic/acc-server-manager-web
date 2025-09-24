@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { User } from '@/lib/types';
+import type { User } from '@/lib/schemas';
 import { deleteUserAction } from '@/lib/actions/membership';
 
 interface DeleteUserModalProps {

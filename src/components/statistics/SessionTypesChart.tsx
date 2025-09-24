@@ -14,16 +14,16 @@ interface SessionTypesChartProps {
 	data: SessionCount[];
 }
 
-export function SessionTypesChart({ data }: SessionTypesChartProps) {
-	const colors = [
-		'#3b82f6', // blue
-		'#10b981', // emerald
-		'#f59e0b', // amber
-		'#ef4444', // red
-		'#8b5cf6', // violet
-		'#06b6d4' // cyan
-	];
+const colors = [
+	'#3b82f6', // blue
+	'#10b981', // emerald
+	'#f59e0b', // amber
+	'#ef4444', // red
+	'#8b5cf6', // violet
+	'#06b6d4' // cyan
+];
 
+export function SessionTypesChart({ data }: SessionTypesChartProps) {
 	const chartData = {
 		labels: data.map((item) => item.name),
 		datasets: [

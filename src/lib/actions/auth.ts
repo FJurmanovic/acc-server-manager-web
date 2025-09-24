@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { loginUser, getOpenToken } from '@/lib/api/server/auth';
 import { login, logout } from '@/lib/auth/server';
+import { loginSchema, loginResponseSchema } from '../schemas';
 
 export type LoginResult = {
 	success: boolean;
@@ -14,18 +15,19 @@ export async function loginAction(prevState: LoginResult, formData: FormData) {
 		const username = formData.get('username') as string;
 		const password = formData.get('password') as string;
 
-		if (!username || !password) {
+		const loginData = loginSchema.safeParse({ username, password });
+		if (!loginData.success) {
 			return {
 				success: false,
-				message: 'Username and password are required'
+				message: loginData.error.message
 			};
 		}
 
-		const result = await loginUser(username, password);
+		const result = loginResponseSchema.safeParse(await loginUser(loginData.data));
 
-		if (result.token && result.user) {
-			const openToken = await getOpenToken(result.token);
-			await login(result.token, result.user, openToken);
+		if (result.success) {
+			const openToken = await getOpenToken(result.data.token);
+			await login(result.data.token, result.data.user, openToken);
 		} else {
 			return {
 				success: false,

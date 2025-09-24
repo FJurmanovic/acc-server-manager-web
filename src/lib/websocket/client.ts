@@ -1,46 +1,9 @@
-export interface WebSocketMessage {
-	type: 'step' | 'steam_output' | 'error' | 'complete';
-	server_id: string;
-	timestamp: number;
-	data: StepData | SteamOutputData | ErrorData | CompleteData;
-}
-
-export interface StepData {
-	step:
-		| 'validation'
-		| 'directory_creation'
-		| 'steam_download'
-		| 'config_generation'
-		| 'service_creation'
-		| 'firewall_rules'
-		| 'database_save'
-		| 'completed';
-	status: 'pending' | 'in_progress' | 'completed' | 'failed';
-	message: string;
-	error: string;
-}
-
-export interface SteamOutputData {
-	output: string;
-	is_error: boolean;
-}
-
-export interface ErrorData {
-	error: string;
-	details: string;
-}
-
-export interface CompleteData {
-	server_id: string;
-	success: boolean;
-	message: string;
-}
-
-export type MessageHandler = (message: WebSocketMessage) => void;
-export type ConnectionStatusHandler = (
-	status: 'connecting' | 'connected' | 'disconnected' | 'error',
-	error?: string
-) => void;
+import {
+	webSocketMessageSchema,
+	type WebSocketMessage,
+	type MessageHandler,
+	type ConnectionStatusHandler
+} from '@/lib/schemas/websocket';
 
 export class WebSocketClient {
 	private ws: WebSocket | null = null;
@@ -89,7 +52,8 @@ export class WebSocketClient {
 
 				this.ws.onmessage = (event) => {
 					try {
-						const message: WebSocketMessage = JSON.parse(event.data);
+						const rawMessage: WebSocketMessage = JSON.parse(event.data);
+						const message = webSocketMessageSchema.parse(rawMessage);
 						this.messageHandlers.forEach((handler) => handler(message));
 					} catch (error) {
 						console.error('Failed to parse WebSocket message:', error);

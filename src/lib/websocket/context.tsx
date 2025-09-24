@@ -9,8 +9,9 @@ import {
 	useCallback,
 	useRef
 } from 'react';
-import { WebSocketClient, MessageHandler, ConnectionStatusHandler } from './client';
+import { WebSocketClient } from './client';
 import { websocketOptions } from './config';
+import type { ConnectionStatusHandler, MessageHandler } from '../schemas/websocket';
 
 interface WebSocketContextType {
 	client: WebSocketClient | null;

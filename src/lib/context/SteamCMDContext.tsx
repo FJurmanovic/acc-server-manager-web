@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { useWebSocket } from '@/lib/websocket/context';
-import { WebSocketMessage, StepData } from '@/lib/websocket/client';
+import type { WebSocketMessage, StepData } from '@/lib/schemas/websocket';
 
 interface SteamCMDContextType {
 	isSteamCMDRunning: boolean;

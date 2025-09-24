@@ -1,6 +1,6 @@
 'use client';
 
-import { Configurations, ServerTab } from '@/lib/types/config';
+import { Configurations, ServerTab } from '@/lib/schemas/config';
 import { ConfigurationEditor } from '@/components/configuration/ConfigurationEditor';
 import { AssistRulesEditor } from '@/components/configuration/AssistRulesEditor';
 import { EventConfigEditor } from '@/components/configuration/EventConfigEditor';
@@ -8,13 +8,21 @@ import { EventRulesEditor } from '@/components/configuration/EventRulesEditor';
 import { ServerSettingsEditor } from '@/components/configuration/ServerSettingsEditor';
 import { StatisticsDashboard } from '@/components/statistics/StatisticsDashboard';
 import { useState } from 'react';
-import { StateHistoryStats } from '@/lib/types';
+import { StateHistoryStats } from '@/lib/schemas';
 
 interface ServerConfigurationTabsProps {
 	serverId: string;
 	configurations: Configurations;
 	statistics: StateHistoryStats;
 }
+const tabs = [
+	{ id: ServerTab.statistics, name: 'Statistics', icon: '📊' },
+	{ id: ServerTab.configuration, name: 'Configuration', icon: '⚙️' },
+	{ id: ServerTab.assistRules, name: 'Assist Rules', icon: '🚗' },
+	{ id: ServerTab.event, name: 'Event Config', icon: '🏁' },
+	{ id: ServerTab.eventRules, name: 'Event Rules', icon: '📋' },
+	{ id: ServerTab.settings, name: 'Server Settings', icon: '🔧' }
+];
 
 export function ServerConfigurationTabs({
 	serverId,
@@ -22,14 +30,6 @@ export function ServerConfigurationTabs({
 	statistics
 }: ServerConfigurationTabsProps) {
 	const [currentTab, setCurrentTab] = useState(ServerTab.statistics);
-	const tabs = [
-		{ id: ServerTab.statistics, name: 'Statistics', icon: '📊' },
-		{ id: ServerTab.configuration, name: 'Configuration', icon: '⚙️' },
-		{ id: ServerTab.assistRules, name: 'Assist Rules', icon: '🚗' },
-		{ id: ServerTab.event, name: 'Event Config', icon: '🏁' },
-		{ id: ServerTab.eventRules, name: 'Event Rules', icon: '📋' },
-		{ id: ServerTab.settings, name: 'Server Settings', icon: '🔧' }
-	];
 
 	const renderTabContent = () => {
 		switch (currentTab) {

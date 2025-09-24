@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Role } from '@/lib/types';
+import type { Role } from '@/lib/schemas';
 import { createUserAction } from '@/lib/actions/membership';
 
 interface CreateUserModalProps {

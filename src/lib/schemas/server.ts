@@ -1,3 +1,5 @@
+import * as z from 'zod';
+
 export enum ServiceStatus {
 	Unknown,
 	Stopped,
@@ -6,6 +8,7 @@ export enum ServiceStatus {
 	Starting,
 	Running
 }
+export const serviceStatusSchema = z.enum(ServiceStatus);
 
 export const serviceStatusToString = (status: ServiceStatus): string => {
 	switch (status) {
@@ -41,16 +44,20 @@ export const getStatusColor = (status: ServiceStatus): string => {
 	}
 };
 
-interface State {
-	session: string;
-	playerCount: number;
-	track: string;
-	maxConnections: number;
-}
+export const stateSchema = z.object({
+	session: z.string(),
+	playerCount: z.number().min(0),
+	track: z.string(),
+	maxConnections: z.number().min(0)
+});
 
-export interface Server {
-	id: string;
-	name: string;
-	status: ServiceStatus;
-	state: State;
-}
+export type State = z.infer<typeof stateSchema>;
+
+export const serverSchema = z.object({
+	id: z.uuid(),
+	name: z.string().min(1),
+	status: z.enum(ServiceStatus),
+	state: stateSchema.optional()
+});
+
+export type Server = z.infer<typeof serverSchema>;

@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import type { Role, User } from '@/lib/types';
-import { hasPermission } from '@/lib/types/user';
+import type { Role, User } from '@/lib/schemas';
+import { hasPermission } from '@/lib/schemas/user';
 import { CreateUserModal } from './CreateUserModal';
 import { DeleteUserModal } from './DeleteUserModal';
 

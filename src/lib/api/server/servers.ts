@@ -1,16 +1,16 @@
 import { fetchServerAPI } from './base';
-import { Server, ServiceStatus } from '@/lib/types/server';
+import { Server, serverSchema, ServiceStatus, serviceStatusSchema } from '@/lib/schemas/server';
 
 const serverRoute = '/server';
 
 export async function getServers(token: string): Promise<Server[]> {
 	const response = await fetchServerAPI<Server[]>(serverRoute, token);
-	return response.data!;
+	return serverSchema.array().parse(response.data);
 }
 
 export async function getServer(token: string, serverId: string): Promise<Server> {
 	const response = await fetchServerAPI<Server>(`${serverRoute}/${serverId}`, token);
-	return response.data!;
+	return serverSchema.parse(response.data);
 }
 
 export async function restartService(token: string, serverId: string): Promise<void> {
@@ -27,12 +27,12 @@ export async function stopService(token: string, serverId: string): Promise<void
 
 export async function getServiceStatus(token: string, serverId: string): Promise<ServiceStatus> {
 	const response = await fetchServerAPI<ServiceStatus>(`${serverRoute}/${serverId}/service`, token);
-	return response.data!;
+	return serviceStatusSchema.parse(response.data);
 }
 
 export async function createServer(token: string, name: string): Promise<Server> {
 	const response = await fetchServerAPI<Server>(serverRoute, token, 'POST', { name });
-	return response.data!;
+	return serverSchema.parse(response.data);
 }
 
 export async function deleteServer(token: string, serverId: string): Promise<void> {

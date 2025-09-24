@@ -1,5 +1,5 @@
 import { SessionOptions } from 'iron-session';
-import { User } from '@/lib/types';
+import { User } from '@/lib/schemas';
 
 export interface SessionData {
 	token?: string;

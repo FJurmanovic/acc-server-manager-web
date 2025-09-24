@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Server } from '@/lib/types/server';
-import { User, hasPermission } from '@/lib/types/user';
+import { Server } from '@/lib/schemas/server';
+import { User, hasPermission } from '@/lib/schemas/user';
 import { ServerCard } from './ServerCard';
 import { CreateServerModal } from './CreateServerModal';
 import RefreshButton from '@/components/ui/RefreshButton';

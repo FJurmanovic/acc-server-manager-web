@@ -1,13 +1,91 @@
 'use client';
 
 import { useState } from 'react';
-import type { ServerSettings } from '@/lib/types/config';
+import type { ServerSettings } from '@/lib/schemas/config';
 import { updateServerSettingsAction } from '@/lib/actions/configuration';
 
 interface ServerSettingsEditorProps {
 	serverId: string;
 	config: ServerSettings;
 }
+
+const textFields = [
+	{
+		key: 'serverName' as keyof ServerSettings,
+		label: 'Server Name',
+		type: 'text'
+	},
+	{
+		key: 'adminPassword' as keyof ServerSettings,
+		label: 'Admin Password',
+		type: 'password'
+	},
+	{
+		key: 'password' as keyof ServerSettings,
+		label: 'Password',
+		type: 'password'
+	},
+	{
+		key: 'spectatorPassword' as keyof ServerSettings,
+		label: 'Spectator Password',
+		type: 'password'
+	},
+	{
+		key: 'centralEntryListPath' as keyof ServerSettings,
+		label: 'Central Entry List Path',
+		type: 'text'
+	}
+];
+
+const carGroups = ['FreeForAll', 'GT3', 'GT4', 'GT2', 'GTC', 'TCX'];
+
+const numberFields = [
+	{
+		key: 'trackMedalsRequirement' as keyof ServerSettings,
+		label: 'Track Medals Requirement',
+		min: -1,
+		max: 3
+	},
+	{
+		key: 'safetyRatingRequirement' as keyof ServerSettings,
+		label: 'Safety Rating Requirement',
+		min: -1,
+		max: 99
+	},
+	{
+		key: 'racecraftRatingRequirement' as keyof ServerSettings,
+		label: 'Racecraft Rating Requirement',
+		min: -1,
+		max: 99
+	},
+	{
+		key: 'maxCarSlots' as keyof ServerSettings,
+		label: 'Max Car Slots',
+		min: 1,
+		max: 30
+	}
+];
+
+const selectFields = [
+	{
+		key: 'dumpLeaderboards' as keyof ServerSettings,
+		label: 'Dump Leaderboards'
+	},
+	{ key: 'isRaceLocked' as keyof ServerSettings, label: 'Race Locked' },
+	{
+		key: 'randomizeTrackWhenEmpty' as keyof ServerSettings,
+		label: 'Randomize Track When Empty'
+	},
+	{ key: 'allowAutoDQ' as keyof ServerSettings, label: 'Allow Auto DQ' },
+	{
+		key: 'shortFormationLap' as keyof ServerSettings,
+		label: 'Short Formation Lap'
+	},
+	{
+		key: 'ignorePrematureDisconnects' as keyof ServerSettings,
+		label: 'Ignore Premature Disconnects'
+	}
+];
 
 export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorProps) {
 	const [formData, setFormData] = useState<ServerSettings>(config);
@@ -42,84 +120,6 @@ export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorP
 			[key]: value
 		}));
 	};
-
-	const textFields = [
-		{
-			key: 'serverName' as keyof ServerSettings,
-			label: 'Server Name',
-			type: 'text'
-		},
-		{
-			key: 'adminPassword' as keyof ServerSettings,
-			label: 'Admin Password',
-			type: 'password'
-		},
-		{
-			key: 'password' as keyof ServerSettings,
-			label: 'Password',
-			type: 'password'
-		},
-		{
-			key: 'spectatorPassword' as keyof ServerSettings,
-			label: 'Spectator Password',
-			type: 'password'
-		},
-		{
-			key: 'centralEntryListPath' as keyof ServerSettings,
-			label: 'Central Entry List Path',
-			type: 'text'
-		}
-	];
-
-	const carGroups = ['FreeForAll', 'GT3', 'GT4', 'GT2', 'GTC', 'TCX'];
-
-	const numberFields = [
-		{
-			key: 'trackMedalsRequirement' as keyof ServerSettings,
-			label: 'Track Medals Requirement',
-			min: -1,
-			max: 3
-		},
-		{
-			key: 'safetyRatingRequirement' as keyof ServerSettings,
-			label: 'Safety Rating Requirement',
-			min: -1,
-			max: 99
-		},
-		{
-			key: 'racecraftRatingRequirement' as keyof ServerSettings,
-			label: 'Racecraft Rating Requirement',
-			min: -1,
-			max: 99
-		},
-		{
-			key: 'maxCarSlots' as keyof ServerSettings,
-			label: 'Max Car Slots',
-			min: 1,
-			max: 30
-		}
-	];
-
-	const selectFields = [
-		{
-			key: 'dumpLeaderboards' as keyof ServerSettings,
-			label: 'Dump Leaderboards'
-		},
-		{ key: 'isRaceLocked' as keyof ServerSettings, label: 'Race Locked' },
-		{
-			key: 'randomizeTrackWhenEmpty' as keyof ServerSettings,
-			label: 'Randomize Track When Empty'
-		},
-		{ key: 'allowAutoDQ' as keyof ServerSettings, label: 'Allow Auto DQ' },
-		{
-			key: 'shortFormationLap' as keyof ServerSettings,
-			label: 'Short Formation Lap'
-		},
-		{
-			key: 'ignorePrematureDisconnects' as keyof ServerSettings,
-			label: 'Ignore Premature Disconnects'
-		}
-	];
 
 	return (
 		<form onSubmit={handleSubmit} className="max-w-4xl space-y-8">
