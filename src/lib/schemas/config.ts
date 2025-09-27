@@ -31,7 +31,7 @@ export const configurationSchema = z.object({
 export type Configuration = z.infer<typeof configurationSchema>;
 
 export const assistRulesSchema = z.object({
-	stabilityControlLevelMax: z.number().min(0).max(3),
+	stabilityControlLevelMax: z.number().min(0).max(5),
 	disableAutosteer: z.number().min(0).max(1),
 	disableAutoLights: z.number().min(0).max(1),
 	disableAutoWiper: z.number().min(0).max(1),
@@ -48,12 +48,12 @@ export const serverSettingsSchema = z.object({
 	serverName: z.string().min(3).max(50),
 	adminPassword: z.string().min(6).max(50),
 	carGroup: z.string().min(1).max(50),
-	trackMedalsRequirement: z.number().min(0).max(3),
-	safetyRatingRequirement: z.number().min(0).max(5),
-	racecraftRatingRequirement: z.number().min(0).max(5),
+	trackMedalsRequirement: z.number().min(-1).max(3),
+	safetyRatingRequirement: z.number().min(-1).max(99),
+	racecraftRatingRequirement: z.number().min(-1).max(99),
 	password: z.string().max(50).optional().or(z.literal('')),
 	spectatorPassword: z.string().max(50).optional().or(z.literal('')),
-	maxCarSlots: z.number().min(1).max(64),
+	maxCarSlots: z.number().min(1).max(30),
 	dumpLeaderboards: z.number().min(0).max(1),
 	isRaceLocked: z.number().min(0).max(1),
 	randomizeTrackWhenEmpty: z.number().min(0).max(1),
@@ -67,8 +67,8 @@ export const serverSettingsSchema = z.object({
 export type ServerSettings = z.infer<typeof serverSettingsSchema>;
 
 export const sessionSchema = z.object({
-	hourOfDay: z.number().min(0).max(23),
-	dayOfWeekend: z.number().min(0).max(6),
+	hourOfDay: z.number().min(1).max(24),
+	dayOfWeekend: z.number().min(1).max(3),
 	timeMultiplier: z.number().min(1).max(120),
 	sessionType: z.string().min(1).max(20),
 	sessionDurationMinutes: z.number().min(1).max(180)
@@ -80,13 +80,13 @@ export const eventConfigSchema = z.object({
 	track: z.string().min(1).max(100),
 	preRaceWaitingTimeSeconds: z.number().min(0).max(600),
 	sessionOverTimeSeconds: z.number().min(0).max(300),
-	ambientTemp: z.number().min(-20).max(50),
-	cloudLevel: z.number().min(0).max(100),
-	rain: z.number().min(0).max(100),
-	weatherRandomness: z.number().min(0).max(100),
+	ambientTemp: z.number().min(0).max(50),
+	cloudLevel: z.number().min(0).max(1),
+	rain: z.number().min(0).max(1),
+	weatherRandomness: z.number().min(0).max(7),
 	postQualySeconds: z.number().min(0).max(600),
 	postRaceSeconds: z.number().min(0).max(600),
-	simracerWeatherConditions: z.number().min(0).max(2),
+	simracerWeatherConditions: z.number().min(0).max(1),
 	isFixedConditionQualification: z.number().min(0).max(1),
 	sessions: z.array(sessionSchema).min(1).max(10)
 });
@@ -94,17 +94,17 @@ export const eventConfigSchema = z.object({
 export type EventConfig = z.infer<typeof eventConfigSchema>;
 
 export const eventRulesSchema = z.object({
-	qualifyStandingType: z.number().min(0).max(2),
-	pitWindowLengthSec: z.number().min(0).max(3600),
-	driverStintTimeSec: z.number().min(0).max(7200),
-	mandatoryPitstopCount: z.number().min(0).max(10),
-	maxTotalDrivingTime: z.number().min(0).max(14400),
+	qualifyStandingType: z.number().min(-1).max(1),
+	pitWindowLengthSec: z.number().min(-1).max(3600),
+	driverStintTimeSec: z.number().min(-1).max(7200),
+	mandatoryPitstopCount: z.number().min(-1).max(5),
+	maxTotalDrivingTime: z.number().min(-1).max(14400),
 	isRefuellingAllowedInRace: z.boolean(),
 	isRefuellingTimeFixed: z.boolean(),
 	isMandatoryPitstopRefuellingRequired: z.boolean(),
 	isMandatoryPitstopTyreChangeRequired: z.boolean(),
 	isMandatoryPitstopSwapDriverRequired: z.boolean(),
-	tyreSetCount: z.number().min(0).max(20)
+	tyreSetCount: z.number().min(0).max(50)
 });
 
 export type EventRules = z.infer<typeof eventRulesSchema>;
