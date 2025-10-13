@@ -1,5 +1,5 @@
 interface RecentSession {
-	id: number;
+	id: string;
 	date: string;
 	type: string;
 	track: string;
