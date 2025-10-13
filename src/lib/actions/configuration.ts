@@ -17,6 +17,7 @@ import type {
 	EventRules,
 	ServerSettings
 } from '@/lib/schemas/config';
+import { boolToInt } from '@/lib/utils';
 
 export async function updateConfigurationAction(serverId: string, formData: FormData) {
 	try {
@@ -198,14 +199,14 @@ export async function updateEventRulesAction(serverId: string, formData: FormDat
 			driverStintTimeSec: parseInt(formData.get('driverStintTimeSec') as string),
 			mandatoryPitstopCount: parseInt(formData.get('mandatoryPitstopCount') as string),
 			maxTotalDrivingTime: parseInt(formData.get('maxTotalDrivingTime') as string),
-			isRefuellingAllowedInRace: formData.get('isRefuellingAllowedInRace') === 'true',
-			isRefuellingTimeFixed: formData.get('isRefuellingTimeFixed') === 'true',
+			isRefuellingAllowedInRace: boolToInt(formData.get('isRefuellingAllowedInRace') === 'true'),
+			isRefuellingTimeFixed: boolToInt(formData.get('isRefuellingTimeFixed') === 'true'),
 			isMandatoryPitstopRefuellingRequired:
-				formData.get('isMandatoryPitstopRefuellingRequired') === 'true',
+				boolToInt(formData.get('isMandatoryPitstopRefuellingRequired') === 'true'),
 			isMandatoryPitstopTyreChangeRequired:
-				formData.get('isMandatoryPitstopTyreChangeRequired') === 'true',
+				boolToInt(formData.get('isMandatoryPitstopTyreChangeRequired') === 'true'),
 			isMandatoryPitstopSwapDriverRequired:
-				formData.get('isMandatoryPitstopSwapDriverRequired') === 'true',
+				boolToInt(formData.get('isMandatoryPitstopSwapDriverRequired') === 'true'),
 			tyreSetCount: parseInt(formData.get('tyreSetCount') as string)
 		};
 
