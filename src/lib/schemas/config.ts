@@ -25,27 +25,27 @@ export const configurationSchema = z.object({
 	maxConnections: z.number().min(1).max(64),
 	lanDiscovery: z.number().min(0).max(1),
 	registerToLobby: z.number().min(0).max(2),
-	configVersion: z.number().min(1).max(2).default(1)
+	configVersion: z.number().min(1).max(2).default(1).optional()
 });
 
 export type Configuration = z.infer<typeof configurationSchema>;
 
 export const assistRulesSchema = z.object({
-	stabilityControlLevelMax: z.number().min(0).max(5),
-	disableAutosteer: z.number().min(0).max(1),
-	disableAutoLights: z.number().min(0).max(1),
-	disableAutoWiper: z.number().min(0).max(1),
-	disableAutoEngineStart: z.number().min(0).max(1),
-	disableAutoPitLimiter: z.number().min(0).max(1),
-	disableAutoGear: z.number().min(0).max(1),
-	disableAutoClutch: z.number().min(0).max(1),
-	disableIdealLine: z.number().min(0).max(1)
+	stabilityControlLevelMax: z.number().min(0).max(100).default(100),
+	disableAutosteer: z.number().min(0).max(1).default(0),
+	disableAutoLights: z.number().min(0).max(1).default(0),
+	disableAutoWiper: z.number().min(0).max(1).default(0),
+	disableAutoEngineStart: z.number().min(0).max(1).default(0),
+	disableAutoPitLimiter: z.number().min(0).max(1).default(0),
+	disableAutoGear: z.number().min(0).max(1).default(0),
+	disableAutoClutch: z.number().min(0).max(1).default(0),
+	disableIdealLine: z.number().min(0).max(1).default(0)
 });
 
 export type AssistRules = z.infer<typeof assistRulesSchema>;
 
 export const serverSettingsSchema = z.object({
-	serverName: z.string().min(3).max(50),
+	serverName: z.string().min(3).max(150),
 	adminPassword: z.string().min(6).max(50),
 	carGroup: z.string().min(1).max(50),
 	trackMedalsRequirement: z.number().min(-1).max(3),
@@ -54,57 +54,57 @@ export const serverSettingsSchema = z.object({
 	password: z.string().max(50).optional().or(z.literal('')),
 	spectatorPassword: z.string().max(50).optional().or(z.literal('')),
 	maxCarSlots: z.number().min(1).max(30),
-	dumpLeaderboards: z.number().min(0).max(1),
-	isRaceLocked: z.number().min(0).max(1),
-	randomizeTrackWhenEmpty: z.number().min(0).max(1),
+	dumpLeaderboards: z.number().min(0).max(1).default(0),
+	isRaceLocked: z.number().min(0).max(1).default(0),
+	randomizeTrackWhenEmpty: z.number().min(0).max(1).default(0),
 	centralEntryListPath: z.string().max(255).optional().or(z.literal('')),
-	allowAutoDQ: z.number().min(0).max(1),
-	shortFormationLap: z.number().min(0).max(1),
-	formationLapType: z.number().min(0).max(2),
-	ignorePrematureDisconnects: z.number().min(0).max(1)
+	allowAutoDQ: z.number().min(0).max(1).default(0),
+	shortFormationLap: z.number().min(0).max(1).default(0),
+	formationLapType: z.number().min(0).max(3).default(0),
+	ignorePrematureDisconnects: z.number().min(0).max(1).default(0)
 });
 
 export type ServerSettings = z.infer<typeof serverSettingsSchema>;
 
 export const sessionSchema = z.object({
-	hourOfDay: z.number().min(1).max(24),
-	dayOfWeekend: z.number().min(1).max(3),
-	timeMultiplier: z.number().min(1).max(120),
+	hourOfDay: z.number().min(1).max(24).default(14),
+	dayOfWeekend: z.number().min(1).max(3).default(1),
+	timeMultiplier: z.number().min(1).max(120).default(1),
 	sessionType: z.string().min(1).max(20),
-	sessionDurationMinutes: z.number().min(1).max(180)
+	sessionDurationMinutes: z.number().min(1).max(180).default(20)
 });
 
 export type Session = z.infer<typeof sessionSchema>;
 
 export const eventConfigSchema = z.object({
 	track: z.string().min(1).max(100),
-	preRaceWaitingTimeSeconds: z.number().min(0).max(600),
-	sessionOverTimeSeconds: z.number().min(0).max(300),
-	ambientTemp: z.number().min(0).max(50),
-	cloudLevel: z.number().min(0).max(1),
-	rain: z.number().min(0).max(1),
-	weatherRandomness: z.number().min(0).max(7),
-	postQualySeconds: z.number().min(0).max(600),
-	postRaceSeconds: z.number().min(0).max(600),
-	simracerWeatherConditions: z.number().min(0).max(1),
-	isFixedConditionQualification: z.number().min(0).max(1),
+	preRaceWaitingTimeSeconds: z.number().min(0).max(600).default(30),
+	sessionOverTimeSeconds: z.number().min(0).max(300).default(30),
+	ambientTemp: z.number().min(0).max(50).default(24),
+	cloudLevel: z.number().min(0).max(1).default(0),
+	rain: z.number().min(0).max(1).default(0),
+	weatherRandomness: z.number().min(0).max(7).default(0),
+	postQualySeconds: z.number().min(0).max(600).default(30),
+	postRaceSeconds: z.number().min(0).max(600).default(30),
+	simracerWeatherConditions: z.number().min(0).max(1).default(0),
+	isFixedConditionQualification: z.number().min(0).max(1).default(0),
 	sessions: z.array(sessionSchema).min(1).max(10)
 });
 
 export type EventConfig = z.infer<typeof eventConfigSchema>;
 
 export const eventRulesSchema = z.object({
-	qualifyStandingType: z.number().min(-1).max(1),
-	pitWindowLengthSec: z.number().min(-1).max(3600),
-	driverStintTimeSec: z.number().min(-1).max(7200),
-	mandatoryPitstopCount: z.number().min(-1).max(5),
-	maxTotalDrivingTime: z.number().min(-1).max(14400),
-	isRefuellingAllowedInRace: z.boolean(),
-	isRefuellingTimeFixed: z.boolean(),
-	isMandatoryPitstopRefuellingRequired: z.boolean(),
-	isMandatoryPitstopTyreChangeRequired: z.boolean(),
-	isMandatoryPitstopSwapDriverRequired: z.boolean(),
-	tyreSetCount: z.number().min(0).max(50)
+	qualifyStandingType: z.number().min(-1).max(1).default(0),
+	pitWindowLengthSec: z.number().min(-1).max(3600).default(30),
+	driverStintTimeSec: z.number().min(-1).max(7200).default(30),
+	mandatoryPitstopCount: z.number().min(-1).max(5).default(0),
+	maxTotalDrivingTime: z.number().min(-1).max(14400).default(60),
+	isRefuellingAllowedInRace: z.number().min(0).max(1).default(0),
+	isRefuellingTimeFixed: z.number().min(0).max(1).default(0),
+	isMandatoryPitstopRefuellingRequired: z.number().min(0).max(1).default(0),
+	isMandatoryPitstopTyreChangeRequired: z.number().min(0).max(1).default(0),
+	isMandatoryPitstopSwapDriverRequired: z.number().min(0).max(1).default(0),
+	tyreSetCount: z.number().min(0).max(50).default(0)
 });
 
 export type EventRules = z.infer<typeof eventRulesSchema>;

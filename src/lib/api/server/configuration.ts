@@ -14,8 +14,8 @@ export async function getServerConfigurations(
 	token: string,
 	serverId: string
 ): Promise<Configurations> {
-	const response = await fetchServerAPI<Configurations>(`${serverRoute}/${serverId}/config`, token);
-	return configurationsSchema.parse(response.data);
+	const response = await fetchServerAPI<Configurations>(`${serverRoute}/${serverId}/config`, token);	
+  return configurationsSchema.parse(response.data);
 }
 
 export function validateConfig(
@@ -45,7 +45,7 @@ export async function updateServerConfiguration(
 	config: Config,
 	restart = false
 ): Promise<void> {
-	await fetchServerAPI(`${serverRoute}/${serverId}/config/${configType}`, token, 'PUT', {
+	await fetchServerAPI(`${serverRoute}/${serverId}/config/${configType}?override=true`, token, 'PUT', {
 		...validateConfig(configType, config),
 		restart
 	});

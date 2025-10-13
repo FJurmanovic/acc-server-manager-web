@@ -29,7 +29,7 @@ export const playerCountPointSchema = z.object({
 export type PlayerCountPoint = z.infer<typeof playerCountPointSchema>;
 
 export const recentSessionSchema = z.object({
-	id: z.number(),
+	id: z.uuid(),
 	date: z.string(),
 	type: z.string(),
 	track: z.string(),
