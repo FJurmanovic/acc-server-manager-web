@@ -57,7 +57,7 @@ export const serverSchema = z.object({
 	id: z.uuid(),
 	name: z.string().min(1),
 	status: z.enum(ServiceStatus),
-	state: stateSchema.optional()
+	state: stateSchema.optional().nullable()
 });
 
 export type Server = z.infer<typeof serverSchema>;
