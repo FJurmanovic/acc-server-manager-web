@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-export const resultValueSchema = z.union([z.number().int().min(0), z.literal('DNF'), z.literal('DNS')]);
+export const resultValueSchema = z.union([z.literal('DNF'), z.literal('DNS'), z.coerce.number().int().min(0)]);
 export type ResultValue = z.infer<typeof resultValueSchema>;
 
 export const leaderboardDriverSchema = z.object({
