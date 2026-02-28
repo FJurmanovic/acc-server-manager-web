@@ -61,7 +61,7 @@ export function TracksEditor({ tracks, drivers, pointsTable, onChange }: TracksE
 			...tracks,
 			{
 				name: `Race ${tracks.length + 1}`,
-				results: drivers.map(() => 0),
+				results: drivers.map(() => 'DNS' as const),
 				fastestLapInitials: ''
 			}
 		]);
