@@ -20,7 +20,7 @@ export function PointsTableEditor({ pointsTable, onChange }: PointsTableEditorPr
 		const pos = pointsTable.length + 1;
 		onChange([
 			...pointsTable,
-			{ points: 0, label: `P${pos}`, color: '#374151', textColor: '#ffffff', priority: pos }
+			{ id: crypto.randomUUID(), points: 0, label: `P${pos}`, color: '#374151', textColor: '#ffffff', priority: pos }
 		]);
 	};
 

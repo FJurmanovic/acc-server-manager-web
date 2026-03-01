@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Leaderboard, LeaderboardDriver } from '@/lib/schemas/leaderboard';
+import { Leaderboard, LeaderboardDriver, FlPoints } from '@/lib/schemas/leaderboard';
 import { saveLeaderboardAction } from '@/lib/actions/leaderboard';
 import { LeaderboardStandings } from './LeaderboardStandings';
 import { DriversEditor } from './editors/DriversEditor';
@@ -24,13 +24,38 @@ interface LeaderboardManagerProps {
 	initialData: Leaderboard;
 }
 
-function isDirty(a: Leaderboard, b: Leaderboard) {
+// Extended type for internal UI state with full FL Points object
+type LeaderboardDraft = Leaderboard & { flPointsData: FlPoints };
+
+function toApiFormat(draft: LeaderboardDraft): Leaderboard {
+	return {
+		...draft,
+		flPoints: draft.flPointsData.points,
+		flColor: draft.flPointsData.color,
+		flTextColor: draft.flPointsData.textColor
+	};
+}
+
+function toUiFormat(api: Leaderboard): LeaderboardDraft {
+	return {
+		...api,
+		flPointsData: {
+			points: api.flPoints,
+			label: 'FL +' + api.flPoints,
+			color: api.flColor,
+			textColor: api.flTextColor,
+			priority: 3
+		}
+	};
+}
+
+function isDirty(a: LeaderboardDraft, b: LeaderboardDraft) {
 	return JSON.stringify(a) !== JSON.stringify(b);
 }
 
 export function LeaderboardManager({ serverId, initialData }: LeaderboardManagerProps) {
-	const [draft, setDraft] = useState<Leaderboard>(initialData);
-	const [saved, setSaved] = useState<Leaderboard>(initialData);
+	const [draft, setDraft] = useState<LeaderboardDraft>(toUiFormat(initialData));
+	const [saved, setSaved] = useState<LeaderboardDraft>(toUiFormat(initialData));
 	const [activeSection, setActiveSection] = useState<Section>('standings');
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -61,7 +86,8 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 		setIsSubmitting(true);
 		setError(null);
 		try {
-			const result = await saveLeaderboardAction(serverId, draft);
+			const apiData = toApiFormat(draft);
+			const result = await saveLeaderboardAction(serverId, apiData);
 			if (result.success) {
 				setSaved(draft);
 			} else {
@@ -77,7 +103,7 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 	const renderSection = () => {
 		switch (activeSection) {
 			case 'standings':
-				return <LeaderboardStandings leaderboard={draft} />;
+				return <LeaderboardStandings leaderboard={toApiFormat(draft)} />;
 			case 'drivers':
 				return <DriversEditor drivers={draft.drivers} onChange={handleDriversChange} />;
 			case 'points':
@@ -90,8 +116,8 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 			case 'fl':
 				return (
 					<FlPointsEditor
-						flPoints={draft.flPoints}
-						onChange={(flPoints) => setDraft({ ...draft, flPoints })}
+						flPoints={draft.flPointsData}
+						onChange={(flPointsData) => setDraft({ ...draft, flPointsData })}
 					/>
 				);
 			case 'tracks':

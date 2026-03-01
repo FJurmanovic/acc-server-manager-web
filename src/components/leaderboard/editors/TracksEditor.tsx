@@ -72,6 +72,7 @@ export function TracksEditor({ tracks, drivers, pointsTable, onChange }: TracksE
 		onChange([
 			...tracks,
 			{
+				id: crypto.randomUUID(),
 				name: `Race ${tracks.length + 1}`,
 				results: drivers.map((d) => ({ driverId: d.id, score: 'DNS' as const })),
 				fastestLapDriverId: ''

@@ -19,7 +19,7 @@ export function LeaderboardStandings({ leaderboard }: LeaderboardStandingsProps)
 				).length;
 				const totalPoints =
 					trackResults.reduce((sum: number, r) => sum + (typeof r === 'number' ? r : 0), 0) +
-					fastestLapCount * leaderboard.flPoints.points;
+					fastestLapCount * leaderboard.flPoints;
 				return { driver, driverId: driver.id, totalPoints, trackResults, fastestLapCount };
 			})
 			.sort((a, b) => b.totalPoints - a.totalPoints);
@@ -87,10 +87,10 @@ export function LeaderboardStandings({ leaderboard }: LeaderboardStandingsProps)
 												<span
 													className="ml-0.5 rounded px-0.5 text-xs"
 													style={{
-														backgroundColor: leaderboard.flPoints.color,
-														color: leaderboard.flPoints.textColor
+														backgroundColor: leaderboard.flColor,
+														color: leaderboard.flTextColor
 													}}
-													title={`Fastest lap: ${leaderboard.flPoints.label}`}
+													title="Fastest lap"
 												>
 													FL
 												</span>
