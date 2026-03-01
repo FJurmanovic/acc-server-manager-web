@@ -16,7 +16,7 @@ export function LeaderboardStandings({ leaderboard }: LeaderboardStandingsProps)
 					(t) => t.fastestLapInitials === driver.initials
 				).length;
 				const totalPoints =
-					trackResults.reduce((sum, r) => sum + (typeof r === 'number' ? r : 0), 0) +
+					trackResults.reduce((sum: number, r) => sum + (typeof r === 'number' ? r : 0), 0) +
 					fastestLapCount * leaderboard.flPoints.points;
 				return { driver, driverIndex: idx, totalPoints, trackResults, fastestLapCount };
 			})
@@ -100,9 +100,7 @@ export function LeaderboardStandings({ leaderboard }: LeaderboardStandingsProps)
 							<td className="px-2 py-2 text-center text-xs text-purple-400">
 								{row.fastestLapCount > 0 ? `×${row.fastestLapCount}` : '—'}
 							</td>
-							<td className="px-2 py-2 text-center font-bold text-yellow-400">
-								{row.totalPoints}
-							</td>
+							<td className="px-2 py-2 text-center font-bold text-yellow-400">{row.totalPoints}</td>
 						</tr>
 					))}
 				</tbody>
