@@ -10,20 +10,27 @@ interface ResultInputProps {
 
 function ResultInput({ value, pointsTable, onChange }: ResultInputProps) {
 	const knownPoints = Array.from(new Set(pointsTable.map((e) => e.points))).sort((a, b) => b - a);
+	// Fallback 0 to DNS if 0 is not a valid points option
+	const displayValue = value === 0 && !knownPoints.includes(0) ? 'DNS' : value;
+	// Ensure the current numeric value is always included in options
+	const allPoints = typeof displayValue === 'number'
+		? Array.from(new Set([...knownPoints, displayValue])).sort((a, b) => b - a)
+		: knownPoints;
 
 	const handleChange = (raw: string) => {
 		if (raw === 'DNF') return onChange('DNF');
 		if (raw === 'DNS') return onChange('DNS');
-		onChange(parseInt(raw) || 0);
+		const parsed = parseInt(raw);
+		onChange(isNaN(parsed) ? 0 : parsed);
 	};
 
 	return (
 		<select
-			value={String(value)}
+			value={String(displayValue)}
 			onChange={(e) => handleChange(e.target.value)}
 			className="w-full rounded bg-gray-600 px-1 py-1 text-xs text-white"
 		>
-			{knownPoints.map((p) => (
+			{allPoints.map((p) => (
 				<option key={p} value={String(p)}>
 					{p}
 				</option>
