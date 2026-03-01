@@ -40,13 +40,17 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 	const handleDriversChange = (newDrivers: LeaderboardDriver[]) => {
 		const oldDrivers = draft.drivers;
 
-		// Build index map: for each position in newDrivers, what was the old index?
-		const indexMap = newDrivers.map((d) => oldDrivers.indexOf(d));
+		// Build index map by matching drivers by initials (their stable identifier)
+		// For each position in newDrivers, find where that driver was in oldDrivers
+		const indexMap = newDrivers.map((d) => {
+			const oldIndex = oldDrivers.findIndex((old) => old.initials === d.initials);
+			return oldIndex; // -1 if new driver, otherwise the old index
+		});
 
-		// If a driver was added (indexOf returns -1), it's new
+		// If a driver was added (findIndex returns -1), it's new, start with DNS
 		const newTracks = draft.tracks.map((t) => ({
 			...t,
-			results: indexMap.map((i) => (i === -1 ? 0 : (t.results[i] ?? 0)))
+			results: indexMap.map((i) => (i === -1 ? 'DNS' : (t.results[i] ?? 'DNS')))
 		}));
 
 		setDraft({ ...draft, drivers: newDrivers, tracks: newTracks });
