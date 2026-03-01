@@ -114,6 +114,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 							<option value="barcelona">Barcelona</option>
 							<option value="brands_hatch">Brands Hatch</option>
 							<option value="donington">Donington</option>
+							<option value="cota">COTA</option>
 							<option value="hungaroring">Hungaroring</option>
 							<option value="imola">Imola</option>
 							<option value="indianapolis">Indianapolis</option>

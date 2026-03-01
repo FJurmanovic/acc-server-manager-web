@@ -7,13 +7,16 @@ import { EventConfigEditor } from '@/components/configuration/EventConfigEditor'
 import { EventRulesEditor } from '@/components/configuration/EventRulesEditor';
 import { ServerSettingsEditor } from '@/components/configuration/ServerSettingsEditor';
 import { StatisticsDashboard } from '@/components/statistics/StatisticsDashboard';
+import { LeaderboardManager } from '@/components/leaderboard/LeaderboardManager';
 import { useState } from 'react';
 import { StateHistoryStats } from '@/lib/schemas';
+import { Leaderboard } from '@/lib/schemas/leaderboard';
 
 interface ServerConfigurationTabsProps {
 	serverId: string;
 	configurations: Configurations;
 	statistics: StateHistoryStats;
+	leaderboard: Leaderboard;
 }
 const tabs = [
 	{ id: ServerTab.statistics, name: 'Statistics', icon: '📊' },
@@ -21,13 +24,15 @@ const tabs = [
 	{ id: ServerTab.assistRules, name: 'Assist Rules', icon: '🚗' },
 	{ id: ServerTab.event, name: 'Event Config', icon: '🏁' },
 	{ id: ServerTab.eventRules, name: 'Event Rules', icon: '📋' },
-	{ id: ServerTab.settings, name: 'Server Settings', icon: '🔧' }
+	{ id: ServerTab.settings, name: 'Server Settings', icon: '🔧' },
+	{ id: ServerTab.leaderboard, name: 'Leaderboard', icon: '🏆' }
 ];
 
 export function ServerConfigurationTabs({
 	serverId,
 	configurations,
-	statistics
+	statistics,
+	leaderboard
 }: ServerConfigurationTabsProps) {
 	const [currentTab, setCurrentTab] = useState(ServerTab.statistics);
 
@@ -50,6 +55,9 @@ export function ServerConfigurationTabs({
 
 			case ServerTab.settings:
 				return <ServerSettingsEditor serverId={serverId} config={configurations.settings} />;
+
+			case ServerTab.leaderboard:
+				return <LeaderboardManager serverId={serverId} initialData={leaderboard} />;
 
 			default:
 				return (
