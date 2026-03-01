@@ -36,7 +36,7 @@ export const leaderboardTrackSchema = z.object({
 	id: z.string(),
 	name: z.string().min(1),
 	results: z.array(z.object({ driverId: z.string(), score: resultValueSchema })),
-	fastestLapDriverId: z.string()
+	fastestLapDriverId: z.string().nullable()
 });
 export type LeaderboardTrack = z.infer<typeof leaderboardTrackSchema>;
 

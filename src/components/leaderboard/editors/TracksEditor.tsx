@@ -75,7 +75,7 @@ export function TracksEditor({ tracks, drivers, pointsTable, onChange }: TracksE
 				id: crypto.randomUUID(),
 				name: `Race ${tracks.length + 1}`,
 				results: drivers.map((d) => ({ driverId: d.id, score: 'DNS' as const })),
-				fastestLapDriverId: ''
+				fastestLapDriverId: null
 			}
 		]);
 	};
@@ -95,8 +95,8 @@ export function TracksEditor({ tracks, drivers, pointsTable, onChange }: TracksE
 						<div className="flex items-center gap-2">
 							<label className="text-xs text-gray-400">FL Driver:</label>
 							<select
-								value={track.fastestLapDriverId}
-								onChange={(e) => updateTrack(ti, { fastestLapDriverId: e.target.value })}
+								value={track.fastestLapDriverId ?? ''}
+								onChange={(e) => updateTrack(ti, { fastestLapDriverId: e.target.value || null })}
 								className="rounded bg-gray-600 px-2 py-1 text-sm text-white"
 							>
 								<option value="">—</option>
