@@ -10,15 +10,17 @@ interface LeaderboardStandingsProps {
 export function LeaderboardStandings({ leaderboard }: LeaderboardStandingsProps) {
 	const standings = useMemo<StandingsRow[]>(() => {
 		return leaderboard.drivers
-			.map((driver, idx) => {
-				const trackResults = leaderboard.tracks.map((t) => t.results[idx] ?? 0);
+			.map((driver) => {
+				const trackResults = leaderboard.tracks.map(
+					(t) => t.results.find((r) => r.driverId === driver.id)?.score ?? 'DNS'
+				);
 				const fastestLapCount = leaderboard.tracks.filter(
-					(t) => t.fastestLapInitials === driver.initials
+					(t) => t.fastestLapDriverId === driver.id
 				).length;
 				const totalPoints =
 					trackResults.reduce((sum: number, r) => sum + (typeof r === 'number' ? r : 0), 0) +
 					fastestLapCount * leaderboard.flPoints.points;
-				return { driver, driverIndex: idx, totalPoints, trackResults, fastestLapCount };
+				return { driver, driverId: driver.id, totalPoints, trackResults, fastestLapCount };
 			})
 			.sort((a, b) => b.totalPoints - a.totalPoints);
 	}, [leaderboard]);
@@ -54,7 +56,7 @@ export function LeaderboardStandings({ leaderboard }: LeaderboardStandingsProps)
 				</thead>
 				<tbody>
 					{standings.map((row, pos) => (
-						<tr key={row.driverIndex} className="border-b border-gray-700/50">
+						<tr key={row.driver.id} className="border-b border-gray-700/50">
 							<td className="py-2 pr-4 text-gray-400">{pos + 1}</td>
 							<td className="py-2 pr-4">
 								<div className="flex items-center gap-2">
@@ -68,7 +70,7 @@ export function LeaderboardStandings({ leaderboard }: LeaderboardStandingsProps)
 							</td>
 							{row.trackResults.map((result, ti) => {
 								const track = leaderboard.tracks[ti];
-								const isFl = track.fastestLapInitials === row.driver.initials;
+								const isFl = track.fastestLapDriverId === row.driver.id;
 								return (
 									<td key={ti} className="px-2 py-2 text-center">
 										<span

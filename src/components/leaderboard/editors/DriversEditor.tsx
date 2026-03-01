@@ -36,13 +36,13 @@ export function DriversEditor({ drivers, onChange }: DriversEditorProps) {
 	};
 
 	const add = () => {
-		onChange([...drivers, { name: 'New Driver', initials: 'ND', color: randomColor() }]);
+		onChange([...drivers, { id: crypto.randomUUID(), name: 'New Driver', initials: 'ND', color: randomColor() }]);
 	};
 
 	return (
 		<div className="space-y-3">
 			{drivers.map((driver, i) => (
-				<div key={i} className="flex items-center gap-3 rounded-lg bg-gray-700 p-3">
+				<div key={driver.id} className="flex items-center gap-3 rounded-lg bg-gray-700 p-3">
 					<div className="flex flex-col gap-1">
 						<button
 							onClick={() => moveUp(i)}

@@ -53,9 +53,14 @@ export function TracksEditor({ tracks, drivers, pointsTable, onChange }: TracksE
 		onChange(tracks.map((t, i) => (i === index ? { ...t, ...patch } : t)));
 	};
 
-	const updateResult = (trackIndex: number, driverIndex: number, value: ResultValue) => {
+	const updateResult = (trackIndex: number, driverId: string, value: ResultValue) => {
 		const newResults = [...tracks[trackIndex].results];
-		newResults[driverIndex] = value;
+		const existingIndex = newResults.findIndex((r) => r.driverId === driverId);
+		if (existingIndex >= 0) {
+			newResults[existingIndex] = { driverId, score: value };
+		} else {
+			newResults.push({ driverId, score: value });
+		}
 		updateTrack(trackIndex, { results: newResults });
 	};
 
@@ -68,8 +73,8 @@ export function TracksEditor({ tracks, drivers, pointsTable, onChange }: TracksE
 			...tracks,
 			{
 				name: `Race ${tracks.length + 1}`,
-				results: drivers.map(() => 'DNS' as const),
-				fastestLapInitials: ''
+				results: drivers.map((d) => ({ driverId: d.id, score: 'DNS' as const })),
+				fastestLapDriverId: ''
 			}
 		]);
 	};
@@ -89,13 +94,13 @@ export function TracksEditor({ tracks, drivers, pointsTable, onChange }: TracksE
 						<div className="flex items-center gap-2">
 							<label className="text-xs text-gray-400">FL Driver:</label>
 							<select
-								value={track.fastestLapInitials}
-								onChange={(e) => updateTrack(ti, { fastestLapInitials: e.target.value })}
+								value={track.fastestLapDriverId}
+								onChange={(e) => updateTrack(ti, { fastestLapDriverId: e.target.value })}
 								className="rounded bg-gray-600 px-2 py-1 text-sm text-white"
 							>
 								<option value="">—</option>
 								{drivers.map((d) => (
-									<option key={d.initials} value={d.initials}>
+									<option key={d.id} value={d.id}>
 										{d.initials} ({d.name})
 									</option>
 								))}
@@ -114,8 +119,8 @@ export function TracksEditor({ tracks, drivers, pointsTable, onChange }: TracksE
 						<p className="text-xs text-gray-500">Add drivers first to enter results.</p>
 					) : (
 						<div className="space-y-1">
-							{drivers.map((driver, di) => (
-								<div key={di} className="flex items-center gap-3">
+							{drivers.map((driver) => (
+								<div key={driver.id} className="flex items-center gap-3">
 									<div className="flex w-40 items-center gap-2">
 										<div
 											className="h-3 w-3 shrink-0 rounded-full"
@@ -125,9 +130,9 @@ export function TracksEditor({ tracks, drivers, pointsTable, onChange }: TracksE
 									</div>
 									<div className="w-24">
 										<ResultInput
-											value={track.results[di] ?? 0}
+											value={track.results.find((r) => r.driverId === driver.id)?.score ?? 'DNS'}
 											pointsTable={pointsTable}
-											onChange={(v) => updateResult(ti, di, v)}
+											onChange={(v) => updateResult(ti, driver.id, v)}
 										/>
 									</div>
 								</div>

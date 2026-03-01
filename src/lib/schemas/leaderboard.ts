@@ -4,6 +4,7 @@ export const resultValueSchema = z.union([z.literal('DNF'), z.literal('DNS'), z.
 export type ResultValue = z.infer<typeof resultValueSchema>;
 
 export const leaderboardDriverSchema = z.object({
+	id: z.string(),
 	name: z.string().min(1),
 	color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
 	initials: z.string().min(1).max(10)
@@ -26,8 +27,8 @@ export type FlPoints = z.infer<typeof flPointsSchema>;
 
 export const leaderboardTrackSchema = z.object({
 	name: z.string().min(1),
-	results: z.array(resultValueSchema),
-	fastestLapInitials: z.string()
+	results: z.array(z.object({ driverId: z.string(), score: resultValueSchema })),
+	fastestLapDriverId: z.string()
 });
 export type LeaderboardTrack = z.infer<typeof leaderboardTrackSchema>;
 
@@ -49,7 +50,7 @@ export const emptyLeaderboard: Leaderboard = {
 // Client-side derived type — never sent to API
 export type StandingsRow = {
 	driver: LeaderboardDriver;
-	driverIndex: number;
+	driverId: string;
 	totalPoints: number;
 	trackResults: ResultValue[];
 	fastestLapCount: number;
