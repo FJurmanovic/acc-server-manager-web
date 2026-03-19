@@ -98,7 +98,7 @@ export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorP
 
 		const formDataObj = new FormData();
 		Object.entries(formData).forEach(([key, value]) => {
-			formDataObj.append(key, value.toString());
+			formDataObj.append(key, value?.toString() ?? '');
 		});
 		if (restart) {
 			formDataObj.append('restart', 'on');

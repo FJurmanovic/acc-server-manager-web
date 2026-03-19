@@ -117,7 +117,7 @@ export function WebSocketProvider({ children, openToken }: WebSocketProviderProp
 				client.associateWithServer(serverId);
 			}
 		},
-		[client, isConnected, connect]
+		[client, isConnected, connect, openToken]
 	);
 
 	const addMessageHandler = useCallback(

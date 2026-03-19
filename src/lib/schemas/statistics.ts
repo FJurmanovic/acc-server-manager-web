@@ -43,10 +43,10 @@ export const stateHistoryStatsSchema = z.object({
 	peakPlayers: z.number(),
 	totalSessions: z.number(),
 	totalPlaytime: z.number(),
-	playerCountOverTime: z.array(playerCountPointSchema),
-	sessionTypes: z.array(sessionCountSchema),
-	dailyActivity: z.array(dailyActivitySchema),
-	recentSessions: z.array(recentSessionSchema)
+	playerCountOverTime: z.array(playerCountPointSchema).nullable(),
+	sessionTypes: z.array(sessionCountSchema).nullable(),
+	dailyActivity: z.array(dailyActivitySchema).nullable(),
+	recentSessions: z.array(recentSessionSchema).nullable()
 });
 export type StateHistoryStats = z.infer<typeof stateHistoryStatsSchema>;
 

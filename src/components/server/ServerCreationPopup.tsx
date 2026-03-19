@@ -78,15 +78,15 @@ export function ServerCreationPopup({
 		setEntries((prev) => [...prev, newEntry]);
 	}, []);
 
-	const scrollToBottom = () => {
+	const scrollToBottom = useCallback(() => {
 		if (consoleRef.current && !isMinimized && isConsoleVisible) {
 			consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
 		}
-	};
+	}, [isMinimized, isConsoleVisible]);
 
 	useEffect(() => {
 		scrollToBottom();
-	}, [entries, isMinimized, isConsoleVisible]);
+	}, [entries, scrollToBottom]);
 
 	useEffect(() => {
 		if (serverId && isOpen) {

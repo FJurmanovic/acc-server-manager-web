@@ -23,7 +23,7 @@ export const serverTabSchema = z.enum(ServerTab);
 export const configurationSchema = z.object({
 	udpPort: z.number().min(1025).max(65535),
 	tcpPort: z.number().min(1025).max(65535),
-	maxConnections: z.number().min(1).max(64),
+	maxConnections: z.number().min(1).max(100),
 	lanDiscovery: z.number().min(0).max(1),
 	registerToLobby: z.number().min(0).max(2),
 	configVersion: z.number().min(1).max(2).default(1).optional()
@@ -47,7 +47,7 @@ export type AssistRules = z.infer<typeof assistRulesSchema>;
 
 export const serverSettingsSchema = z.object({
 	serverName: z.string().min(3).max(150),
-	adminPassword: z.string().min(6).max(50),
+	adminPassword: z.string().min(6).max(50).or(z.literal('').nullable()),
 	carGroup: z.string().min(1).max(50),
 	trackMedalsRequirement: z.number().min(-1).max(3),
 	safetyRatingRequirement: z.number().min(-1).max(99),
