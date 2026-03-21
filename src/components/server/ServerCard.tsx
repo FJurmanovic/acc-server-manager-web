@@ -52,6 +52,7 @@ export function ServerCard({ server }: ServerCardProps) {
 		ServiceStatus.Stopping,
 		ServiceStatus.Unknown,
 	].includes(server.status);
+	const isRunning = server.status === ServiceStatus.Running;
 
 	return (
 		<div className="overflow-hidden rounded-lg border border-gh-border bg-gh-canvas transition-colors hover:border-gh-blue/40">
@@ -59,9 +60,6 @@ export function ServerCard({ server }: ServerCardProps) {
 				<div className="flex items-start justify-between">
 					<span className="text-sm font-semibold text-gh-primary">{server.name}</span>
 					<StatusDot status={server.status} />
-				</div>
-				<div className="mt-1 text-xs text-gh-muted">
-					{server.state?.track || 'No track'} · {server.state?.playerCount ?? 0} players
 				</div>
 
 				<div className="mt-3 grid grid-cols-2 gap-3">
@@ -91,7 +89,7 @@ export function ServerCard({ server }: ServerCardProps) {
 					variant="primary"
 					size="sm"
 					onClick={startServer}
-					disabled={server.status === ServiceStatus.Running || isPending || disabled}
+					disabled={isRunning || disabled || isPending}
 				>
 					Start
 				</GhButton>
@@ -99,7 +97,7 @@ export function ServerCard({ server }: ServerCardProps) {
 					variant="ghost"
 					size="sm"
 					onClick={restartServer}
-					disabled={server.status === ServiceStatus.Stopped || isPending || disabled}
+					disabled={!isRunning || disabled || isPending}
 				>
 					Restart
 				</GhButton>
@@ -107,7 +105,7 @@ export function ServerCard({ server }: ServerCardProps) {
 					variant="danger-outline"
 					size="sm"
 					onClick={stopServer}
-					disabled={server.status === ServiceStatus.Stopped || isPending || disabled}
+					disabled={!isRunning || disabled || isPending}
 				>
 					Stop
 				</GhButton>

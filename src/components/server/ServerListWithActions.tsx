@@ -24,7 +24,7 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 	const canCreateServer = hasPermission(user, 'server.create');
 
 	const runningCount = servers.filter((s) => s.status === ServiceStatus.Running).length;
-	const offlineCount = servers.filter((s) => s.status === ServiceStatus.Stopped).length;
+	const offlineCount = servers.filter((s) => s.status !== ServiceStatus.Running).length;
 
 	return (
 		<>
