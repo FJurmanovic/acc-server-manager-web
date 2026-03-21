@@ -28,7 +28,7 @@ export default async function ServerPage({ params }: ServerPageProps) {
 	]);
 
 	return (
-		<div className="flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 0px)' }}>
+		<div className="flex flex-col overflow-hidden h-screen">
 			<ServerHeader server={server} user={session.user!} />
 			<ServerConfigurationTabs
 				serverId={id}

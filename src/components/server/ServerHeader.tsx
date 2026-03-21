@@ -77,7 +77,6 @@ export function ServerHeader({ server, user }: ServerHeaderProps) {
 					{ label: 'Track', value: server.state?.track ?? 'N/A' },
 					{ label: 'Players', value: `${server.state?.playerCount ?? 0} / ${server.state?.maxConnections ?? 0}` },
 					{ label: 'Session', value: server.state?.session ?? 'N/A' },
-					{ label: 'Max Connections', value: String(server.state?.maxConnections ?? 0) },
 				].map(({ label, value }) => (
 					<div key={label}>
 						<div className="text-xs text-gh-subtle">{label}</div>
