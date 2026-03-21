@@ -4,24 +4,26 @@ import type { UserListParams } from '@/lib/api/server/membership';
 import { UserManagementTable } from '@/components/membership/UserManagementTable';
 
 interface MembershipPageProps {
-	searchParams: {
+	searchParams: Promise<{
 		username?: string;
 		role_name?: string;
 		sort_by?: string;
 		sort_desc?: string;
 		page?: string;
-	};
+	}>;
 }
 
 export default async function MembershipPage({ searchParams }: MembershipPageProps) {
 	const session = await requireAuth();
 
+	const resolvedParams = await searchParams;
+
 	const params: UserListParams = {
-		username: searchParams.username,
-		role_name: searchParams.role_name,
-		sort_by: searchParams.sort_by || 'username',
-		sort_desc: searchParams.sort_desc === 'true',
-		page: parseInt(searchParams.page || '1'),
+		username: resolvedParams.username,
+		role_name: resolvedParams.role_name,
+		sort_by: resolvedParams.sort_by || 'username',
+		sort_desc: resolvedParams.sort_desc === 'true',
+		page: parseInt(resolvedParams.page || '1'),
 		limit: 20
 	};
 
