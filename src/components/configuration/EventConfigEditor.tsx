@@ -99,17 +99,17 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 	return (
 		<form onSubmit={handleSubmit} className="max-w-4xl space-y-8">
 			<div className="space-y-6">
-				<h3 className="border-b border-gray-700 pb-2 text-lg font-medium text-white">
+				<h3 className="border-b border-gh-border-muted pb-2 text-sm font-semibold text-gh-primary">
 					Basic Event Settings
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">Track</label>
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">Track</label>
 						<select
 							disabled={isSubmitting}
 							value={formData.track}
 							onChange={(e) => handleInputChange('track', e.target.value)}
-							className="form-input w-full"
+							className="form-select w-full"
 						>
 							<option value="barcelona">Barcelona</option>
 							<option value="brands_hatch">Brands Hatch</option>
@@ -140,7 +140,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					</div>
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Pre-Race Waiting Time (seconds)
 						</label>
 						<input
@@ -154,7 +154,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					</div>
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Session Over Time (seconds)
 						</label>
 						<input
@@ -168,7 +168,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					</div>
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Post Qualify Seconds
 						</label>
 						<input
@@ -182,7 +182,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					</div>
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Post Race Seconds
 						</label>
 						<input
@@ -198,12 +198,12 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 			</div>
 
 			<div className="space-y-6">
-				<h3 className="border-b border-gray-700 pb-2 text-lg font-medium text-white">
+				<h3 className="border-b border-gh-border-muted pb-2 text-sm font-semibold text-gh-primary">
 					Weather Settings
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Ambient Temperature (°C)
 						</label>
 						<input
@@ -218,7 +218,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					</div>
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Cloud Level (0.0-1.0)
 						</label>
 						<input
@@ -234,7 +234,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					</div>
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">Rain (0.0-1.0)</label>
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">Rain (0.0-1.0)</label>
 						<input
 							type="number"
 							disabled={isSubmitting}
@@ -248,7 +248,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					</div>
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Weather Randomness
 						</label>
 						<input
@@ -263,14 +263,14 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					</div>
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Simracer Weather Conditions
 						</label>
 						<select
 							disabled={isSubmitting}
 							value={formData.simracerWeatherConditions}
 							onChange={(e) => handleInputChange('simracerWeatherConditions', e.target.value)}
-							className="form-input w-full"
+							className="form-select w-full"
 						>
 							<option value={0}>No</option>
 							<option value={1}>Yes</option>
@@ -278,14 +278,14 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					</div>
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Fixed Condition Qualification
 						</label>
 						<select
 							disabled={isSubmitting}
 							value={formData.isFixedConditionQualification}
 							onChange={(e) => handleInputChange('isFixedConditionQualification', e.target.value)}
-							className="form-input w-full"
+							className="form-select w-full"
 						>
 							<option value={0}>No</option>
 							<option value={1}>Yes</option>
@@ -295,28 +295,28 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 			</div>
 
 			<div className="space-y-6">
-				<div className="flex items-center justify-between border-b border-gray-700 pb-2">
-					<h3 className="text-lg font-medium text-white">Sessions</h3>
+				<div className="flex items-center justify-between border-b border-gh-border-muted pb-2">
+					<h3 className="text-sm font-semibold text-gh-primary">Sessions</h3>
 					<button
 						type="button"
 						onClick={addSession}
 						disabled={isSubmitting}
-						className="rounded-md bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+						className="rounded-md border border-gh-border bg-gh-overlay px-3 py-1.5 text-xs font-medium text-gh-secondary hover:bg-gh-border disabled:opacity-40"
 					>
-						Add Session
+						+ Add Session
 					</button>
 				</div>
 
 				<div className="space-y-4">
 					{formData.sessions.map((session, index) => (
-						<div key={index} className="rounded-lg bg-gray-800 p-4">
+						<div key={index} className="rounded-lg border border-gh-border bg-gh-canvas p-4">
 							<div className="mb-4 flex items-center justify-between">
-								<h4 className="text-sm font-medium text-white">Session {index + 1}</h4>
+								<h4 className="text-sm font-medium text-gh-primary">Session {index + 1}</h4>
 								<button
 									type="button"
 									onClick={() => removeSession(index)}
 									disabled={isSubmitting}
-									className="rounded-md bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-50"
+									className="rounded px-2 py-1 text-xs text-gh-red hover:bg-gh-red-bg disabled:opacity-40"
 								>
 									Remove
 								</button>
@@ -324,14 +324,14 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
 								<div>
-									<label className="mb-1 block text-xs font-medium text-gray-400">
+									<label className="mb-1 block text-xs font-medium text-gh-muted">
 										Session Type
 									</label>
 									<select
 										disabled={isSubmitting}
 										value={session.sessionType}
 										onChange={(e) => handleSessionChange(index, 'sessionType', e.target.value)}
-										className="form-input w-full text-sm"
+										className="form-select w-full text-sm"
 									>
 										{sessionTypes.map((type) => (
 											<option key={type.value} value={type.value}>
@@ -342,7 +342,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 								</div>
 
 								<div>
-									<label className="mb-1 block text-xs font-medium text-gray-400">
+									<label className="mb-1 block text-xs font-medium text-gh-muted">
 										Hour of Day
 									</label>
 									<input
@@ -357,7 +357,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 								</div>
 
 								<div>
-									<label className="mb-1 block text-xs font-medium text-gray-400">
+									<label className="mb-1 block text-xs font-medium text-gh-muted">
 										Day of Weekend
 									</label>
 									<input
@@ -372,7 +372,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 								</div>
 
 								<div>
-									<label className="mb-1 block text-xs font-medium text-gray-400">
+									<label className="mb-1 block text-xs font-medium text-gh-muted">
 										Time Multiplier
 									</label>
 									<input
@@ -387,7 +387,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 								</div>
 
 								<div>
-									<label className="mb-1 block text-xs font-medium text-gray-400">
+									<label className="mb-1 block text-xs font-medium text-gh-muted">
 										Duration (minutes)
 									</label>
 									<input
@@ -407,15 +407,15 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 				</div>
 			</div>
 
-			<div className="border-t border-gray-700 pt-6">
-				<label className="flex items-center">
+			<div className="border-t border-gh-border pt-6">
+				<label className="flex items-center gap-2 text-sm text-gh-muted">
 					<input
 						type="checkbox"
 						checked={restart}
 						onChange={(e) => setRestart(e.target.checked)}
-						className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-600 focus:ring-green-500"
+						className="h-4 w-4 rounded border-gh-border bg-gh-overlay accent-gh-green focus:ring-gh-blue"
 					/>
-					<span className="ml-2 text-sm text-gray-300">Restart server after saving</span>
+					Restart server after saving
 				</label>
 			</div>
 
@@ -423,9 +423,9 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					className="rounded-md bg-green-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+					className="rounded-md bg-gh-btn-green border border-gh-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-gh-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
 				>
-					{isSubmitting ? 'Saving...' : 'Save Changes'}
+					{isSubmitting ? 'Saving…' : 'Save Changes'}
 				</button>
 			</div>
 		</form>

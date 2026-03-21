@@ -96,7 +96,7 @@ export function AssistRulesEditor({ serverId, config }: AssistRulesEditorProps) 
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				{assistFields.map(({ key, label, type }) => (
 					<div key={key}>
-						<label className="mb-2 block text-sm font-medium text-gray-300">{label}</label>
+						<label className="mb-1.5 block text-sm font-medium text-gh-secondary">{label}</label>
 						{type === 'number' ? (
 							<input
 								type="number"
@@ -112,7 +112,7 @@ export function AssistRulesEditor({ serverId, config }: AssistRulesEditorProps) 
 								disabled={isSubmitting}
 								value={formData[key]}
 								onChange={(e) => handleInputChange(key, e.target.value)}
-								className="form-input w-full"
+								className="form-select w-full"
 							>
 								<option value={0}>Allowed</option>
 								<option value={1}>Disabled</option>
@@ -122,15 +122,15 @@ export function AssistRulesEditor({ serverId, config }: AssistRulesEditorProps) 
 				))}
 			</div>
 
-			<div className="border-t border-gray-700 pt-6">
-				<label className="flex items-center">
+			<div className="border-t border-gh-border pt-6">
+				<label className="flex items-center gap-2 text-sm text-gh-muted">
 					<input
 						type="checkbox"
 						checked={restart}
 						onChange={(e) => setRestart(e.target.checked)}
-						className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-600 focus:ring-green-500"
+						className="h-4 w-4 rounded border-gh-border bg-gh-overlay accent-gh-green focus:ring-gh-blue"
 					/>
-					<span className="ml-2 text-sm text-gray-300">Restart server after saving</span>
+					Restart server after saving
 				</label>
 			</div>
 
@@ -138,9 +138,9 @@ export function AssistRulesEditor({ serverId, config }: AssistRulesEditorProps) 
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					className="rounded-md bg-green-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+					className="rounded-md bg-gh-btn-green border border-gh-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-gh-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
 				>
-					{isSubmitting ? 'Saving...' : 'Save Changes'}
+					{isSubmitting ? 'Saving…' : 'Save Changes'}
 				</button>
 			</div>
 		</form>

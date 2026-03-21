@@ -105,11 +105,11 @@ export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
 	return (
 		<form onSubmit={handleSubmit} className="max-w-4xl space-y-8">
 			<div className="space-y-6">
-				<h3 className="border-b border-gray-700 pb-2 text-lg font-medium text-white">Race Rules</h3>
+				<h3 className="border-b border-gh-border-muted pb-2 text-sm font-semibold text-gh-primary">Race Rules</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					{numberFields.map(({ key, label, min, max }) => (
 						<div key={key}>
-							<label className="mb-2 block text-sm font-medium text-gray-300">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-gh-secondary">{label}</label>
 							<input
 								type="number"
 								disabled={isSubmitting}
@@ -125,18 +125,18 @@ export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
 			</div>
 
 			<div className="space-y-6">
-				<h3 className="border-b border-gray-700 pb-2 text-lg font-medium text-white">
+				<h3 className="border-b border-gh-border-muted pb-2 text-sm font-semibold text-gh-primary">
 					Pitstop & Refuelling Rules
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					{booleanFields.map(({ key, label }) => (
 						<div key={key}>
-							<label className="mb-2 block text-sm font-medium text-gray-300">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-gh-secondary">{label}</label>
 							<select
 								disabled={isSubmitting}
 								value={formData[key] ? 'true' : 'false'}
 								onChange={(e) => handleInputChange(key, e.target.value === 'true')}
-								className="form-input w-full"
+								className="form-select w-full"
 							>
 								<option value="false">No</option>
 								<option value="true">Yes</option>
@@ -146,15 +146,15 @@ export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
 				</div>
 			</div>
 
-			<div className="border-t border-gray-700 pt-6">
-				<label className="flex items-center">
+			<div className="border-t border-gh-border pt-6">
+				<label className="flex items-center gap-2 text-sm text-gh-muted">
 					<input
 						type="checkbox"
 						checked={restart}
 						onChange={(e) => setRestart(e.target.checked)}
-						className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-600 focus:ring-green-500"
+						className="h-4 w-4 rounded border-gh-border bg-gh-overlay accent-gh-green focus:ring-gh-blue"
 					/>
-					<span className="ml-2 text-sm text-gray-300">Restart server after saving</span>
+					Restart server after saving
 				</label>
 			</div>
 
@@ -162,9 +162,9 @@ export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					className="rounded-md bg-green-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+					className="rounded-md bg-gh-btn-green border border-gh-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-gh-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
 				>
-					{isSubmitting ? 'Saving...' : 'Save Changes'}
+					{isSubmitting ? 'Saving…' : 'Save Changes'}
 				</button>
 			</div>
 		</form>
