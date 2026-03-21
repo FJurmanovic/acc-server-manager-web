@@ -10,7 +10,7 @@ interface GhButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-	primary: 'bg-[#238636] border border-[#2ea043] text-white hover:bg-[#2ea043]',
+	primary: 'bg-gh-btn-green border border-gh-btn-green-hover text-white hover:bg-gh-btn-green-hover',
 	ghost: 'bg-transparent border border-gh-border text-gh-secondary hover:bg-gh-overlay hover:text-gh-primary',
 	'danger-outline': 'bg-transparent border border-gh-border text-gh-red hover:border-gh-red/40 hover:bg-gh-red-bg',
 	'danger-solid': 'bg-gh-overlay border border-gh-red/20 text-gh-red hover:bg-gh-red-bg',
@@ -34,7 +34,7 @@ export function GhButton({
 			{...props}
 			disabled={disabled}
 			className={cn(
-				'inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gh-blue focus:ring-offset-1 focus:ring-offset-gh-base',
+				'inline-flex items-center gap-1.5 justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gh-blue focus:ring-offset-1 focus:ring-offset-gh-base',
 				'disabled:cursor-not-allowed disabled:opacity-40',
 				variantClasses[variant],
 				sizeClasses[size],

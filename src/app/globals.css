@@ -21,6 +21,8 @@
   --color-gh-red: #f85149;
   --color-gh-red-bg: #f8514920;
   --color-gh-orange: #f78166;
+  --color-gh-btn-green: #238636;
+  --color-gh-btn-green-hover: #2ea043;
 }
 
 @layer components {
