@@ -310,7 +310,7 @@ export function ServerCreationPopup({
 			!isCompleted && Object.values(steps).some((step) => step.status === 'in_progress');
 
 		return (
-			<div className="fixed right-4 bottom-4 z-40">
+			<div className="fixed right-4 bottom-20 md:bottom-4 z-40">
 				<button
 					onClick={() => setIsMinimized(false)}
 					className={`flex h-16 w-16 items-center justify-center rounded-full border-2 shadow-lg transition-all hover:scale-105 ${
@@ -364,7 +364,7 @@ export function ServerCreationPopup({
 	}
 
 	return (
-		<div className="fixed right-4 bottom-4 z-40 max-h-[600px] w-96 rounded-lg border border-gray-700 bg-gray-800 shadow-2xl select-none">
+		<div className="fixed right-4 bottom-20 md:bottom-4 z-40 max-h-[600px] w-96 rounded-lg border border-gray-700 bg-gray-800 shadow-2xl select-none">
 			<div className="flex items-center justify-between border-b border-gray-700 p-4">
 				<div className="flex items-center space-x-2">
 					<span className="text-lg">🔧</span>

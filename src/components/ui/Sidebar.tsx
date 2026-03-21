@@ -33,7 +33,7 @@ function UsersIcon({ active }: { active: boolean }) {
 
 export function Sidebar({ showUsers }: SidebarProps) {
   const pathname = usePathname();
-  const isServers = !pathname.startsWith('/dashboard/membership');
+  const isServers = pathname === '/dashboard' || pathname.startsWith('/dashboard/server');
   const isUsers = pathname.startsWith('/dashboard/membership');
 
   const navItems = [
