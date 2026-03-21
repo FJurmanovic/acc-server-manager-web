@@ -10,7 +10,7 @@ import {
 	stopServerEventAction
 } from '@/lib/actions/servers';
 import { StatusDot } from '@/components/ui/StatusDot';
-import { GhButton } from '@/components/ui/GhButton';
+import { Button } from '@/components/ui/Button';
 
 interface ServerRowProps {
 	server: Server;
@@ -45,39 +45,39 @@ export function ServerRow({ server }: ServerRowProps) {
 	const disabled = transitioning || isPending;
 
 	return (
-		<div className="flex items-center justify-between gap-3 rounded-lg border border-gh-border bg-gh-canvas px-3 py-2.5 transition-colors hover:border-gh-border/60">
+		<div className="flex items-center justify-between gap-3 rounded-lg border border-border bg-canvas px-3 py-2.5 transition-colors hover:border-border/60">
 			<Link href={`/dashboard/server/${server.id}`} className="flex min-w-0 flex-1 items-center gap-3">
 				<StatusDot status={server.status} />
 				<div className="min-w-0">
-					<div className="truncate text-sm font-semibold text-gh-primary">{server.name}</div>
-					<div className="truncate text-xs text-gh-muted">
+					<div className="truncate text-sm font-semibold text-primary">{server.name}</div>
+					<div className="truncate text-xs text-muted">
 						{server.state?.track ?? 'No track'} · {server.state?.playerCount ?? 0} players
 					</div>
 				</div>
 			</Link>
 			<div className="flex shrink-0 gap-1.5">
 				{server.status === ServiceStatus.Stopped ? (
-					<GhButton variant="primary" size="sm" onClick={startServer} disabled={disabled}>
+					<Button variant="primary" size="sm" onClick={startServer} disabled={disabled}>
 						Start
-					</GhButton>
+					</Button>
 				) : (
 					<>
-						<GhButton
+						<Button
 							variant="ghost"
 							size="sm"
 							onClick={restartServer}
 							disabled={disabled}
 						>
 							Restart
-						</GhButton>
-						<GhButton
+						</Button>
+						<Button
 							variant="danger-outline"
 							size="sm"
 							onClick={stopServer}
 							disabled={disabled}
 						>
 							Stop
-						</GhButton>
+						</Button>
 					</>
 				)}
 			</div>

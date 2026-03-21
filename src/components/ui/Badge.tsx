@@ -9,11 +9,11 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-	green: 'bg-gh-green-bg text-gh-green border border-gh-green/20',
-	yellow: 'bg-gh-yellow-bg text-gh-yellow border border-gh-yellow/20',
-	red: 'bg-gh-red-bg text-gh-red border border-gh-red/20',
-	blue: 'bg-gh-blue-bg text-gh-blue border border-gh-blue/20',
-	gray: 'bg-gh-overlay text-gh-muted border border-gh-border',
+	green: 'bg-green-bg text-green border border-green/20',
+	yellow: 'bg-yellow-bg text-yellow border border-yellow/20',
+	red: 'bg-red-bg text-red border border-red/20',
+	blue: 'bg-blue-bg text-blue border border-blue/20',
+	gray: 'bg-overlay text-muted border border-border',
 };
 
 export function Badge({ variant, children, className }: BadgeProps) {

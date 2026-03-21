@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { Role } from '@/lib/schemas';
 import { createUserAction } from '@/lib/actions/membership';
-import { GhButton } from '@/components/ui/GhButton';
+import { Button } from '@/components/ui/Button';
 
 interface CreateUserModalProps {
 	roles: Role[];
@@ -46,11 +46,11 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-			<div className="w-full max-w-md rounded-lg border border-gh-border bg-gh-canvas p-6 shadow-xl">
-				<h2 className="mb-4 text-base font-semibold text-gh-primary">Create New User</h2>
+			<div className="w-full max-w-md rounded-lg border border-border bg-canvas p-6 shadow-xl">
+				<h2 className="mb-4 text-base font-semibold text-primary">Create New User</h2>
 
 				{error && (
-					<div className="mb-4 rounded-md border border-gh-red/20 bg-gh-red-bg p-3 text-sm text-gh-red">
+					<div className="mb-4 rounded-md border border-red/20 bg-red-bg p-3 text-sm text-red">
 						{error}
 					</div>
 				)}
@@ -59,7 +59,7 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 					<div className="mb-4">
 						<label
 							htmlFor="create-username"
-							className="mb-1.5 block text-sm font-medium text-gh-secondary"
+							className="mb-1.5 block text-sm font-medium text-secondary"
 						>
 							Username
 						</label>
@@ -77,7 +77,7 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 					<div className="mb-4">
 						<label
 							htmlFor="create-password"
-							className="mb-1.5 block text-sm font-medium text-gh-secondary"
+							className="mb-1.5 block text-sm font-medium text-secondary"
 						>
 							Password
 						</label>
@@ -95,7 +95,7 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 					<div className="mb-6">
 						<label
 							htmlFor="create-role"
-							className="mb-1.5 block text-sm font-medium text-gh-secondary"
+							className="mb-1.5 block text-sm font-medium text-secondary"
 						>
 							Role
 						</label>
@@ -117,12 +117,12 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 					</div>
 
 					<div className="flex justify-end gap-2">
-						<GhButton type="button" variant="ghost" onClick={onClose} disabled={isSubmitting}>
+						<Button type="button" variant="ghost" onClick={onClose} disabled={isSubmitting}>
 							Cancel
-						</GhButton>
-						<GhButton type="submit" variant="primary" disabled={isSubmitting}>
+						</Button>
+						<Button type="submit" variant="primary" disabled={isSubmitting}>
 							{isSubmitting ? 'Creating...' : 'Create User'}
-						</GhButton>
+						</Button>
 					</div>
 				</form>
 			</div>

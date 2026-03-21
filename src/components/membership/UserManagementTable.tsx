@@ -6,7 +6,7 @@ import type { Role, User } from '@/lib/schemas';
 import { hasPermission } from '@/lib/schemas/user';
 import { CreateUserModal } from './CreateUserModal';
 import { DeleteUserModal } from './DeleteUserModal';
-import { GhButton } from '@/components/ui/GhButton';
+import { Button } from '@/components/ui/Button';
 
 interface UserManagementTableProps {
 	initialData: User[];
@@ -79,24 +79,22 @@ export function UserManagementTable({ initialData, roles, currentUser }: UserMan
 
 	return (
 		<>
-			{/* Internal topbar */}
-			<header className="flex h-12 items-center justify-between border-b border-gh-border-muted px-5">
+			<header className="flex h-12 items-center justify-between border-b border-border-muted px-5">
 				<div className="flex items-center gap-3">
-					<span className="text-sm font-semibold text-gh-primary">User Management</span>
+					<span className="text-sm font-semibold text-primary">User Management</span>
 				</div>
 				{hasPermission(currentUser, 'membership.create') && (
-					<GhButton variant="primary" size="sm" onClick={openCreateModal}>
+					<Button variant="primary" size="sm" onClick={openCreateModal}>
 						+ Create User
-					</GhButton>
+					</Button>
 				)}
 			</header>
 
-			{/* Filters */}
-			<div className="mx-5 mt-4 rounded-lg border border-gh-border bg-gh-canvas p-4">
-				<div className="mb-3 text-sm font-semibold text-gh-primary">Filters</div>
+			<div className="mx-5 mt-4 rounded-lg border border-border bg-canvas p-4">
+				<div className="mb-3 text-sm font-semibold text-primary">Filters</div>
 				<div className="grid grid-cols-1 gap-3 md:grid-cols-2">
 					<div>
-						<label htmlFor="username" className="mb-1 block text-xs font-medium text-gh-muted">
+						<label htmlFor="username" className="mb-1 block text-xs font-medium text-muted">
 							Username
 						</label>
 						<input
@@ -109,7 +107,7 @@ export function UserManagementTable({ initialData, roles, currentUser }: UserMan
 						/>
 					</div>
 					<div>
-						<label htmlFor="role" className="mb-1 block text-xs font-medium text-gh-muted">
+						<label htmlFor="role" className="mb-1 block text-xs font-medium text-muted">
 							Role
 						</label>
 						<input
@@ -123,27 +121,25 @@ export function UserManagementTable({ initialData, roles, currentUser }: UserMan
 					</div>
 				</div>
 				<div className="mt-3 flex gap-2">
-					<GhButton variant="primary" size="sm" onClick={applyFilters}>
+					<Button variant="primary" size="sm" onClick={applyFilters}>
 						Apply
-					</GhButton>
-					<GhButton variant="ghost" size="sm" onClick={resetFilters}>
+					</Button>
+					<Button variant="ghost" size="sm" onClick={resetFilters}>
 						Reset
-					</GhButton>
+					</Button>
 				</div>
 			</div>
 
-			{/* Results count */}
-			<div className="mx-5 mt-3 text-xs text-gh-muted">Showing {initialData.length} users</div>
+			<div className="mx-5 mt-3 text-xs text-muted">Showing {initialData.length} users</div>
 
-			{/* Users table */}
-			<div className="mx-5 mt-2 mb-5 overflow-hidden rounded-lg border border-gh-border bg-gh-canvas">
+			<div className="mx-5 mt-2 mb-5 overflow-hidden rounded-lg border border-border bg-canvas">
 				<table className="min-w-full">
 					<thead>
-						<tr className="border-b border-gh-border-muted bg-gh-base">
+						<tr className="border-b border-border-muted bg-base">
 							<th className="px-4 py-2 text-left">
 								<button
 									onClick={() => handleSort('username')}
-									className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-gh-subtle hover:text-gh-primary"
+									className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-subtle hover:text-primary"
 								>
 									Username <span>{getSortIcon('username')}</span>
 								</button>
@@ -151,13 +147,13 @@ export function UserManagementTable({ initialData, roles, currentUser }: UserMan
 							<th className="px-4 py-2 text-left">
 								<button
 									onClick={() => handleSort('role')}
-									className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-gh-subtle hover:text-gh-primary"
+									className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-subtle hover:text-primary"
 								>
 									Role <span>{getSortIcon('role')}</span>
 								</button>
 							</th>
 							{hasPermission(currentUser, 'membership.edit') && (
-								<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-gh-subtle">
+								<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
 									Actions
 								</th>
 							)}
@@ -168,26 +164,26 @@ export function UserManagementTable({ initialData, roles, currentUser }: UserMan
 							initialData.map((user) => (
 								<tr
 									key={user.id}
-									className="border-b border-gh-border-muted transition-colors hover:bg-gh-hover last:border-0"
+									className="border-b border-border-muted transition-colors hover:bg-hover last:border-0"
 								>
-									<td className="px-4 py-3 text-sm font-medium text-gh-primary">
+									<td className="px-4 py-3 text-sm font-medium text-primary">
 										{user.username}
 									</td>
 									<td className="px-4 py-3">
-										<span className="inline-flex rounded-full border border-gh-blue/20 bg-gh-blue-bg px-2 py-0.5 text-xs font-medium text-gh-blue">
+										<span className="inline-flex rounded-full border border-blue/20 bg-blue-bg px-2 py-0.5 text-xs font-medium text-blue">
 											{user.role.name}
 										</span>
 									</td>
 									{hasPermission(currentUser, 'membership.edit') && (
 										<td className="px-4 py-3">
 											<div className="flex gap-3">
-												<button className="text-xs text-gh-blue hover:underline">
+												<button className="text-xs text-blue hover:underline">
 													Edit
 												</button>
 												{hasPermission(currentUser, 'membership.delete') && (
 													<button
 														onClick={() => openDeleteModal(user)}
-														className="text-xs text-gh-red hover:underline"
+														className="text-xs text-red hover:underline"
 													>
 														Delete
 													</button>
@@ -201,7 +197,7 @@ export function UserManagementTable({ initialData, roles, currentUser }: UserMan
 							<tr>
 								<td
 									colSpan={hasPermission(currentUser, 'membership.edit') ? 3 : 2}
-									className="px-4 py-8 text-center text-sm text-gh-muted"
+									className="px-4 py-8 text-center text-sm text-muted"
 								>
 									No users found
 								</td>
@@ -211,7 +207,6 @@ export function UserManagementTable({ initialData, roles, currentUser }: UserMan
 				</table>
 			</div>
 
-			{/* Modals */}
 			{showCreateModal && <CreateUserModal roles={roles} onClose={closeCreateModal} />}
 
 			{showDeleteModal && selectedUser && (

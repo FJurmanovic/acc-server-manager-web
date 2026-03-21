@@ -47,7 +47,7 @@ export function ConfigurationEditor({ serverId, config }: ConfigurationEditorPro
 		<form onSubmit={handleSubmit} className="max-w-3xl space-y-6">
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-gh-secondary">UDP Port</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">UDP Port</label>
 					<input
 						type="number"
 						disabled={isSubmitting}
@@ -58,7 +58,7 @@ export function ConfigurationEditor({ serverId, config }: ConfigurationEditorPro
 				</div>
 
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-gh-secondary">TCP Port</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">TCP Port</label>
 					<input
 						type="number"
 						disabled={isSubmitting}
@@ -69,7 +69,7 @@ export function ConfigurationEditor({ serverId, config }: ConfigurationEditorPro
 				</div>
 
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-gh-secondary">Max Connections</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">Max Connections</label>
 					<input
 						type="number"
 						disabled={isSubmitting}
@@ -80,7 +80,7 @@ export function ConfigurationEditor({ serverId, config }: ConfigurationEditorPro
 				</div>
 
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-gh-secondary">LAN Discovery</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">LAN Discovery</label>
 					<select
 						disabled={isSubmitting}
 						value={formData.lanDiscovery}
@@ -93,7 +93,7 @@ export function ConfigurationEditor({ serverId, config }: ConfigurationEditorPro
 				</div>
 
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-gh-secondary">Register To Lobby</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">Register To Lobby</label>
 					<select
 						disabled={isSubmitting}
 						value={formData.registerToLobby}
@@ -106,13 +106,13 @@ export function ConfigurationEditor({ serverId, config }: ConfigurationEditorPro
 				</div>
 			</div>
 
-			<div className="border-t border-gh-border pt-6">
-				<label className="flex items-center gap-2 text-sm text-gh-muted">
+			<div className="border-t border-border pt-6">
+				<label className="flex items-center gap-2 text-sm text-muted">
 					<input
 						type="checkbox"
 						checked={restart}
 						onChange={(e) => setRestart(e.target.checked)}
-						className="h-4 w-4 rounded border-gh-border bg-gh-overlay accent-gh-green focus:ring-1 focus:ring-gh-blue"
+						className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
 					/>
 					Restart server after saving
 				</label>
@@ -122,7 +122,7 @@ export function ConfigurationEditor({ serverId, config }: ConfigurationEditorPro
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					className="rounded-md bg-gh-btn-green border border-gh-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-gh-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
+					className="rounded-md bg-btn-green border border-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
 				>
 					{isSubmitting ? 'Saving…' : 'Save Changes'}
 				</button>

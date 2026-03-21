@@ -8,7 +8,7 @@ import { ServerRow } from './ServerRow';
 import { CreateServerModal } from './CreateServerModal';
 import RefreshButton from '@/components/ui/RefreshButton';
 import { useSteamCMD } from '@/lib/context/SteamCMDContext';
-import { GhButton } from '@/components/ui/GhButton';
+import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 
 interface ServerListWithActionsProps {
@@ -28,16 +28,15 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 
 	return (
 		<>
-			{/* Topbar */}
-			<header className="flex h-12 items-center justify-between border-b border-gh-border-muted px-5">
+			<header className="flex h-12 items-center justify-between border-b border-border-muted px-5">
 				<div className="flex items-center gap-3">
-					<span className="text-sm font-semibold text-gh-primary">Servers</span>
-					<span className="text-xs text-gh-muted">{servers.length} total</span>
+					<span className="text-sm font-semibold text-primary">Servers</span>
+					<span className="text-xs text-muted">{servers.length} total</span>
 				</div>
 				<div className="flex items-center gap-2">
 					<RefreshButton />
 					{canCreateServer && (
-						<GhButton
+						<Button
 							variant="primary"
 							size="sm"
 							onClick={() => setIsCreateModalOpen(true)}
@@ -45,12 +44,11 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 							title={isSteamCMDRunning ? 'Disabled while SteamCMD is running' : undefined}
 						>
 							+ New Server
-						</GhButton>
+						</Button>
 					)}
 				</div>
 			</header>
 
-			{/* Status summary bar */}
 			<div className="flex items-center px-5 py-3">
 				<div className="flex gap-2">
 					{runningCount > 0 && <Badge variant="green">● {runningCount} running</Badge>}
@@ -58,7 +56,6 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 				</div>
 			</div>
 
-			{/* Responsive server list */}
 			<div className="px-5 pb-5">
 				{/* Card grid — desktop only */}
 				<div

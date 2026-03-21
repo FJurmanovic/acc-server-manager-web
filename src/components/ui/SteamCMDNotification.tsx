@@ -12,11 +12,11 @@ export function SteamCMDNotification() {
   const serverCount = runningSteamServers.size;
 
   return (
-    <div className="border-l-4 border-gh-yellow bg-gh-yellow-bg px-4 py-3">
+    <div className="border-l-4 border-yellow bg-yellow-bg px-4 py-3">
       <div className="flex items-center">
         <div className="flex-shrink-0">
           <svg
-            className="h-5 w-5 text-gh-yellow"
+            className="h-5 w-5 text-yellow"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -28,7 +28,7 @@ export function SteamCMDNotification() {
           </svg>
         </div>
         <div className="ml-3">
-          <p className="text-sm text-gh-yellow">
+          <p className="text-sm text-yellow">
             <strong>SteamCMD is currently running</strong> for {serverCount} server{serverCount !== 1 ? 's' : ''}.
             Server actions are temporarily disabled to prevent conflicts.
             This will automatically resolve when the download completes.
@@ -36,8 +36,8 @@ export function SteamCMDNotification() {
         </div>
         <div className="ml-auto flex-shrink-0">
           <div className="flex items-center">
-            <div className="animate-spin h-4 w-4 border-2 border-gh-yellow border-t-transparent rounded-full mr-2"></div>
-            <span className="text-xs text-gh-yellow">Downloading...</span>
+            <div className="animate-spin h-4 w-4 border-2 border-yellow border-t-transparent rounded-full mr-2"></div>
+            <span className="text-xs text-yellow">Downloading...</span>
           </div>
         </div>
       </div>

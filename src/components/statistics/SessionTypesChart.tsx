@@ -15,10 +15,10 @@ interface SessionTypesChartProps {
 }
 
 const colors = [
-	'#3fb950', // gh-green
-	'#58a6ff', // gh-blue
-	'#f78166', // gh-red
-	'#d29922'  // gh-yellow
+	'#3fb950', // green
+	'#58a6ff', // blue
+	'#f78166', // red
+	'#d29922'  // yellow
 ];
 
 export function SessionTypesChart({ data }: SessionTypesChartProps) {

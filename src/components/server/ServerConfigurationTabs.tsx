@@ -72,7 +72,7 @@ export function ServerConfigurationTabs({
 
 	return (
 		<div className="flex flex-1 flex-col overflow-hidden">
-			<nav className="flex overflow-x-auto border-b border-gh-border-muted px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Tabs">
+			<nav className="flex overflow-x-auto border-b border-border-muted px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Tabs">
 				{tabs.map((tab) => {
 					const isActive = currentTab === tab.id;
 					return (
@@ -81,8 +81,8 @@ export function ServerConfigurationTabs({
 							onClick={() => setCurrentTab(tab.id)}
 							className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
 								isActive
-									? 'border-gh-orange text-gh-primary'
-									: 'border-transparent text-gh-muted hover:text-gh-primary'
+									? 'border-orange text-primary'
+									: 'border-transparent text-muted hover:text-primary'
 							}`}
 						>
 							<span className="text-sm">{tab.icon}</span>

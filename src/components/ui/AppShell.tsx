@@ -8,7 +8,7 @@ interface AppShellProps {
 
 export function AppShell({ children, showUsers }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-gh-base">
+    <div className="min-h-screen bg-base">
       <Sidebar showUsers={showUsers} />
       {/* Offset for sidebar (desktop: left margin, mobile: bottom padding) */}
       <div className="pb-14 md:pb-0 md:pl-14">

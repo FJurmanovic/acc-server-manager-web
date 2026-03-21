@@ -37,13 +37,13 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
 			<div className="absolute inset-0" onClick={onClose} />
 			<div
 				className={cn(
-					'relative w-full max-w-md rounded-lg border border-gh-border bg-gh-canvas p-6 shadow-xl',
+					'relative w-full max-w-md rounded-lg border border-border bg-canvas p-6 shadow-xl',
 					className
 				)}
 			>
 				<div className="mb-4 flex items-center justify-between">
-					<h3 className="text-lg font-semibold text-gh-primary">{title}</h3>
-					<button onClick={onClose} className="text-gh-muted hover:text-gh-primary">
+					<h3 className="text-lg font-semibold text-primary">{title}</h3>
+					<button onClick={onClose} className="text-muted hover:text-primary">
 						×
 					</button>
 				</div>

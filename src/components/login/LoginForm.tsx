@@ -23,26 +23,26 @@ export default function LoginForm({
 	}, [expired]);
 	const [state, formAction] = useActionState(loginAction, initialState);
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gh-base px-4">
-			<div className="w-full max-w-md space-y-6 rounded-lg border border-gh-border bg-gh-canvas p-8 shadow-xl">
+		<div className="flex min-h-screen items-center justify-center bg-base px-4">
+			<div className="w-full max-w-md space-y-6 rounded-lg border border-border bg-canvas p-8 shadow-xl">
 				<div className="text-center">
-					<h1 className="text-xl font-bold text-gh-primary">ACC Server Manager</h1>
-					<p className="mt-1 text-sm text-gh-muted">Sign in to manage your servers</p>
+					<h1 className="text-xl font-bold text-primary">ACC Server Manager</h1>
+					<p className="mt-1 text-sm text-muted">Sign in to manage your servers</p>
 				</div>
 				{expired && (
-					<div className="rounded-md border border-gh-yellow/30 bg-gh-yellow-bg px-3 py-2 text-sm text-gh-yellow">
+					<div className="rounded-md border border-yellow/30 bg-yellow-bg px-3 py-2 text-sm text-yellow">
 						Your session has expired. Please sign in again.
 					</div>
 				)}
 				{state?.success ? null : (
-					<div className="rounded-md border border-gh-red/30 bg-gh-red-bg px-3 py-2 text-sm text-gh-red">
+					<div className="rounded-md border border-red/30 bg-red-bg px-3 py-2 text-sm text-red">
 						{state?.message}
 					</div>
 				)}
 
 				<form action={formAction} className="space-y-4">
 					<div>
-						<label htmlFor="username" className="mb-1.5 block text-sm font-medium text-gh-secondary">
+						<label htmlFor="username" className="mb-1.5 block text-sm font-medium text-secondary">
 							Username
 						</label>
 						<input
@@ -56,7 +56,7 @@ export default function LoginForm({
 					</div>
 
 					<div>
-						<label htmlFor="password" className="mb-1.5 block text-sm font-medium text-gh-secondary">
+						<label htmlFor="password" className="mb-1.5 block text-sm font-medium text-secondary">
 							Password
 						</label>
 						<input
@@ -71,7 +71,7 @@ export default function LoginForm({
 
 					<button
 						type="submit"
-						className="w-full rounded-md bg-gh-btn-green border border-gh-btn-green px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gh-btn-green-hover focus:outline-none focus:ring-2 focus:ring-gh-blue focus:ring-offset-2 focus:ring-offset-gh-base"
+						className="w-full rounded-md bg-btn-green border border-btn-green px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover focus:outline-none focus:ring-2 focus:ring-blue focus:ring-offset-2 focus:ring-offset-base"
 					>
 						Sign in
 					</button>

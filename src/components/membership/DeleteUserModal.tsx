@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { User } from '@/lib/schemas';
 import { deleteUserAction } from '@/lib/actions/membership';
-import { GhButton } from '@/components/ui/GhButton';
+import { Button } from '@/components/ui/Button';
 
 interface DeleteUserModalProps {
 	user: User;
@@ -39,28 +39,28 @@ export function DeleteUserModal({ user, onClose }: DeleteUserModalProps) {
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-			<div className="w-full max-w-md rounded-lg border border-gh-border bg-gh-canvas p-6 shadow-xl">
-				<h2 className="mb-4 text-base font-semibold text-gh-primary">Delete User</h2>
+			<div className="w-full max-w-md rounded-lg border border-border bg-canvas p-6 shadow-xl">
+				<h2 className="mb-4 text-base font-semibold text-primary">Delete User</h2>
 
 				{error && (
-					<div className="mb-4 rounded-md border border-gh-red/20 bg-gh-red-bg p-3 text-sm text-gh-red">
+					<div className="mb-4 rounded-md border border-red/20 bg-red-bg p-3 text-sm text-red">
 						{error}
 					</div>
 				)}
 
-				<p className="mb-6 text-sm text-gh-secondary">
+				<p className="mb-6 text-sm text-secondary">
 					Are you sure you want to delete the user &quot;{user.username}&quot;? This action cannot
 					be undone.
 				</p>
 
 				<form onSubmit={handleSubmit}>
 					<div className="flex justify-end gap-2">
-						<GhButton type="button" variant="ghost" onClick={onClose} disabled={isSubmitting}>
+						<Button type="button" variant="ghost" onClick={onClose} disabled={isSubmitting}>
 							Cancel
-						</GhButton>
-						<GhButton type="submit" variant="danger-solid" disabled={isSubmitting}>
+						</Button>
+						<Button type="submit" variant="danger-solid" disabled={isSubmitting}>
 							{isSubmitting ? 'Deleting...' : 'Delete User'}
-						</GhButton>
+						</Button>
 					</div>
 				</form>
 			</div>

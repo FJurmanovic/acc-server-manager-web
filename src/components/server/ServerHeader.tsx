@@ -11,7 +11,7 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { DeleteServerModal } from './DeleteServerModal';
 import { Badge } from '@/components/ui/Badge';
-import { GhButton } from '@/components/ui/GhButton';
+import { Button } from '@/components/ui/Button';
 
 interface ServerHeaderProps {
 	server: Server;
@@ -48,12 +48,11 @@ export function ServerHeader({ server, user }: ServerHeaderProps) {
 
 	return (
 		<>
-			{/* Topbar */}
-			<header className="flex h-12 items-center justify-between border-b border-gh-border-muted px-5">
+			<header className="flex h-12 items-center justify-between border-b border-border-muted px-5">
 				<div className="flex items-center gap-2 text-sm">
-					<Link href="/dashboard" className="text-gh-blue hover:underline">Servers</Link>
-					<span className="text-gh-subtle">/</span>
-					<span className="font-semibold text-gh-primary">{server.name}</span>
+					<Link href="/dashboard" className="text-blue hover:underline">Servers</Link>
+					<span className="text-subtle">/</span>
+					<span className="font-semibold text-primary">{server.name}</span>
 				</div>
 				<div className="flex items-center gap-2">
 					<Badge variant={
@@ -62,25 +61,24 @@ export function ServerHeader({ server, user }: ServerHeaderProps) {
 					}>
 						● {serviceStatusToString(server.status)}
 					</Badge>
-					<GhButton variant="ghost" size="sm" onClick={startServer} disabled={server.status === ServiceStatus.Running || disabled || isPending}>Start</GhButton>
-					<GhButton variant="ghost" size="sm" onClick={restartServer} disabled={server.status === ServiceStatus.Stopped || disabled || isPending}>Restart</GhButton>
-					<GhButton variant="danger-outline" size="sm" onClick={stopServer} disabled={server.status === ServiceStatus.Stopped || disabled || isPending}>Stop</GhButton>
+					<Button variant="ghost" size="sm" onClick={startServer} disabled={server.status === ServiceStatus.Running || disabled || isPending}>Start</Button>
+					<Button variant="ghost" size="sm" onClick={restartServer} disabled={server.status === ServiceStatus.Stopped || disabled || isPending}>Restart</Button>
+					<Button variant="danger-outline" size="sm" onClick={stopServer} disabled={server.status === ServiceStatus.Stopped || disabled || isPending}>Stop</Button>
 					{canDeleteServer && (
-						<GhButton variant="danger-solid" size="sm" onClick={() => setIsDeleteModalOpen(true)} disabled={disabled || isPending}>Remove</GhButton>
+						<Button variant="danger-solid" size="sm" onClick={() => setIsDeleteModalOpen(true)} disabled={disabled || isPending}>Remove</Button>
 					)}
 				</div>
 			</header>
 
-			{/* Info strip */}
-			<div className="flex flex-wrap gap-6 border-b border-gh-border-muted px-5 py-3">
+			<div className="flex flex-wrap gap-6 border-b border-border-muted px-5 py-3">
 				{[
 					{ label: 'Track', value: server.state?.track ?? 'N/A' },
 					{ label: 'Players', value: `${server.state?.playerCount ?? 0} / ${server.state?.maxConnections ?? 0}` },
 					{ label: 'Session', value: server.state?.session ?? 'N/A' },
 				].map(({ label, value }) => (
 					<div key={label}>
-						<div className="text-xs text-gh-subtle">{label}</div>
-						<div className="text-sm font-semibold text-gh-primary">{value}</div>
+						<div className="text-xs text-subtle">{label}</div>
+						<div className="text-sm font-semibold text-primary">{value}</div>
 					</div>
 				))}
 			</div>

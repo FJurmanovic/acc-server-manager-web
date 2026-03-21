@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { GhButton } from '@/components/ui/GhButton';
+import { Button } from '@/components/ui/Button';
 import { Leaderboard, LeaderboardDriver, FlPoints } from '@/lib/schemas/leaderboard';
 import { saveLeaderboardAction } from '@/lib/actions/leaderboard';
 import { LeaderboardStandings } from './LeaderboardStandings';
@@ -136,19 +136,19 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 	return (
 		<div className="space-y-4">
 			{dirty && (
-				<div className="flex items-center justify-between rounded-lg border border-gh-yellow/30 bg-gh-yellow-bg px-4 py-2 text-sm text-gh-yellow">
+				<div className="flex items-center justify-between rounded-lg border border-yellow/30 bg-yellow-bg px-4 py-2 text-sm text-yellow">
 					<span>Unsaved changes</span>
 					<div className="flex gap-2">
 						<button
 							onClick={() => setDraft(saved)}
-							className="rounded px-2 py-1 text-xs text-gh-yellow hover:text-gh-primary"
+							className="rounded px-2 py-1 text-xs text-yellow hover:text-primary"
 						>
 							Discard
 						</button>
 						<button
 							onClick={handleSave}
 							disabled={isSubmitting}
-							className="rounded bg-gh-yellow px-3 py-1 text-xs font-semibold text-gh-base hover:opacity-90 disabled:opacity-40"
+							className="rounded bg-yellow px-3 py-1 text-xs font-semibold text-base hover:opacity-90 disabled:opacity-40"
 						>
 							{isSubmitting ? 'Saving…' : 'Save'}
 						</button>
@@ -157,7 +157,7 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 			)}
 
 			{error && (
-				<div className="rounded-lg border border-gh-red/30 bg-gh-red-bg px-4 py-2 text-sm text-gh-red">
+				<div className="rounded-lg border border-red/30 bg-red-bg px-4 py-2 text-sm text-red">
 					{error}
 				</div>
 			)}
@@ -169,8 +169,8 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 						onClick={() => setActiveSection(s.id)}
 						className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
 							activeSection === s.id
-								? 'bg-gh-blue text-white'
-								: 'bg-gh-overlay text-gh-secondary hover:bg-gh-border'
+								? 'bg-blue text-white'
+								: 'bg-overlay text-secondary hover:bg-border'
 						}`}
 					>
 						{s.label}
@@ -182,9 +182,9 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 
 			{!dirty && (
 				<div className="flex justify-end">
-					<GhButton variant="primary" size="md" onClick={handleSave} disabled={isSubmitting}>
+					<Button variant="primary" size="md" onClick={handleSave} disabled={isSubmitting}>
 						{isSubmitting ? 'Saving…' : 'Save Leaderboard'}
-					</GhButton>
+					</Button>
 				</div>
 			)}
 		</div>

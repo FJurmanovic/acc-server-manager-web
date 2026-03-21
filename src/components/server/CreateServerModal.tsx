@@ -3,7 +3,7 @@
 import { useState, useEffect, useActionState, useTransition } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { GhButton } from '@/components/ui/GhButton';
+import { Button } from '@/components/ui/Button';
 import { createServerAction, type ServerActionResult } from '@/lib/actions/server-management';
 import { useServerCreationPopup } from '@/lib/context/ServerCreationPopupContext';
 
@@ -59,12 +59,12 @@ export function CreateServerModal({ isOpen, onClose }: CreateServerModalProps) {
 	return (
 		<Modal isOpen={isOpen} onClose={handleClose} title="Create New Server">
 			{!state.success && state.message && (
-				<div className="mb-4 rounded-md border border-gh-red/20 bg-gh-red-bg p-3 text-sm text-gh-red">{state.message}</div>
+				<div className="mb-4 rounded-md border border-red/20 bg-red-bg p-3 text-sm text-red">{state.message}</div>
 			)}
 
 			<form onSubmit={handleSubmit}>
 				<div className="mb-6">
-					<label htmlFor="server-name" className="mb-1.5 block text-sm font-medium text-gh-secondary">
+					<label htmlFor="server-name" className="mb-1.5 block text-sm font-medium text-secondary">
 						Server Name
 					</label>
 					<input
@@ -80,7 +80,7 @@ export function CreateServerModal({ isOpen, onClose }: CreateServerModalProps) {
 				</div>
 
 				<div className="flex justify-end space-x-2">
-					<GhButton
+					<Button
 						type="button"
 						variant="ghost"
 						size="md"
@@ -88,8 +88,8 @@ export function CreateServerModal({ isOpen, onClose }: CreateServerModalProps) {
 						disabled={isSubmitting || isPending}
 					>
 						Cancel
-					</GhButton>
-					<GhButton
+					</Button>
+					<Button
 						type="submit"
 						variant="primary"
 						size="md"
@@ -103,7 +103,7 @@ export function CreateServerModal({ isOpen, onClose }: CreateServerModalProps) {
 						) : (
 							'Create Server'
 						)}
-					</GhButton>
+					</Button>
 				</div>
 			</form>
 		</Modal>

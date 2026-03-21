@@ -8,13 +8,13 @@ interface StatusDotProps {
 
 export function StatusDot({ status, className }: StatusDotProps) {
 	const dotClass = {
-		[ServiceStatus.Running]: 'bg-gh-green shadow-[0_0_0_3px_#3fb95022]',
-		[ServiceStatus.Starting]: 'bg-gh-yellow animate-pulse',
-		[ServiceStatus.Stopping]: 'bg-gh-yellow animate-pulse',
-		[ServiceStatus.Restarting]: 'bg-gh-yellow animate-pulse',
-		[ServiceStatus.Stopped]: 'bg-gh-subtle',
-		[ServiceStatus.Unknown]: 'bg-gh-subtle',
-	}[status] ?? 'bg-gh-subtle';
+		[ServiceStatus.Running]: 'bg-green shadow-[0_0_0_3px_#3fb95022]',
+		[ServiceStatus.Starting]: 'bg-yellow animate-pulse',
+		[ServiceStatus.Stopping]: 'bg-yellow animate-pulse',
+		[ServiceStatus.Restarting]: 'bg-yellow animate-pulse',
+		[ServiceStatus.Stopped]: 'bg-subtle',
+		[ServiceStatus.Unknown]: 'bg-subtle',
+	}[status] ?? 'bg-subtle';
 
 	return (
 		<span
