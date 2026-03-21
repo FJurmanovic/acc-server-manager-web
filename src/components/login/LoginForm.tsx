@@ -23,26 +23,26 @@ export default function LoginForm({
 	}, [expired]);
 	const [state, formAction] = useActionState(loginAction, initialState);
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gray-900 px-4">
-			<div className="w-full max-w-md space-y-8 rounded-lg bg-gray-800 p-8 shadow-lg">
+		<div className="flex min-h-screen items-center justify-center bg-gh-base px-4">
+			<div className="w-full max-w-md space-y-6 rounded-lg border border-gh-border bg-gh-canvas p-8 shadow-xl">
 				<div className="text-center">
-					<h1 className="text-3xl font-bold text-white">ACC Server Manager</h1>
-					<p className="mt-2 text-gray-400">Sign in to manage your servers</p>
+					<h1 className="text-xl font-bold text-gh-primary">ACC Server Manager</h1>
+					<p className="mt-1 text-sm text-gh-muted">Sign in to manage your servers</p>
 				</div>
 				{expired && (
-					<div className="rounded-md border border-yellow-700 bg-yellow-900/50 p-3 text-sm text-yellow-200">
+					<div className="rounded-md border border-gh-yellow/30 bg-gh-yellow-bg px-3 py-2 text-sm text-gh-yellow">
 						Your session has expired. Please sign in again.
 					</div>
 				)}
 				{state?.success ? null : (
-					<div className="rounded-md border border-red-700 bg-red-900/50 p-3 text-sm text-red-200">
+					<div className="rounded-md border border-gh-red/30 bg-gh-red-bg px-3 py-2 text-sm text-gh-red">
 						{state?.message}
 					</div>
 				)}
 
-				<form action={formAction} className="space-y-6">
+				<form action={formAction} className="space-y-4">
 					<div>
-						<label htmlFor="username" className="mb-2 block text-sm font-medium text-gray-300">
+						<label htmlFor="username" className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Username
 						</label>
 						<input
@@ -51,12 +51,12 @@ export default function LoginForm({
 							type="text"
 							autoComplete="username"
 							required
-							className="form-input w-full"
+							className="form-input"
 						/>
 					</div>
 
 					<div>
-						<label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-300">
+						<label htmlFor="password" className="mb-1.5 block text-sm font-medium text-gh-secondary">
 							Password
 						</label>
 						<input
@@ -65,13 +65,13 @@ export default function LoginForm({
 							type="password"
 							autoComplete="current-password"
 							required
-							className="form-input w-full"
+							className="form-input"
 						/>
 					</div>
 
 					<button
 						type="submit"
-						className="w-full rounded-md bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+						className="w-full rounded-md bg-gh-btn-green border border-gh-btn-green-hover px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gh-btn-green-hover focus:outline-none focus:ring-2 focus:ring-gh-blue focus:ring-offset-2 focus:ring-offset-gh-base"
 					>
 						Sign in
 					</button>
