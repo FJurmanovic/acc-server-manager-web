@@ -6,12 +6,13 @@ import { updateConfigurationAction } from '@/lib/actions/configuration';
 
 interface ConfigurationEditorProps {
 	serverId: string;
-	config: Configuration;
+	formData: Configuration;
+	restart: boolean;
+	onFormDataChange: (data: Configuration) => void;
+	onRestartChange: (restart: boolean) => void;
 }
 
-export function ConfigurationEditor({ serverId, config }: ConfigurationEditorProps) {
-	const [formData, setFormData] = useState<Configuration>(config);
-	const [restart, setRestart] = useState(true);
+export function ConfigurationEditor({ serverId, formData, restart, onFormDataChange, onRestartChange }: ConfigurationEditorProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,10 +38,10 @@ export function ConfigurationEditor({ serverId, config }: ConfigurationEditorPro
 	};
 
 	const handleInputChange = (key: keyof Configuration, value: string | number) => {
-		setFormData((prev) => ({
-			...prev,
+		onFormDataChange({
+			...formData,
 			[key]: typeof value === 'string' ? parseInt(value) : value
-		}));
+		});
 	};
 
 	return (
@@ -111,7 +112,7 @@ export function ConfigurationEditor({ serverId, config }: ConfigurationEditorPro
 					<input
 						type="checkbox"
 						checked={restart}
-						onChange={(e) => setRestart(e.target.checked)}
+						onChange={(e) => onRestartChange(e.target.checked)}
 						className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
 					/>
 					Restart server after saving

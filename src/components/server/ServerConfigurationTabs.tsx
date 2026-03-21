@@ -36,25 +36,80 @@ export function ServerConfigurationTabs({
 }: ServerConfigurationTabsProps) {
 	const [currentTab, setCurrentTab] = useState(ServerTab.statistics);
 
+	const [configData, setConfigData] = useState(configurations.configuration);
+	const [configRestart, setConfigRestart] = useState(true);
+
+	const [assistData, setAssistData] = useState(configurations.assistRules);
+	const [assistRestart, setAssistRestart] = useState(true);
+
+	const [eventData, setEventData] = useState(configurations.event);
+	const [eventRestart, setEventRestart] = useState(true);
+
+	const [eventRulesData, setEventRulesData] = useState(configurations.eventRules);
+	const [eventRulesRestart, setEventRulesRestart] = useState(true);
+
+	const [settingsData, setSettingsData] = useState(configurations.settings);
+	const [settingsRestart, setSettingsRestart] = useState(true);
+
 	const renderTabContent = () => {
 		switch (currentTab) {
 			case ServerTab.statistics:
 				return <StatisticsDashboard stats={statistics} />;
 
 			case ServerTab.configuration:
-				return <ConfigurationEditor serverId={serverId} config={configurations.configuration} />;
+				return (
+					<ConfigurationEditor
+						serverId={serverId}
+						formData={configData}
+						restart={configRestart}
+						onFormDataChange={setConfigData}
+						onRestartChange={setConfigRestart}
+					/>
+				);
 
 			case ServerTab.assistRules:
-				return <AssistRulesEditor serverId={serverId} config={configurations.assistRules} />;
+				return (
+					<AssistRulesEditor
+						serverId={serverId}
+						formData={assistData}
+						restart={assistRestart}
+						onFormDataChange={setAssistData}
+						onRestartChange={setAssistRestart}
+					/>
+				);
 
 			case ServerTab.event:
-				return <EventConfigEditor serverId={serverId} config={configurations.event} />;
+				return (
+					<EventConfigEditor
+						serverId={serverId}
+						formData={eventData}
+						restart={eventRestart}
+						onFormDataChange={setEventData}
+						onRestartChange={setEventRestart}
+					/>
+				);
 
 			case ServerTab.eventRules:
-				return <EventRulesEditor serverId={serverId} config={configurations.eventRules} />;
+				return (
+					<EventRulesEditor
+						serverId={serverId}
+						formData={eventRulesData}
+						restart={eventRulesRestart}
+						onFormDataChange={setEventRulesData}
+						onRestartChange={setEventRulesRestart}
+					/>
+				);
 
 			case ServerTab.settings:
-				return <ServerSettingsEditor serverId={serverId} config={configurations.settings} />;
+				return (
+					<ServerSettingsEditor
+						serverId={serverId}
+						formData={settingsData}
+						restart={settingsRestart}
+						onFormDataChange={setSettingsData}
+						onRestartChange={setSettingsRestart}
+					/>
+				);
 
 			case ServerTab.leaderboard:
 				return <LeaderboardManager serverId={serverId} initialData={leaderboard} />;

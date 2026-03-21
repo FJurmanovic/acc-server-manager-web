@@ -6,7 +6,10 @@ import { updateAssistRulesAction } from '@/lib/actions/configuration';
 
 interface AssistRulesEditorProps {
 	serverId: string;
-	config: AssistRules;
+	formData: AssistRules;
+	restart: boolean;
+	onFormDataChange: (data: AssistRules) => void;
+	onRestartChange: (restart: boolean) => void;
 }
 
 const assistFields = [
@@ -57,9 +60,7 @@ const assistFields = [
 	}
 ];
 
-export function AssistRulesEditor({ serverId, config }: AssistRulesEditorProps) {
-	const [formData, setFormData] = useState<AssistRules>(config);
-	const [restart, setRestart] = useState(true);
+export function AssistRulesEditor({ serverId, formData, restart, onFormDataChange, onRestartChange }: AssistRulesEditorProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -85,10 +86,10 @@ export function AssistRulesEditor({ serverId, config }: AssistRulesEditorProps) 
 	};
 
 	const handleInputChange = (key: keyof AssistRules, value: string | number) => {
-		setFormData((prev) => ({
-			...prev,
+		onFormDataChange({
+			...formData,
 			[key]: typeof value === 'string' ? parseInt(value) : value
-		}));
+		});
 	};
 
 	return (
@@ -127,7 +128,7 @@ export function AssistRulesEditor({ serverId, config }: AssistRulesEditorProps) 
 					<input
 						type="checkbox"
 						checked={restart}
-						onChange={(e) => setRestart(e.target.checked)}
+						onChange={(e) => onRestartChange(e.target.checked)}
 						className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
 					/>
 					Restart server after saving

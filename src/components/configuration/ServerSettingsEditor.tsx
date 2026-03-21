@@ -6,7 +6,10 @@ import { updateServerSettingsAction } from '@/lib/actions/configuration';
 
 interface ServerSettingsEditorProps {
 	serverId: string;
-	config: ServerSettings;
+	formData: ServerSettings;
+	restart: boolean;
+	onFormDataChange: (data: ServerSettings) => void;
+	onRestartChange: (restart: boolean) => void;
 }
 
 const textFields = [
@@ -87,9 +90,7 @@ const selectFields = [
 	}
 ];
 
-export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorProps) {
-	const [formData, setFormData] = useState<ServerSettings>(config);
-	const [restart, setRestart] = useState(true);
+export function ServerSettingsEditor({ serverId, formData, restart, onFormDataChange, onRestartChange }: ServerSettingsEditorProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -115,10 +116,7 @@ export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorP
 	};
 
 	const handleInputChange = (key: keyof ServerSettings, value: string | number) => {
-		setFormData((prev) => ({
-			...prev,
-			[key]: value
-		}));
+		onFormDataChange({ ...formData, [key]: value });
 	};
 
 	return (
@@ -226,7 +224,7 @@ export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorP
 					<input
 						type="checkbox"
 						checked={restart}
-						onChange={(e) => setRestart(e.target.checked)}
+						onChange={(e) => onRestartChange(e.target.checked)}
 						className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
 					/>
 					Restart server after saving

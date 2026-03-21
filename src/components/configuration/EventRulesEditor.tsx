@@ -6,7 +6,10 @@ import { updateEventRulesAction } from '@/lib/actions/configuration';
 
 interface EventRulesEditorProps {
 	serverId: string;
-	config: EventRules;
+	formData: EventRules;
+	restart: boolean;
+	onFormDataChange: (data: EventRules) => void;
+	onRestartChange: (restart: boolean) => void;
 }
 
 const numberFields = [
@@ -68,9 +71,7 @@ const booleanFields = [
 	}
 ];
 
-export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
-	const [formData, setFormData] = useState<EventRules>(config);
-	const [restart, setRestart] = useState(true);
+export function EventRulesEditor({ serverId, formData, restart, onFormDataChange, onRestartChange }: EventRulesEditorProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -96,10 +97,7 @@ export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
 	};
 
 	const handleInputChange = (key: keyof EventRules, value: string | number | boolean) => {
-		setFormData((prev) => ({
-			...prev,
-			[key]: value
-		}));
+		onFormDataChange({ ...formData, [key]: value });
 	};
 
 	return (
@@ -151,7 +149,7 @@ export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
 					<input
 						type="checkbox"
 						checked={restart}
-						onChange={(e) => setRestart(e.target.checked)}
+						onChange={(e) => onRestartChange(e.target.checked)}
 						className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
 					/>
 					Restart server after saving

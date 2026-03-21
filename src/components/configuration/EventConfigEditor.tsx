@@ -6,7 +6,10 @@ import { updateEventConfigAction } from '@/lib/actions/configuration';
 
 interface EventConfigEditorProps {
 	serverId: string;
-	config: EventConfig;
+	formData: EventConfig;
+	restart: boolean;
+	onFormDataChange: (data: EventConfig) => void;
+	onRestartChange: (restart: boolean) => void;
 }
 
 const sessionTypes = [
@@ -15,9 +18,7 @@ const sessionTypes = [
 	{ value: 'R', label: 'Race' }
 ];
 
-export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) {
-	const [formData, setFormData] = useState<EventConfig>(config);
-	const [restart, setRestart] = useState(true);
+export function EventConfigEditor({ serverId, formData, restart, onFormDataChange, onRestartChange }: EventConfigEditorProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,15 +50,15 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 	const handleInputChange = (key: keyof EventConfig, value: string | number) => {
 		if (key === 'sessions') return;
 
-		setFormData((prev) => ({
-			...prev,
+		onFormDataChange({
+			...formData,
 			[key]:
 				typeof formData[key] === 'number'
 					? typeof value === 'string'
 						? parseFloat(value) || 0
 						: value
 					: value
-		}));
+		});
 	};
 
 	const handleSessionChange = (index: number, field: keyof Session, value: string | number) => {
@@ -67,11 +68,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 			[field]:
 				field === 'sessionType' ? value : typeof value === 'string' ? parseFloat(value) || 0 : value
 		};
-
-		setFormData((prev) => ({
-			...prev,
-			sessions: newSessions
-		}));
+		onFormDataChange({ ...formData, sessions: newSessions });
 	};
 
 	const addSession = () => {
@@ -82,18 +79,11 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 			sessionType: 'P',
 			sessionDurationMinutes: 20
 		};
-
-		setFormData((prev) => ({
-			...prev,
-			sessions: [...prev.sessions, newSession]
-		}));
+		onFormDataChange({ ...formData, sessions: [...formData.sessions, newSession] });
 	};
 
 	const removeSession = (index: number) => {
-		setFormData((prev) => ({
-			...prev,
-			sessions: prev.sessions.filter((_, i) => i !== index)
-		}));
+		onFormDataChange({ ...formData, sessions: formData.sessions.filter((_, i) => i !== index) });
 	};
 
 	return (
@@ -412,7 +402,7 @@ export function EventConfigEditor({ serverId, config }: EventConfigEditorProps) 
 					<input
 						type="checkbox"
 						checked={restart}
-						onChange={(e) => setRestart(e.target.checked)}
+						onChange={(e) => onRestartChange(e.target.checked)}
 						className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
 					/>
 					Restart server after saving
