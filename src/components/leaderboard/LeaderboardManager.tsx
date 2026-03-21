@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { GhButton } from '@/components/ui/GhButton';
 import { Leaderboard, LeaderboardDriver, FlPoints } from '@/lib/schemas/leaderboard';
 import { saveLeaderboardAction } from '@/lib/actions/leaderboard';
 import { LeaderboardStandings } from './LeaderboardStandings';
@@ -181,13 +182,9 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 
 			{!dirty && (
 				<div className="flex justify-end">
-					<button
-						onClick={handleSave}
-						disabled={isSubmitting}
-						className="rounded-lg border border-gh-btn-green bg-gh-btn-green px-4 py-2 text-sm font-semibold text-white hover:bg-gh-btn-green-hover disabled:opacity-40"
-					>
+					<GhButton variant="primary" size="md" onClick={handleSave} disabled={isSubmitting}>
 						{isSubmitting ? 'Saving…' : 'Save Leaderboard'}
-					</button>
+					</GhButton>
 				</div>
 			)}
 		</div>
