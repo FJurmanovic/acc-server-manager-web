@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Role } from '@/lib/schemas';
 import { createUserAction } from '@/lib/actions/membership';
+import { GhButton } from '@/components/ui/GhButton';
 
 interface CreateUserModalProps {
 	roles: Role[];
@@ -44,17 +45,22 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 	};
 
 	return (
-		<div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-			<div className="w-full max-w-md rounded-lg bg-gray-800 p-6">
-				<h3 className="mb-4 text-lg font-semibold text-white">Create New User</h3>
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+			<div className="w-full max-w-md rounded-lg border border-gh-border bg-gh-canvas p-6 shadow-xl">
+				<h2 className="mb-4 text-base font-semibold text-gh-primary">Create New User</h2>
 
 				{error && (
-					<div className="mb-4 rounded-md bg-red-900 p-3 text-sm text-red-300">{error}</div>
+					<div className="mb-4 rounded-md border border-gh-red/20 bg-gh-red-bg p-3 text-sm text-gh-red">
+						{error}
+					</div>
 				)}
 
 				<form onSubmit={handleSubmit}>
 					<div className="mb-4">
-						<label htmlFor="create-username" className="block text-sm font-medium text-gray-300">
+						<label
+							htmlFor="create-username"
+							className="mb-1.5 block text-sm font-medium text-gh-secondary"
+						>
 							Username
 						</label>
 						<input
@@ -64,12 +70,15 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 							onChange={(e) => setFormData((prev) => ({ ...prev, username: e.target.value }))}
 							required
 							disabled={isSubmitting}
-							className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50"
+							className="form-input"
 						/>
 					</div>
 
 					<div className="mb-4">
-						<label htmlFor="create-password" className="block text-sm font-medium text-gray-300">
+						<label
+							htmlFor="create-password"
+							className="mb-1.5 block text-sm font-medium text-gh-secondary"
+						>
 							Password
 						</label>
 						<input
@@ -79,12 +88,15 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 							onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
 							required
 							disabled={isSubmitting}
-							className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50"
+							className="form-input"
 						/>
 					</div>
 
 					<div className="mb-6">
-						<label htmlFor="create-role" className="block text-sm font-medium text-gray-300">
+						<label
+							htmlFor="create-role"
+							className="mb-1.5 block text-sm font-medium text-gh-secondary"
+						>
 							Role
 						</label>
 						<select
@@ -93,7 +105,7 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 							onChange={(e) => setFormData((prev) => ({ ...prev, role: e.target.value }))}
 							required
 							disabled={isSubmitting}
-							className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50"
+							className="form-input"
 						>
 							<option value="">Select a role...</option>
 							{roles.map((role) => (
@@ -104,22 +116,13 @@ export function CreateUserModal({ roles, onClose }: CreateUserModalProps) {
 						</select>
 					</div>
 
-					<div className="flex justify-end space-x-2">
-						<button
-							type="button"
-							onClick={onClose}
-							disabled={isSubmitting}
-							className="rounded-md bg-gray-600 px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-700 disabled:opacity-50"
-						>
+					<div className="flex justify-end gap-2">
+						<GhButton type="button" variant="ghost" onClick={onClose} disabled={isSubmitting}>
 							Cancel
-						</button>
-						<button
-							type="submit"
-							disabled={isSubmitting}
-							className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium transition-colors hover:bg-green-700 disabled:opacity-50"
-						>
+						</GhButton>
+						<GhButton type="submit" variant="primary" disabled={isSubmitting}>
 							{isSubmitting ? 'Creating...' : 'Create User'}
-						</button>
+						</GhButton>
 					</div>
 				</form>
 			</div>

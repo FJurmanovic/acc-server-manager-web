@@ -31,8 +31,6 @@ export default async function MembershipPage({ searchParams }: MembershipPagePro
 	]);
 
 	return (
-		<div className="min-h-screen bg-gray-900 text-white">
-			<UserManagementTable initialData={userListData} roles={roles} currentUser={session.user!} />
-		</div>
+		<UserManagementTable initialData={userListData} roles={roles} currentUser={session.user!} />
 	);
 }
