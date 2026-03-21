@@ -71,7 +71,7 @@ export default function LoginForm({
 
 					<button
 						type="submit"
-						className="w-full rounded-md bg-gh-btn-green border border-gh-btn-green-hover px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gh-btn-green-hover focus:outline-none focus:ring-2 focus:ring-gh-blue focus:ring-offset-2 focus:ring-offset-gh-base"
+						className="w-full rounded-md bg-gh-btn-green border border-gh-btn-green px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gh-btn-green-hover focus:outline-none focus:ring-2 focus:ring-gh-blue focus:ring-offset-2 focus:ring-offset-gh-base"
 					>
 						Sign in
 					</button>
