@@ -28,19 +28,14 @@ export default async function ServerPage({ params }: ServerPageProps) {
 	]);
 
 	return (
-		<div className="min-h-screen bg-gray-900 text-white">
-			<div className="mx-auto max-w-[120rem] px-4 py-8 sm:px-6 lg:px-8">
-				<ServerHeader server={server} user={session.user!} />
-
-				<div className="mt-8">
-					<ServerConfigurationTabs
-						serverId={id}
-						configurations={configurations}
-						statistics={statistics}
-						leaderboard={leaderboard}
-					/>
-				</div>
-			</div>
+		<div className="flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 0px)' }}>
+			<ServerHeader server={server} user={session.user!} />
+			<ServerConfigurationTabs
+				serverId={id}
+				configurations={configurations}
+				statistics={statistics}
+				leaderboard={leaderboard}
+			/>
 		</div>
 	);
 }

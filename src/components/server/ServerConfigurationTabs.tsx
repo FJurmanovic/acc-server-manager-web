@@ -71,30 +71,28 @@ export function ServerConfigurationTabs({
 	};
 
 	return (
-		<div className="overflow-hidden rounded-lg bg-gray-800">
-			<div className="border-b border-gray-700">
-				<nav className="flex space-x-8 overflow-x-auto" aria-label="Tabs">
-					{tabs.map((tab) => {
-						const isActive = currentTab === tab.id;
-						return (
-							<button
-								key={tab.id}
-								onClick={() => setCurrentTab(tab.id)}
-								className={`flex items-center space-x-2 border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap transition-colors ${
-									isActive
-										? 'border-blue-500 text-blue-400'
-										: 'border-transparent text-gray-400 hover:border-gray-300 hover:text-gray-300'
-								} `}
-							>
-								<span className="text-base">{tab.icon}</span>
-								<span>{tab.name}</span>
-							</button>
-						);
-					})}
-				</nav>
-			</div>
+		<div className="flex flex-1 flex-col overflow-hidden">
+			<nav className="flex overflow-x-auto border-b border-gh-border-muted px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Tabs">
+				{tabs.map((tab) => {
+					const isActive = currentTab === tab.id;
+					return (
+						<button
+							key={tab.id}
+							onClick={() => setCurrentTab(tab.id)}
+							className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
+								isActive
+									? 'border-gh-orange text-gh-primary'
+									: 'border-transparent text-gh-muted hover:text-gh-primary'
+							}`}
+						>
+							<span className="text-sm">{tab.icon}</span>
+							<span>{tab.name}</span>
+						</button>
+					);
+				})}
+			</nav>
 
-			<div className="p-6">{renderTabContent()}</div>
+			<div className="flex-1 overflow-y-auto p-5">{renderTabContent()}</div>
 		</div>
 	);
 }

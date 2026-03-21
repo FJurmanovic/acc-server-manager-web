@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { Server, getStatusColor, serviceStatusToString, ServiceStatus } from '@/lib/schemas/server';
+import { Server, serviceStatusToString, ServiceStatus } from '@/lib/schemas/server';
 import {
 	startServerEventAction,
 	restartServerEventAction,
@@ -10,6 +10,8 @@ import { hasPermission, User } from '@/lib/schemas';
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { DeleteServerModal } from './DeleteServerModal';
+import { Badge } from '@/components/ui/Badge';
+import { GhButton } from '@/components/ui/GhButton';
 
 interface ServerHeaderProps {
 	server: Server;
@@ -43,112 +45,45 @@ export function ServerHeader({ server, user }: ServerHeaderProps) {
 		ServiceStatus.Stopping,
 		ServiceStatus.Unknown
 	].includes(server.status);
+
 	return (
-		<div className="rounded-lg bg-gray-800 p-6">
-			<div className="flex items-center justify-between">
-				<div className="flex items-center space-x-4">
-					<Link
-						href="/dashboard"
-						className="flex items-center text-gray-400 transition-colors hover:text-white"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="mr-2 h-5 w-5"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M15 19l-7-7 7-7"
-							/>
-						</svg>
-						Back to Dashboard
-					</Link>
+		<>
+			{/* Topbar */}
+			<header className="flex h-12 items-center justify-between border-b border-gh-border-muted px-5">
+				<div className="flex items-center gap-2 text-sm">
+					<Link href="/dashboard" className="text-gh-blue hover:underline">Servers</Link>
+					<span className="text-gh-subtle">/</span>
+					<span className="font-semibold text-gh-primary">{server.name}</span>
 				</div>
-			</div>
-
-			<div className="mt-6">
-				<div className="flex items-center justify-between">
-					<div>
-						<h1 className="text-3xl font-bold text-white">{server.name}</h1>
-						<div className="mt-2 flex items-center">
-							<span
-								className={`inline-block h-3 w-3 rounded-full ${getStatusColor(server.status)} mr-3`}
-							/>
-							<span className="text-lg text-gray-300 capitalize">
-								{serviceStatusToString(server.status)}
-							</span>
-						</div>
-					</div>
-
-					<div className="flex space-x-3">
-						{canDeleteServer && (
-							<button
-								type="button"
-								onClick={(e) => {
-									e.preventDefault();
-									setIsDeleteModalOpen(true);
-								}}
-								disabled={disabled || isPending}
-								className="mr-3 rounded bg-red-800 px-4 py-2 font-medium text-white transition-colors hover:bg-red-900 disabled:cursor-not-allowed disabled:opacity-50"
-							>
-								Remove Server
-							</button>
-						)}
-						<button
-							type="button"
-							onClick={startServer}
-							disabled={server.status === ServiceStatus.Running || disabled || isPending}
-							className="rounded bg-green-600 px-4 py-2 font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
-						>
-							Start
-						</button>
-
-						<button
-							type="button"
-							onClick={restartServer}
-							disabled={server.status === ServiceStatus.Stopped || disabled || isPending}
-							className="rounded bg-yellow-600 px-4 py-2 font-medium text-white transition-colors hover:bg-yellow-700 disabled:cursor-not-allowed disabled:opacity-50"
-						>
-							Restart
-						</button>
-
-						<button
-							type="button"
-							onClick={stopServer}
-							disabled={server.status === ServiceStatus.Stopped || disabled || isPending}
-							className="rounded bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
-						>
-							Stop
-						</button>
-					</div>
+				<div className="flex items-center gap-2">
+					<Badge variant={
+						server.status === ServiceStatus.Running ? 'green' :
+						server.status === ServiceStatus.Stopped ? 'gray' : 'yellow'
+					}>
+						● {serviceStatusToString(server.status)}
+					</Badge>
+					<GhButton variant="ghost" size="sm" onClick={startServer} disabled={server.status === ServiceStatus.Running || disabled || isPending}>Start</GhButton>
+					<GhButton variant="ghost" size="sm" onClick={restartServer} disabled={server.status === ServiceStatus.Stopped || disabled || isPending}>Restart</GhButton>
+					<GhButton variant="danger-outline" size="sm" onClick={stopServer} disabled={server.status === ServiceStatus.Stopped || disabled || isPending}>Stop</GhButton>
+					{canDeleteServer && (
+						<GhButton variant="danger-solid" size="sm" onClick={() => setIsDeleteModalOpen(true)} disabled={disabled || isPending}>Remove</GhButton>
+					)}
 				</div>
+			</header>
 
-				<div className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-4">
-					<div>
-						<div className="text-sm text-gray-500">Current Track</div>
-						<div className="text-lg font-medium text-white">{server.state?.track || 'N/A'}</div>
+			{/* Info strip */}
+			<div className="flex flex-wrap gap-6 border-b border-gh-border-muted px-5 py-3">
+				{[
+					{ label: 'Track', value: server.state?.track ?? 'N/A' },
+					{ label: 'Players', value: `${server.state?.playerCount ?? 0} / ${server.state?.maxConnections ?? 0}` },
+					{ label: 'Session', value: server.state?.session ?? 'N/A' },
+					{ label: 'Max Connections', value: String(server.state?.maxConnections ?? 0) },
+				].map(({ label, value }) => (
+					<div key={label}>
+						<div className="text-xs text-gh-subtle">{label}</div>
+						<div className="text-sm font-semibold text-gh-primary">{value}</div>
 					</div>
-					<div>
-						<div className="text-sm text-gray-500">Players</div>
-						<div className="text-lg font-medium text-white">
-							{server.state?.playerCount || 0} / {server.state?.maxConnections || 0}
-						</div>
-					</div>
-					<div>
-						<div className="text-sm text-gray-500">Session</div>
-						<div className="text-lg font-medium text-white">{server.state?.session || 'N/A'}</div>
-					</div>
-					<div>
-						<div className="text-sm text-gray-500">Max Connections</div>
-						<div className="text-lg font-medium text-white">
-							{server.state?.maxConnections || 0}
-						</div>
-					</div>
-				</div>
+				))}
 			</div>
 
 			<DeleteServerModal
@@ -156,6 +91,6 @@ export function ServerHeader({ server, user }: ServerHeaderProps) {
 				onClose={() => setIsDeleteModalOpen(false)}
 				server={server}
 			/>
-		</div>
+		</>
 	);
 }
