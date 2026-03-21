@@ -29,7 +29,7 @@ export function StatisticsDashboard({ stats }: StatisticsDashboardProps) {
 				<StatCard title="Total Sessions" value={stats.totalSessions ?? 0} icon="🏁" />
 				<StatCard
 					title="Total Playtime"
-					value={`${Math.round(stats.totalPlaytime ?? 0 / 60)}h`}
+					value={`${Math.round((stats.totalPlaytime ?? 0) / 60)}h`}
 					icon="⏱️"
 				/>
 				<StatCard
