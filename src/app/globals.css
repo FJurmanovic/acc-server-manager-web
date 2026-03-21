@@ -1,11 +1,33 @@
 @import "tailwindcss";
 
+@theme {
+  --color-gh-base: #0d1117;
+  --color-gh-canvas: #161b22;
+  --color-gh-overlay: #21262d;
+  --color-gh-sidebar: #010409;
+  --color-gh-border: #30363d;
+  --color-gh-border-muted: #21262d;
+  --color-gh-hover: #1c2128;
+  --color-gh-primary: #e6edf3;
+  --color-gh-secondary: #c9d1d9;
+  --color-gh-muted: #8b949e;
+  --color-gh-subtle: #6e7681;
+  --color-gh-blue: #58a6ff;
+  --color-gh-blue-bg: #1f6feb33;
+  --color-gh-green: #3fb950;
+  --color-gh-green-bg: #3fb95022;
+  --color-gh-yellow: #d29922;
+  --color-gh-yellow-bg: #d2992220;
+  --color-gh-red: #f85149;
+  --color-gh-red-bg: #f8514920;
+  --color-gh-orange: #f78166;
+}
+
 @layer components {
   .form-input {
-    @apply mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500;
+    @apply block w-full rounded-md border border-gh-border bg-gh-overlay px-3 py-2 text-sm text-gh-primary placeholder-gh-subtle focus:border-gh-blue focus:outline-none focus:ring-1 focus:ring-gh-blue;
   }
-
   .form-select {
-    @apply mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500;
+    @apply block w-full rounded-md border border-gh-border bg-gh-overlay px-3 py-2 text-sm text-gh-primary focus:border-gh-blue focus:outline-none focus:ring-1 focus:ring-gh-blue;
   }
 }
