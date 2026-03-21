@@ -152,7 +152,7 @@ export function EventRulesEditor({ serverId, config }: EventRulesEditorProps) {
 						type="checkbox"
 						checked={restart}
 						onChange={(e) => setRestart(e.target.checked)}
-						className="h-4 w-4 rounded border-gh-border bg-gh-overlay accent-gh-green focus:ring-gh-blue"
+						className="h-4 w-4 rounded border-gh-border bg-gh-overlay accent-gh-green focus:ring-1 focus:ring-gh-blue"
 					/>
 					Restart server after saving
 				</label>
