@@ -1,12 +1,15 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Server } from '@/lib/schemas/server';
+import { Server, ServiceStatus } from '@/lib/schemas/server';
 import { User, hasPermission } from '@/lib/schemas/user';
 import { ServerCard } from './ServerCard';
+import { ServerRow } from './ServerRow';
 import { CreateServerModal } from './CreateServerModal';
 import RefreshButton from '@/components/ui/RefreshButton';
 import { useSteamCMD } from '@/lib/context/SteamCMDContext';
+import { GhButton } from '@/components/ui/GhButton';
+import { Badge } from '@/components/ui/Badge';
 
 interface ServerListWithActionsProps {
 	servers: Server[];
@@ -20,29 +23,58 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 	const handleOnClose = useCallback(() => setIsCreateModalOpen(false), []);
 	const canCreateServer = hasPermission(user, 'server.create');
 
+	const runningCount = servers.filter((s) => s.status === ServiceStatus.Running).length;
+	const offlineCount = servers.filter((s) => s.status === ServiceStatus.Stopped).length;
+
 	return (
 		<>
-			<div className="mb-6 flex items-center justify-between">
-				<h2 className="text-xl font-semibold">Your Servers</h2>
-				<div className="flex items-center space-x-4">
+			{/* Topbar */}
+			<header className="flex h-12 items-center justify-between border-b border-gh-border-muted px-5">
+				<div className="flex items-center gap-3">
+					<span className="text-sm font-semibold text-gh-primary">Servers</span>
+					<span className="text-xs text-gh-muted">{servers.length} total</span>
+				</div>
+				<div className="flex items-center gap-2">
+					<RefreshButton />
 					{canCreateServer && (
-						<button
+						<GhButton
+							variant="primary"
+							size="sm"
 							onClick={() => setIsCreateModalOpen(true)}
 							disabled={isSteamCMDRunning}
-							className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
-							title={isSteamCMDRunning ? 'Server creation disabled while SteamCMD is running' : ''}
+							title={isSteamCMDRunning ? 'Disabled while SteamCMD is running' : undefined}
 						>
-							Create Server
-						</button>
+							+ New Server
+						</GhButton>
 					)}
-					<RefreshButton />
+				</div>
+			</header>
+
+			{/* Status summary bar */}
+			<div className="flex items-center px-5 py-3">
+				<div className="flex gap-2">
+					{runningCount > 0 && <Badge variant="green">● {runningCount} running</Badge>}
+					{offlineCount > 0 && <Badge variant="gray">{offlineCount} offline</Badge>}
 				</div>
 			</div>
 
-			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-				{servers.map((server) => (
-					<ServerCard key={server.id} server={server} />
-				))}
+			{/* Responsive server list */}
+			<div className="px-5 pb-5">
+				{/* Card grid — desktop only */}
+				<div
+					className="hidden gap-3 md:grid"
+					style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}
+				>
+					{servers.map((server) => (
+						<ServerCard key={server.id} server={server} />
+					))}
+				</div>
+				{/* Row list — mobile only */}
+				<div className="flex flex-col gap-2 md:hidden">
+					{servers.map((server) => (
+						<ServerRow key={server.id} server={server} />
+					))}
+				</div>
 			</div>
 
 			<CreateServerModal isOpen={isCreateModalOpen} onClose={handleOnClose} />
