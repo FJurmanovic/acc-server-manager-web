@@ -28,10 +28,10 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 
 	return (
 		<>
-			<header className="flex h-12 items-center justify-between border-b border-border-muted px-5">
+			<header className="border-border-muted flex h-12 items-center justify-between border-b px-5">
 				<div className="flex items-center gap-3">
-					<span className="text-sm font-semibold text-primary">Servers</span>
-					<span className="text-xs text-muted">{servers.length} total</span>
+					<span className="text-primary text-sm font-semibold">Servers</span>
+					<span className="text-muted text-xs">{servers.length} total</span>
 				</div>
 				<div className="flex items-center gap-2">
 					<RefreshButton />
@@ -60,7 +60,7 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 				{/* Card grid — desktop only */}
 				<div
 					className="hidden gap-3 md:grid"
-					style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}
+					style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))' }}
 				>
 					{servers.map((server) => (
 						<ServerCard key={server.id} server={server} />
