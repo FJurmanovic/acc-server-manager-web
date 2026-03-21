@@ -3,6 +3,7 @@
 import { useState, useEffect, useActionState, useTransition } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { GhButton } from '@/components/ui/GhButton';
 import { createServerAction, type ServerActionResult } from '@/lib/actions/server-management';
 import { useServerCreationPopup } from '@/lib/context/ServerCreationPopupContext';
 
@@ -58,12 +59,12 @@ export function CreateServerModal({ isOpen, onClose }: CreateServerModalProps) {
 	return (
 		<Modal isOpen={isOpen} onClose={handleClose} title="Create New Server">
 			{!state.success && state.message && (
-				<div className="mb-4 rounded-md bg-red-900 p-3 text-sm text-red-300">{state.message}</div>
+				<div className="mb-4 rounded-md border border-gh-red/20 bg-gh-red-bg p-3 text-sm text-gh-red">{state.message}</div>
 			)}
 
 			<form onSubmit={handleSubmit}>
 				<div className="mb-6">
-					<label htmlFor="server-name" className="block text-sm font-medium text-gray-300">
+					<label htmlFor="server-name" className="mb-1.5 block text-sm font-medium text-gh-secondary">
 						Server Name
 					</label>
 					<input
@@ -73,34 +74,36 @@ export function CreateServerModal({ isOpen, onClose }: CreateServerModalProps) {
 						onChange={(e) => setServerName(e.target.value)}
 						required
 						disabled={isSubmitting || isPending}
-						className="mt-1 block w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50"
+						className="form-input"
 						placeholder="Enter server name..."
 					/>
 				</div>
 
 				<div className="flex justify-end space-x-2">
-					<button
+					<GhButton
 						type="button"
+						variant="ghost"
+						size="md"
 						onClick={handleClose}
 						disabled={isSubmitting || isPending}
-						className="rounded-md bg-gray-600 px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-700 disabled:opacity-50"
 					>
 						Cancel
-					</button>
-					<button
+					</GhButton>
+					<GhButton
 						type="submit"
+						variant="primary"
+						size="md"
 						disabled={isSubmitting || !serverName.trim() || isPending}
-						className="flex items-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium transition-colors hover:bg-green-700 disabled:opacity-50"
 					>
 						{isSubmitting ? (
 							<>
-								<LoadingSpinner className="mr-2 h-4 w-4" />
+								<LoadingSpinner className="h-4 w-4" />
 								Creating...
 							</>
 						) : (
 							'Create Server'
 						)}
-					</button>
+					</GhButton>
 				</div>
 			</form>
 		</Modal>

@@ -33,17 +33,17 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
 	if (!isOpen) return null;
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center">
-			<div className="bg-opacity-50 absolute inset-0 bg-black" onClick={onClose} />
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+			<div className="absolute inset-0" onClick={onClose} />
 			<div
 				className={cn(
-					'relative mx-4 w-full max-w-md rounded-lg bg-gray-800 p-6 shadow-lg',
+					'relative w-full max-w-md rounded-lg border border-gh-border bg-gh-canvas p-6 shadow-xl',
 					className
 				)}
 			>
 				<div className="mb-4 flex items-center justify-between">
-					<h3 className="text-lg font-semibold text-white">{title}</h3>
-					<button onClick={onClose} className="text-gray-400 hover:text-white">
+					<h3 className="text-lg font-semibold text-gh-primary">{title}</h3>
+					<button onClick={onClose} className="text-gh-muted hover:text-gh-primary">
 						×
 					</button>
 				</div>
