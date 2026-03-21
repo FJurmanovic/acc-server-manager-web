@@ -10,7 +10,7 @@ export type Permission = z.infer<typeof permissionSchema>;
 export const roleSchema = z.object({
 	id: z.uuid(),
 	name: z.string(),
-	permissions: z.array(permissionSchema)
+	permissions: z.array(permissionSchema).nullable()
 });
 
 export type Role = z.infer<typeof roleSchema>;

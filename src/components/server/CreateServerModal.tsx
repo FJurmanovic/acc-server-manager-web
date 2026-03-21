@@ -97,7 +97,7 @@ export function CreateServerModal({ isOpen, onClose }: CreateServerModalProps) {
 					>
 						{isSubmitting ? (
 							<>
-								<LoadingSpinner className="h-4 w-4" />
+								<LoadingSpinner size="sm" />
 								Creating...
 							</>
 						) : (
