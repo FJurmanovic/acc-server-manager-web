@@ -1,15 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import type { EventRules } from '@/lib/schemas/config';
-import { updateEventRulesAction } from '@/lib/actions/configuration';
 
 interface EventRulesEditorProps {
-	serverId: string;
 	formData: EventRules;
-	restart: boolean;
+	disabled?: boolean;
 	onFormDataChange: (data: EventRules) => void;
-	onRestartChange: (restart: boolean) => void;
 }
 
 const numberFields = [
@@ -71,37 +67,13 @@ const booleanFields = [
 	}
 ];
 
-export function EventRulesEditor({ serverId, formData, restart, onFormDataChange, onRestartChange }: EventRulesEditorProps) {
-	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setIsSubmitting(true);
-
-		const formDataObj = new FormData();
-		Object.entries(formData).forEach(([key, value]) => {
-			formDataObj.append(key, value.toString());
-		});
-		if (restart) {
-			formDataObj.append('restart', 'on');
-		}
-
-		try {
-			const result = await updateEventRulesAction(serverId, formDataObj);
-			if (!result.success) {
-				console.error('Failed to update event rules:', result.message);
-			}
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
-
-	const handleInputChange = (key: keyof EventRules, value: string | number | boolean) => {
+export function EventRulesEditor({ formData, disabled, onFormDataChange }: EventRulesEditorProps) {
+	const handleInputChange = (key: keyof EventRules, value: number) => {
 		onFormDataChange({ ...formData, [key]: value });
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="max-w-4xl space-y-8">
+		<div className="max-w-4xl space-y-8">
 			<div className="space-y-6">
 				<h3 className="border-b border-border-muted pb-2 text-sm font-semibold text-primary">Race Rules</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -110,7 +82,7 @@ export function EventRulesEditor({ serverId, formData, restart, onFormDataChange
 							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
 							<input
 								type="number"
-								disabled={isSubmitting}
+								disabled={disabled}
 								value={formData[key] as number}
 								onChange={(e) => handleInputChange(key, parseInt(e.target.value) || 0)}
 								className="form-input w-full"
@@ -131,9 +103,9 @@ export function EventRulesEditor({ serverId, formData, restart, onFormDataChange
 						<div key={key}>
 							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
 							<select
-								disabled={isSubmitting}
+								disabled={disabled}
 								value={formData[key] ? 'true' : 'false'}
-								onChange={(e) => handleInputChange(key, e.target.value === 'true')}
+								onChange={(e) => handleInputChange(key, e.target.value === 'true' ? 1 : 0)}
 								className="form-select w-full"
 							>
 								<option value="false">No</option>
@@ -143,28 +115,6 @@ export function EventRulesEditor({ serverId, formData, restart, onFormDataChange
 					))}
 				</div>
 			</div>
-
-			<div className="border-t border-border pt-6">
-				<label className="flex items-center gap-2 text-sm text-muted">
-					<input
-						type="checkbox"
-						checked={restart}
-						onChange={(e) => onRestartChange(e.target.checked)}
-						className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
-					/>
-					Restart server after saving
-				</label>
-			</div>
-
-			<div className="flex justify-end">
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					className="rounded-md bg-btn-green border border-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
-				>
-					{isSubmitting ? 'Saving…' : 'Save Changes'}
-				</button>
-			</div>
-		</form>
+		</div>
 	);
 }

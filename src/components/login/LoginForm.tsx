@@ -2,6 +2,8 @@
 
 import { clearExpiredSessionAction, loginAction, LoginResult } from '@/lib/actions/auth';
 import { use, useActionState, useEffect } from 'react';
+import type { HealthStatus } from '@/lib/api/server/health';
+import { Badge } from '@/components/ui/Badge';
 
 const initialState: LoginResult = {
 	message: '',
@@ -9,9 +11,11 @@ const initialState: LoginResult = {
 };
 
 export default function LoginForm({
-	searchParams
+	searchParams,
+	health
 }: {
 	searchParams: Promise<{ expired: boolean | undefined }>;
+	health: HealthStatus;
 }) {
 	const params = use(searchParams);
 	const expired = params.expired;
@@ -28,6 +32,13 @@ export default function LoginForm({
 				<div className="text-center">
 					<h1 className="text-xl font-bold text-primary">ACC Server Manager</h1>
 					<p className="mt-1 text-sm text-muted">Sign in to manage your servers</p>
+					<div className="mt-2 flex justify-center">
+						{health.healthy ? (
+							<Badge variant="green">API v{health.version}</Badge>
+						) : (
+							<Badge variant="red">API unreachable</Badge>
+						)}
+					</div>
 				</div>
 				{expired && (
 					<div className="rounded-md border border-yellow/30 bg-yellow-bg px-3 py-2 text-sm text-yellow">

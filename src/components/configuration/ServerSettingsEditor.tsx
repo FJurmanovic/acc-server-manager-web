@@ -1,15 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import type { ServerSettings } from '@/lib/schemas/config';
-import { updateServerSettingsAction } from '@/lib/actions/configuration';
 
 interface ServerSettingsEditorProps {
-	serverId: string;
 	formData: ServerSettings;
-	restart: boolean;
+	disabled?: boolean;
 	onFormDataChange: (data: ServerSettings) => void;
-	onRestartChange: (restart: boolean) => void;
 }
 
 const textFields = [
@@ -90,37 +86,13 @@ const selectFields = [
 	}
 ];
 
-export function ServerSettingsEditor({ serverId, formData, restart, onFormDataChange, onRestartChange }: ServerSettingsEditorProps) {
-	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setIsSubmitting(true);
-
-		const formDataObj = new FormData();
-		Object.entries(formData).forEach(([key, value]) => {
-			formDataObj.append(key, value?.toString() ?? '');
-		});
-		if (restart) {
-			formDataObj.append('restart', 'on');
-		}
-
-		try {
-			const result = await updateServerSettingsAction(serverId, formDataObj);
-			if (!result.success) {
-				console.error('Failed to update server settings:', result.message);
-			}
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
-
+export function ServerSettingsEditor({ formData, disabled, onFormDataChange }: ServerSettingsEditorProps) {
 	const handleInputChange = (key: keyof ServerSettings, value: string | number) => {
 		onFormDataChange({ ...formData, [key]: value });
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="max-w-4xl space-y-8">
+		<div className="max-w-4xl space-y-8">
 			<div className="space-y-6">
 				<h3 className="border-b border-border-muted pb-2 text-sm font-semibold text-primary">
 					Basic Settings
@@ -131,7 +103,7 @@ export function ServerSettingsEditor({ serverId, formData, restart, onFormDataCh
 							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
 							<input
 								type={type}
-								disabled={isSubmitting}
+								disabled={disabled}
 								value={formData[key] as string}
 								onChange={(e) => handleInputChange(key, e.target.value)}
 								className="form-input w-full"
@@ -142,7 +114,7 @@ export function ServerSettingsEditor({ serverId, formData, restart, onFormDataCh
 					<div>
 						<label className="mb-1.5 block text-sm font-medium text-secondary">Car Group</label>
 						<select
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.carGroup}
 							onChange={(e) => handleInputChange('carGroup', e.target.value)}
 							className="form-select w-full"
@@ -167,7 +139,7 @@ export function ServerSettingsEditor({ serverId, formData, restart, onFormDataCh
 							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
 							<input
 								type="number"
-								disabled={isSubmitting}
+								disabled={disabled}
 								value={formData[key] as number}
 								onChange={(e) => handleInputChange(key, parseInt(e.target.value) || 0)}
 								className="form-input w-full"
@@ -188,7 +160,7 @@ export function ServerSettingsEditor({ serverId, formData, restart, onFormDataCh
 						<div key={key}>
 							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
 							<select
-								disabled={isSubmitting}
+								disabled={disabled}
 								value={formData[key] as number}
 								onChange={(e) => handleInputChange(key, parseInt(e.target.value))}
 								className="form-select w-full"
@@ -204,7 +176,7 @@ export function ServerSettingsEditor({ serverId, formData, restart, onFormDataCh
 							Formation Lap Type
 						</label>
 						<select
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.formationLapType}
 							onChange={(e) => handleInputChange('formationLapType', parseInt(e.target.value))}
 							className="form-select w-full"
@@ -218,28 +190,6 @@ export function ServerSettingsEditor({ serverId, formData, restart, onFormDataCh
 					</div>
 				</div>
 			</div>
-
-			<div className="border-t border-border pt-6">
-				<label className="flex items-center gap-2 text-sm text-muted">
-					<input
-						type="checkbox"
-						checked={restart}
-						onChange={(e) => onRestartChange(e.target.checked)}
-						className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
-					/>
-					Restart server after saving
-				</label>
-			</div>
-
-			<div className="flex justify-end">
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					className="rounded-md bg-btn-green border border-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
-				>
-					{isSubmitting ? 'Saving…' : 'Save Changes'}
-				</button>
-			</div>
-		</form>
+		</div>
 	);
 }

@@ -1,15 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import type { EventConfig, Session } from '@/lib/schemas/config';
-import { updateEventConfigAction } from '@/lib/actions/configuration';
 
 interface EventConfigEditorProps {
-	serverId: string;
 	formData: EventConfig;
-	restart: boolean;
+	disabled?: boolean;
 	onFormDataChange: (data: EventConfig) => void;
-	onRestartChange: (restart: boolean) => void;
 }
 
 const sessionTypes = [
@@ -18,35 +14,7 @@ const sessionTypes = [
 	{ value: 'R', label: 'Race' }
 ];
 
-export function EventConfigEditor({ serverId, formData, restart, onFormDataChange, onRestartChange }: EventConfigEditorProps) {
-	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setIsSubmitting(true);
-
-		const formDataObj = new FormData();
-		Object.entries(formData).forEach(([key, value]) => {
-			if (key === 'sessions') {
-				formDataObj.append(key, JSON.stringify(value));
-			} else {
-				formDataObj.append(key, value.toString());
-			}
-		});
-		if (restart) {
-			formDataObj.append('restart', 'on');
-		}
-
-		try {
-			const result = await updateEventConfigAction(serverId, formDataObj);
-			if (!result.success) {
-				console.error('Failed to update event config:', result.message);
-			}
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
-
+export function EventConfigEditor({ formData, disabled, onFormDataChange }: EventConfigEditorProps) {
 	const handleInputChange = (key: keyof EventConfig, value: string | number) => {
 		if (key === 'sessions') return;
 
@@ -87,7 +55,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="max-w-4xl space-y-8">
+		<div className="max-w-4xl space-y-8">
 			<div className="space-y-6">
 				<h3 className="border-b border-border-muted pb-2 text-sm font-semibold text-primary">
 					Basic Event Settings
@@ -96,7 +64,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 					<div>
 						<label className="mb-1.5 block text-sm font-medium text-secondary">Track</label>
 						<select
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.track}
 							onChange={(e) => handleInputChange('track', e.target.value)}
 							className="form-select w-full"
@@ -135,7 +103,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 						</label>
 						<input
 							type="number"
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.preRaceWaitingTimeSeconds}
 							onChange={(e) => handleInputChange('preRaceWaitingTimeSeconds', e.target.value)}
 							className="form-input w-full"
@@ -149,7 +117,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 						</label>
 						<input
 							type="number"
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.sessionOverTimeSeconds}
 							onChange={(e) => handleInputChange('sessionOverTimeSeconds', e.target.value)}
 							className="form-input w-full"
@@ -163,7 +131,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 						</label>
 						<input
 							type="number"
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.postQualySeconds}
 							onChange={(e) => handleInputChange('postQualySeconds', e.target.value)}
 							className="form-input w-full"
@@ -177,7 +145,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 						</label>
 						<input
 							type="number"
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.postRaceSeconds}
 							onChange={(e) => handleInputChange('postRaceSeconds', e.target.value)}
 							className="form-input w-full"
@@ -198,7 +166,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 						</label>
 						<input
 							type="number"
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.ambientTemp}
 							onChange={(e) => handleInputChange('ambientTemp', e.target.value)}
 							className="form-input w-full"
@@ -213,7 +181,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 						</label>
 						<input
 							type="number"
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.cloudLevel}
 							onChange={(e) => handleInputChange('cloudLevel', e.target.value)}
 							className="form-input w-full"
@@ -227,7 +195,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 						<label className="mb-1.5 block text-sm font-medium text-secondary">Rain (0.0-1.0)</label>
 						<input
 							type="number"
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.rain}
 							onChange={(e) => handleInputChange('rain', e.target.value)}
 							className="form-input w-full"
@@ -243,7 +211,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 						</label>
 						<input
 							type="number"
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.weatherRandomness}
 							onChange={(e) => handleInputChange('weatherRandomness', e.target.value)}
 							className="form-input w-full"
@@ -257,7 +225,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 							Simracer Weather Conditions
 						</label>
 						<select
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.simracerWeatherConditions}
 							onChange={(e) => handleInputChange('simracerWeatherConditions', e.target.value)}
 							className="form-select w-full"
@@ -272,7 +240,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 							Fixed Condition Qualification
 						</label>
 						<select
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.isFixedConditionQualification}
 							onChange={(e) => handleInputChange('isFixedConditionQualification', e.target.value)}
 							className="form-select w-full"
@@ -290,7 +258,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 					<button
 						type="button"
 						onClick={addSession}
-						disabled={isSubmitting}
+						disabled={disabled}
 						className="rounded-md border border-border bg-overlay px-3 py-1.5 text-xs font-medium text-secondary hover:bg-border disabled:opacity-40"
 					>
 						+ Add Session
@@ -305,7 +273,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 								<button
 									type="button"
 									onClick={() => removeSession(index)}
-									disabled={isSubmitting}
+									disabled={disabled}
 									className="rounded px-2 py-1 text-xs text-red hover:bg-red-bg disabled:opacity-40"
 								>
 									Remove
@@ -318,7 +286,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 										Session Type
 									</label>
 									<select
-										disabled={isSubmitting}
+										disabled={disabled}
 										value={session.sessionType}
 										onChange={(e) => handleSessionChange(index, 'sessionType', e.target.value)}
 										className="form-select w-full text-sm"
@@ -337,7 +305,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 									</label>
 									<input
 										type="number"
-										disabled={isSubmitting}
+										disabled={disabled}
 										value={session.hourOfDay}
 										onChange={(e) => handleSessionChange(index, 'hourOfDay', e.target.value)}
 										className="form-input w-full text-sm"
@@ -352,7 +320,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 									</label>
 									<input
 										type="number"
-										disabled={isSubmitting}
+										disabled={disabled}
 										value={session.dayOfWeekend}
 										onChange={(e) => handleSessionChange(index, 'dayOfWeekend', e.target.value)}
 										className="form-input w-full text-sm"
@@ -367,7 +335,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 									</label>
 									<input
 										type="number"
-										disabled={isSubmitting}
+										disabled={disabled}
 										value={session.timeMultiplier}
 										onChange={(e) => handleSessionChange(index, 'timeMultiplier', e.target.value)}
 										className="form-input w-full text-sm"
@@ -382,7 +350,7 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 									</label>
 									<input
 										type="number"
-										disabled={isSubmitting}
+										disabled={disabled}
 										value={session.sessionDurationMinutes}
 										onChange={(e) =>
 											handleSessionChange(index, 'sessionDurationMinutes', e.target.value)
@@ -396,28 +364,6 @@ export function EventConfigEditor({ serverId, formData, restart, onFormDataChang
 					))}
 				</div>
 			</div>
-
-			<div className="border-t border-border pt-6">
-				<label className="flex items-center gap-2 text-sm text-muted">
-					<input
-						type="checkbox"
-						checked={restart}
-						onChange={(e) => onRestartChange(e.target.checked)}
-						className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
-					/>
-					Restart server after saving
-				</label>
-			</div>
-
-			<div className="flex justify-end">
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					className="rounded-md bg-btn-green border border-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
-				>
-					{isSubmitting ? 'Saving…' : 'Save Changes'}
-				</button>
-			</div>
-		</form>
+		</div>
 	);
 }

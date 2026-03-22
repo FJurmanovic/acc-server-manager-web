@@ -11,6 +11,7 @@ import { LeaderboardManager } from '@/components/leaderboard/LeaderboardManager'
 import { useState } from 'react';
 import { StateHistoryStats } from '@/lib/schemas';
 import { Leaderboard } from '@/lib/schemas/leaderboard';
+import { bulkUpdateConfigurationsAction } from '@/lib/actions/configuration';
 
 interface ServerConfigurationTabsProps {
 	serverId: string;
@@ -28,6 +29,14 @@ const tabs = [
 	{ id: ServerTab.leaderboard, name: 'Leaderboard', icon: '🏆' }
 ];
 
+const configTabs = new Set([
+	ServerTab.configuration,
+	ServerTab.assistRules,
+	ServerTab.event,
+	ServerTab.eventRules,
+	ServerTab.settings
+]);
+
 export function ServerConfigurationTabs({
 	serverId,
 	configurations,
@@ -37,19 +46,44 @@ export function ServerConfigurationTabs({
 	const [currentTab, setCurrentTab] = useState(ServerTab.statistics);
 
 	const [configData, setConfigData] = useState(configurations.configuration);
-	const [configRestart, setConfigRestart] = useState(true);
-
 	const [assistData, setAssistData] = useState(configurations.assistRules);
-	const [assistRestart, setAssistRestart] = useState(true);
-
 	const [eventData, setEventData] = useState(configurations.event);
-	const [eventRestart, setEventRestart] = useState(true);
-
 	const [eventRulesData, setEventRulesData] = useState(configurations.eventRules);
-	const [eventRulesRestart, setEventRulesRestart] = useState(true);
-
 	const [settingsData, setSettingsData] = useState(configurations.settings);
-	const [settingsRestart, setSettingsRestart] = useState(true);
+
+	const [restart, setRestart] = useState(true);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [saveError, setSaveError] = useState<string | null>(null);
+	const [saveSuccess, setSaveSuccess] = useState(false);
+
+	const handleSaveAll = async () => {
+		setIsSubmitting(true);
+		setSaveError(null);
+		setSaveSuccess(false);
+
+		const result = await bulkUpdateConfigurationsAction(
+			serverId,
+			{
+				configuration: configData,
+				assistRules: assistData,
+				event: eventData,
+				eventRules: eventRulesData,
+				settings: settingsData
+			},
+			restart
+		);
+
+		if (result.success) {
+			setSaveSuccess(true);
+			setTimeout(() => setSaveSuccess(false), 3000);
+		} else {
+			setSaveError(result.message);
+		}
+
+		setIsSubmitting(false);
+	};
+
+	const isConfigTab = configTabs.has(currentTab);
 
 	const renderTabContent = () => {
 		switch (currentTab) {
@@ -59,55 +93,45 @@ export function ServerConfigurationTabs({
 			case ServerTab.configuration:
 				return (
 					<ConfigurationEditor
-						serverId={serverId}
 						formData={configData}
-						restart={configRestart}
+						disabled={isSubmitting}
 						onFormDataChange={setConfigData}
-						onRestartChange={setConfigRestart}
 					/>
 				);
 
 			case ServerTab.assistRules:
 				return (
 					<AssistRulesEditor
-						serverId={serverId}
 						formData={assistData}
-						restart={assistRestart}
+						disabled={isSubmitting}
 						onFormDataChange={setAssistData}
-						onRestartChange={setAssistRestart}
 					/>
 				);
 
 			case ServerTab.event:
 				return (
 					<EventConfigEditor
-						serverId={serverId}
 						formData={eventData}
-						restart={eventRestart}
+						disabled={isSubmitting}
 						onFormDataChange={setEventData}
-						onRestartChange={setEventRestart}
 					/>
 				);
 
 			case ServerTab.eventRules:
 				return (
 					<EventRulesEditor
-						serverId={serverId}
 						formData={eventRulesData}
-						restart={eventRulesRestart}
+						disabled={isSubmitting}
 						onFormDataChange={setEventRulesData}
-						onRestartChange={setEventRulesRestart}
 					/>
 				);
 
 			case ServerTab.settings:
 				return (
 					<ServerSettingsEditor
-						serverId={serverId}
 						formData={settingsData}
-						restart={settingsRestart}
+						disabled={isSubmitting}
 						onFormDataChange={setSettingsData}
-						onRestartChange={setSettingsRestart}
 					/>
 				);
 
@@ -146,6 +170,37 @@ export function ServerConfigurationTabs({
 					);
 				})}
 			</nav>
+
+			{isConfigTab && (
+				<div className="flex items-center justify-between border-b border-border-muted bg-overlay px-5 py-3">
+					<div className="flex items-center gap-3">
+						{saveError && (
+							<p className="text-sm text-red">{saveError}</p>
+						)}
+						{saveSuccess && (
+							<p className="text-sm text-green">All configurations saved.</p>
+						)}
+					</div>
+					<div className="flex items-center gap-4">
+						<label className="flex items-center gap-2 text-sm text-muted">
+							<input
+								type="checkbox"
+								checked={restart}
+								onChange={(e) => setRestart(e.target.checked)}
+								className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
+							/>
+							Restart after saving
+						</label>
+						<button
+							onClick={handleSaveAll}
+							disabled={isSubmitting}
+							className="rounded-md bg-btn-green border border-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
+						>
+							{isSubmitting ? 'Saving…' : 'Save All'}
+						</button>
+					</div>
+				</div>
+			)}
 
 			<div className="flex-1 overflow-y-auto p-5">{renderTabContent()}</div>
 		</div>
