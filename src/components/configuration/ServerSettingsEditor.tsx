@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import type { ServerSettings } from '@/lib/schemas/config';
-import { updateServerSettingsAction } from '@/lib/actions/configuration';
 
 interface ServerSettingsEditorProps {
-	serverId: string;
-	config: ServerSettings;
+	formData: ServerSettings;
+	disabled?: boolean;
+	onFormDataChange: (data: ServerSettings) => void;
 }
 
 const textFields = [
@@ -87,53 +86,24 @@ const selectFields = [
 	}
 ];
 
-export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorProps) {
-	const [formData, setFormData] = useState<ServerSettings>(config);
-	const [restart, setRestart] = useState(true);
-	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setIsSubmitting(true);
-
-		const formDataObj = new FormData();
-		Object.entries(formData).forEach(([key, value]) => {
-			formDataObj.append(key, value?.toString() ?? '');
-		});
-		if (restart) {
-			formDataObj.append('restart', 'on');
-		}
-
-		try {
-			const result = await updateServerSettingsAction(serverId, formDataObj);
-			if (!result.success) {
-				console.error('Failed to update server settings:', result.message);
-			}
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
-
+export function ServerSettingsEditor({ formData, disabled, onFormDataChange }: ServerSettingsEditorProps) {
 	const handleInputChange = (key: keyof ServerSettings, value: string | number) => {
-		setFormData((prev) => ({
-			...prev,
-			[key]: value
-		}));
+		onFormDataChange({ ...formData, [key]: value });
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="max-w-4xl space-y-8">
+		<div className="max-w-4xl space-y-8">
 			<div className="space-y-6">
-				<h3 className="border-b border-gray-700 pb-2 text-lg font-medium text-white">
+				<h3 className="border-b border-border-muted pb-2 text-sm font-semibold text-primary">
 					Basic Settings
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					{textFields.map(({ key, label, type }) => (
 						<div key={key}>
-							<label className="mb-2 block text-sm font-medium text-gray-300">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
 							<input
 								type={type}
-								disabled={isSubmitting}
+								disabled={disabled}
 								value={formData[key] as string}
 								onChange={(e) => handleInputChange(key, e.target.value)}
 								className="form-input w-full"
@@ -142,12 +112,12 @@ export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorP
 					))}
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">Car Group</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">Car Group</label>
 						<select
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.carGroup}
 							onChange={(e) => handleInputChange('carGroup', e.target.value)}
-							className="form-input w-full"
+							className="form-select w-full"
 						>
 							{carGroups.map((group) => (
 								<option key={group} value={group}>
@@ -160,16 +130,16 @@ export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorP
 			</div>
 
 			<div className="space-y-6">
-				<h3 className="border-b border-gray-700 pb-2 text-lg font-medium text-white">
+				<h3 className="border-b border-border-muted pb-2 text-sm font-semibold text-primary">
 					Requirements & Limits
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{numberFields.map(({ key, label, min, max }) => (
 						<div key={key}>
-							<label className="mb-2 block text-sm font-medium text-gray-300">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
 							<input
 								type="number"
-								disabled={isSubmitting}
+								disabled={disabled}
 								value={formData[key] as number}
 								onChange={(e) => handleInputChange(key, parseInt(e.target.value) || 0)}
 								className="form-input w-full"
@@ -182,18 +152,18 @@ export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorP
 			</div>
 
 			<div className="space-y-6">
-				<h3 className="border-b border-gray-700 pb-2 text-lg font-medium text-white">
+				<h3 className="border-b border-border-muted pb-2 text-sm font-semibold text-primary">
 					Race Options
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{selectFields.map(({ key, label }) => (
 						<div key={key}>
-							<label className="mb-2 block text-sm font-medium text-gray-300">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
 							<select
-								disabled={isSubmitting}
+								disabled={disabled}
 								value={formData[key] as number}
 								onChange={(e) => handleInputChange(key, parseInt(e.target.value))}
-								className="form-input w-full"
+								className="form-select w-full"
 							>
 								<option value={0}>No</option>
 								<option value={1}>Yes</option>
@@ -202,14 +172,14 @@ export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorP
 					))}
 
 					<div>
-						<label className="mb-2 block text-sm font-medium text-gray-300">
+						<label className="mb-1.5 block text-sm font-medium text-secondary">
 							Formation Lap Type
 						</label>
 						<select
-							disabled={isSubmitting}
+							disabled={disabled}
 							value={formData.formationLapType}
 							onChange={(e) => handleInputChange('formationLapType', parseInt(e.target.value))}
-							className="form-input w-full"
+							className="form-select w-full"
 						>
 							<option value={0}>Old Limiter Lap</option>
 							<option value={1}>
@@ -220,28 +190,6 @@ export function ServerSettingsEditor({ serverId, config }: ServerSettingsEditorP
 					</div>
 				</div>
 			</div>
-
-			<div className="border-t border-gray-700 pt-6">
-				<label className="flex items-center">
-					<input
-						type="checkbox"
-						checked={restart}
-						onChange={(e) => setRestart(e.target.checked)}
-						className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-600 focus:ring-green-500"
-					/>
-					<span className="ml-2 text-sm text-gray-300">Restart server after saving</span>
-				</label>
-			</div>
-
-			<div className="flex justify-end">
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					className="rounded-md bg-green-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
-				>
-					{isSubmitting ? 'Saving...' : 'Save Changes'}
-				</button>
-			</div>
-		</form>
+		</div>
 	);
 }

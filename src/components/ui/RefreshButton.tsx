@@ -1,15 +1,13 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/Button';
 
 export default function RefreshButton() {
 	const router = useRouter();
 	return (
-		<button
-			onClick={() => router.refresh()}
-			className="rounded-md bg-gray-700 px-3 py-1 text-sm hover:bg-gray-600"
-		>
+		<Button variant="ghost" size="sm" onClick={() => router.refresh()}>
 			Refresh
-		</button>
+		</Button>
 	);
 }

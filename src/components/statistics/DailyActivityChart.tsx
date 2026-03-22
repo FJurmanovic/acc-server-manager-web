@@ -29,8 +29,8 @@ export function DailyActivityChart({ data }: DailyActivityChartProps) {
 			{
 				label: 'Sessions',
 				data: data.map((item) => item.sessionsCount),
-				backgroundColor: 'rgba(59, 130, 246, 0.8)',
-				borderColor: 'rgb(59, 130, 246)',
+				backgroundColor: '#3fb950',
+				borderColor: '#3fb950',
 				borderWidth: 1
 			}
 		]
@@ -43,27 +43,27 @@ export function DailyActivityChart({ data }: DailyActivityChartProps) {
 			legend: {
 				position: 'top' as const,
 				labels: {
-					color: '#e5e7eb'
+					color: '#e6edf3'
 				}
 			}
 		},
 		scales: {
 			x: {
 				ticks: {
-					color: '#9ca3af'
+					color: '#8b949e'
 				},
 				grid: {
-					color: '#374151'
+					color: '#21262d'
 				}
 			},
 			y: {
 				beginAtZero: true,
 				ticks: {
-					color: '#9ca3af',
+					color: '#8b949e',
 					stepSize: 1
 				},
 				grid: {
-					color: '#374151'
+					color: '#21262d'
 				}
 			}
 		}

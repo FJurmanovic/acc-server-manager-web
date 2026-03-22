@@ -33,17 +33,20 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
 	if (!isOpen) return null;
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center">
-			<div className="bg-opacity-50 absolute inset-0 bg-black" onClick={onClose} />
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+			<div className="absolute inset-0" onClick={onClose} aria-label="Close" />
 			<div
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby="modal-title"
 				className={cn(
-					'relative mx-4 w-full max-w-md rounded-lg bg-gray-800 p-6 shadow-lg',
+					'relative w-full max-w-md rounded-lg border border-border bg-canvas p-6 shadow-xl',
 					className
 				)}
 			>
 				<div className="mb-4 flex items-center justify-between">
-					<h3 className="text-lg font-semibold text-white">{title}</h3>
-					<button onClick={onClose} className="text-gray-400 hover:text-white">
+					<h3 id="modal-title" className="text-lg font-semibold text-primary">{title}</h3>
+					<button onClick={onClose} className="text-muted hover:text-primary" aria-label="Close modal">
 						×
 					</button>
 				</div>

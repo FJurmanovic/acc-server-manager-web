@@ -29,51 +29,52 @@ export function RecentSessions({ sessions }: RecentSessionsProps) {
 
 	if (sessions.length === 0) {
 		return (
-			<div className="py-8 text-center">
-				<div className="mb-2 text-4xl">📊</div>
-				<p className="text-gray-400">No recent sessions found</p>
-			</div>
+			<div className="px-4 py-8 text-center text-sm text-muted">No recent sessions found</div>
 		);
 	}
 
 	return (
 		<div className="overflow-x-auto">
-			<table className="min-w-full divide-y divide-gray-700">
+			<table className="min-w-full">
 				<thead>
-					<tr>
-						<th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-400 uppercase">
+					<tr className="border-b border-border-muted bg-base">
+						<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
 							Date
 						</th>
-						<th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-400 uppercase">
+						<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
 							Type
 						</th>
-						<th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-400 uppercase">
+						<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
 							Track
 						</th>
-						<th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-400 uppercase">
+						<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
 							Duration
 						</th>
-						<th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-400 uppercase">
+						<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
 							Players
 						</th>
 					</tr>
 				</thead>
-				<tbody className="divide-y divide-gray-700">
+				<tbody>
 					{sessions.map((session) => (
-						<tr key={session.id} className="transition-colors hover:bg-gray-700">
-							<td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+						<tr key={session.id} className="border-b border-border-muted transition-colors hover:bg-hover last:border-0">
+							<td className="px-4 py-3 text-sm text-muted">
 								{formatDate(session.date)}
 							</td>
-							<td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
-								<span className="inline-flex items-center rounded-full bg-blue-900 px-2.5 py-0.5 text-xs font-medium text-blue-300">
-									{session.type}
+							<td className="px-4 py-3">
+								<span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+									session.type === 'R' ? 'bg-green-bg text-green' :
+									session.type === 'Q' ? 'bg-yellow-bg text-yellow' :
+									'bg-blue-bg text-blue'
+								}`}>
+									{session.type === 'R' ? 'Race' : session.type === 'Q' ? 'Qualify' : 'Practice'}
 								</span>
 							</td>
-							<td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">{session.track}</td>
-							<td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+							<td className="px-4 py-3 text-sm text-secondary">{session.track}</td>
+							<td className="px-4 py-3 text-sm text-muted">
 								{formatDuration(session.duration)}
 							</td>
-							<td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+							<td className="px-4 py-3 text-sm text-secondary">
 								{session.players}
 							</td>
 						</tr>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@/components/ui/Button';
 import { Leaderboard, LeaderboardDriver, FlPoints } from '@/lib/schemas/leaderboard';
 import { saveLeaderboardAction } from '@/lib/actions/leaderboard';
 import { LeaderboardStandings } from './LeaderboardStandings';
@@ -135,19 +136,19 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 	return (
 		<div className="space-y-4">
 			{dirty && (
-				<div className="flex items-center justify-between rounded-lg bg-yellow-900/40 px-4 py-2 text-sm text-yellow-300">
+				<div className="flex items-center justify-between rounded-lg border border-yellow/30 bg-yellow-bg px-4 py-2 text-sm text-yellow">
 					<span>Unsaved changes</span>
 					<div className="flex gap-2">
 						<button
 							onClick={() => setDraft(saved)}
-							className="rounded px-2 py-1 text-xs text-yellow-400 hover:text-yellow-200"
+							className="rounded px-2 py-1 text-xs text-yellow hover:text-primary"
 						>
 							Discard
 						</button>
 						<button
 							onClick={handleSave}
 							disabled={isSubmitting}
-							className="rounded bg-yellow-600 px-3 py-1 text-xs font-semibold text-white hover:bg-yellow-500 disabled:opacity-50"
+							className="rounded bg-yellow px-3 py-1 text-xs font-semibold text-base hover:opacity-90 disabled:opacity-40"
 						>
 							{isSubmitting ? 'Saving…' : 'Save'}
 						</button>
@@ -156,7 +157,9 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 			)}
 
 			{error && (
-				<div className="rounded-lg bg-red-900/40 px-4 py-2 text-sm text-red-300">{error}</div>
+				<div className="rounded-lg border border-red/30 bg-red-bg px-4 py-2 text-sm text-red">
+					{error}
+				</div>
 			)}
 
 			<div className="flex flex-wrap gap-2">
@@ -164,10 +167,10 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 					<button
 						key={s.id}
 						onClick={() => setActiveSection(s.id)}
-						className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+						className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
 							activeSection === s.id
-								? 'bg-blue-600 text-white'
-								: 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+								? 'bg-blue text-white'
+								: 'bg-overlay text-secondary hover:bg-border'
 						}`}
 					>
 						{s.label}
@@ -179,13 +182,9 @@ export function LeaderboardManager({ serverId, initialData }: LeaderboardManager
 
 			{!dirty && (
 				<div className="flex justify-end">
-					<button
-						onClick={handleSave}
-						disabled={isSubmitting}
-						className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:opacity-50"
-					>
+					<Button variant="primary" size="md" onClick={handleSave} disabled={isSubmitting}>
 						{isSubmitting ? 'Saving…' : 'Save Leaderboard'}
-					</button>
+					</Button>
 				</div>
 			)}
 		</div>

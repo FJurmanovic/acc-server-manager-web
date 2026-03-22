@@ -11,6 +11,7 @@ import { LeaderboardManager } from '@/components/leaderboard/LeaderboardManager'
 import { useState } from 'react';
 import { StateHistoryStats } from '@/lib/schemas';
 import { Leaderboard } from '@/lib/schemas/leaderboard';
+import { bulkUpdateConfigurationsAction } from '@/lib/actions/configuration';
 
 interface ServerConfigurationTabsProps {
 	serverId: string;
@@ -28,6 +29,14 @@ const tabs = [
 	{ id: ServerTab.leaderboard, name: 'Leaderboard', icon: '🏆' }
 ];
 
+const configTabs = new Set([
+	ServerTab.configuration,
+	ServerTab.assistRules,
+	ServerTab.event,
+	ServerTab.eventRules,
+	ServerTab.settings
+]);
+
 export function ServerConfigurationTabs({
 	serverId,
 	configurations,
@@ -36,25 +45,95 @@ export function ServerConfigurationTabs({
 }: ServerConfigurationTabsProps) {
 	const [currentTab, setCurrentTab] = useState(ServerTab.statistics);
 
+	const [configData, setConfigData] = useState(configurations.configuration);
+	const [assistData, setAssistData] = useState(configurations.assistRules);
+	const [eventData, setEventData] = useState(configurations.event);
+	const [eventRulesData, setEventRulesData] = useState(configurations.eventRules);
+	const [settingsData, setSettingsData] = useState(configurations.settings);
+
+	const [restart, setRestart] = useState(true);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [saveError, setSaveError] = useState<string | null>(null);
+	const [saveSuccess, setSaveSuccess] = useState(false);
+
+	const handleSaveAll = async () => {
+		setIsSubmitting(true);
+		setSaveError(null);
+		setSaveSuccess(false);
+
+		const result = await bulkUpdateConfigurationsAction(
+			serverId,
+			{
+				configuration: configData,
+				assistRules: assistData,
+				event: eventData,
+				eventRules: eventRulesData,
+				settings: settingsData
+			},
+			restart
+		);
+
+		if (result.success) {
+			setSaveSuccess(true);
+			setTimeout(() => setSaveSuccess(false), 3000);
+		} else {
+			setSaveError(result.message);
+		}
+
+		setIsSubmitting(false);
+	};
+
+	const isConfigTab = configTabs.has(currentTab);
+
 	const renderTabContent = () => {
 		switch (currentTab) {
 			case ServerTab.statistics:
 				return <StatisticsDashboard stats={statistics} />;
 
 			case ServerTab.configuration:
-				return <ConfigurationEditor serverId={serverId} config={configurations.configuration} />;
+				return (
+					<ConfigurationEditor
+						formData={configData}
+						disabled={isSubmitting}
+						onFormDataChange={setConfigData}
+					/>
+				);
 
 			case ServerTab.assistRules:
-				return <AssistRulesEditor serverId={serverId} config={configurations.assistRules} />;
+				return (
+					<AssistRulesEditor
+						formData={assistData}
+						disabled={isSubmitting}
+						onFormDataChange={setAssistData}
+					/>
+				);
 
 			case ServerTab.event:
-				return <EventConfigEditor serverId={serverId} config={configurations.event} />;
+				return (
+					<EventConfigEditor
+						formData={eventData}
+						disabled={isSubmitting}
+						onFormDataChange={setEventData}
+					/>
+				);
 
 			case ServerTab.eventRules:
-				return <EventRulesEditor serverId={serverId} config={configurations.eventRules} />;
+				return (
+					<EventRulesEditor
+						formData={eventRulesData}
+						disabled={isSubmitting}
+						onFormDataChange={setEventRulesData}
+					/>
+				);
 
 			case ServerTab.settings:
-				return <ServerSettingsEditor serverId={serverId} config={configurations.settings} />;
+				return (
+					<ServerSettingsEditor
+						formData={settingsData}
+						disabled={isSubmitting}
+						onFormDataChange={setSettingsData}
+					/>
+				);
 
 			case ServerTab.leaderboard:
 				return <LeaderboardManager serverId={serverId} initialData={leaderboard} />;
@@ -71,30 +150,59 @@ export function ServerConfigurationTabs({
 	};
 
 	return (
-		<div className="overflow-hidden rounded-lg bg-gray-800">
-			<div className="border-b border-gray-700">
-				<nav className="flex space-x-8 overflow-x-auto" aria-label="Tabs">
-					{tabs.map((tab) => {
-						const isActive = currentTab === tab.id;
-						return (
-							<button
-								key={tab.id}
-								onClick={() => setCurrentTab(tab.id)}
-								className={`flex items-center space-x-2 border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap transition-colors ${
-									isActive
-										? 'border-blue-500 text-blue-400'
-										: 'border-transparent text-gray-400 hover:border-gray-300 hover:text-gray-300'
-								} `}
-							>
-								<span className="text-base">{tab.icon}</span>
-								<span>{tab.name}</span>
-							</button>
-						);
-					})}
-				</nav>
-			</div>
+		<div className="flex flex-1 flex-col overflow-hidden">
+			<nav className="flex overflow-x-auto border-b border-border-muted px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Tabs">
+				{tabs.map((tab) => {
+					const isActive = currentTab === tab.id;
+					return (
+						<button
+							key={tab.id}
+							onClick={() => setCurrentTab(tab.id)}
+							className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
+								isActive
+									? 'border-orange text-primary'
+									: 'border-transparent text-muted hover:text-primary'
+							}`}
+						>
+							<span className="text-sm">{tab.icon}</span>
+							<span>{tab.name}</span>
+						</button>
+					);
+				})}
+			</nav>
 
-			<div className="p-6">{renderTabContent()}</div>
+			{isConfigTab && (
+				<div className="flex items-center justify-between border-b border-border-muted bg-overlay px-5 py-3">
+					<div className="flex items-center gap-3">
+						{saveError && (
+							<p className="text-sm text-red">{saveError}</p>
+						)}
+						{saveSuccess && (
+							<p className="text-sm text-green">All configurations saved.</p>
+						)}
+					</div>
+					<div className="flex items-center gap-4">
+						<label className="flex items-center gap-2 text-sm text-muted">
+							<input
+								type="checkbox"
+								checked={restart}
+								onChange={(e) => setRestart(e.target.checked)}
+								className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
+							/>
+							Restart after saving
+						</label>
+						<button
+							onClick={handleSaveAll}
+							disabled={isSubmitting}
+							className="rounded-md bg-btn-green border border-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
+						>
+							{isSubmitting ? 'Saving…' : 'Save All'}
+						</button>
+					</div>
+				</div>
+			)}
+
+			<div className="flex-1 overflow-y-auto p-5">{renderTabContent()}</div>
 		</div>
 	);
 }

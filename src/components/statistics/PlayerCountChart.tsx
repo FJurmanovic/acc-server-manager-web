@@ -43,8 +43,8 @@ export function PlayerCountChart({ data }: PlayerCountChartProps) {
 					x: new Date(point.timestamp),
 					y: point.count
 				})),
-				borderColor: 'rgb(59, 130, 246)',
-				backgroundColor: 'rgba(59, 130, 246, 0.1)',
+				borderColor: '#58a6ff',
+				backgroundColor: '#58a6ff1a',
 				tension: 0.4
 			}
 		]
@@ -57,7 +57,7 @@ export function PlayerCountChart({ data }: PlayerCountChartProps) {
 			legend: {
 				position: 'top' as const,
 				labels: {
-					color: '#e5e7eb'
+					color: '#e6edf3'
 				}
 			}
 		},
@@ -68,20 +68,20 @@ export function PlayerCountChart({ data }: PlayerCountChartProps) {
 					unit: 'hour' as const
 				},
 				ticks: {
-					color: '#9ca3af'
+					color: '#8b949e'
 				},
 				grid: {
-					color: '#374151'
+					color: '#21262d'
 				}
 			},
 			y: {
 				beginAtZero: true,
 				ticks: {
-					color: '#9ca3af',
+					color: '#8b949e',
 					stepSize: 1
 				},
 				grid: {
-					color: '#374151'
+					color: '#21262d'
 				}
 			}
 		}

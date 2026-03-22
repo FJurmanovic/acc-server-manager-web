@@ -8,14 +8,23 @@ import {
 } from '@/lib/schemas/config';
 import * as z from 'zod';
 
+export type ConfigAuditRecord = {
+	id: string;
+	serverId: string;
+	configFile: string;
+	oldConfig: string;
+	newConfig: string;
+	changedAt: string;
+};
+
 const serverRoute = '/server';
 
 export async function getServerConfigurations(
 	token: string,
 	serverId: string
 ): Promise<Configurations> {
-	const response = await fetchServerAPI<Configurations>(`${serverRoute}/${serverId}/config`, token);	
-  return configurationsSchema.parse(response.data);
+	const response = await fetchServerAPI<Configurations>(`${serverRoute}/${serverId}/config`, token);
+	return configurationsSchema.parse(response.data);
 }
 
 export function validateConfig(
@@ -45,8 +54,26 @@ export async function updateServerConfiguration(
 	config: Config,
 	restart = false
 ): Promise<void> {
-	await fetchServerAPI(`${serverRoute}/${serverId}/config/${configType}?override=true`, token, 'PUT', {
-		...validateConfig(configType, config),
-		restart
-	});
+	await fetchServerAPI(
+		`${serverRoute}/${serverId}/config/${configType}?override=true&restart=${restart}`,
+		token,
+		'PUT',
+		{
+			...validateConfig(configType, config)
+		}
+	);
+}
+
+export async function bulkUpdateServerConfigurations(
+	token: string,
+	serverId: string,
+	configs: Configurations,
+	restart = false
+): Promise<void> {
+	await fetchServerAPI<ConfigAuditRecord[]>(
+		`${serverRoute}/${serverId}/config?override=true&restart=${restart}`,
+		token,
+		'PATCH',
+		configs
+	);
 }

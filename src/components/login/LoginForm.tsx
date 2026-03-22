@@ -2,6 +2,8 @@
 
 import { clearExpiredSessionAction, loginAction, LoginResult } from '@/lib/actions/auth';
 import { use, useActionState, useEffect } from 'react';
+import type { HealthStatus } from '@/lib/api/server/health';
+import { Badge } from '@/components/ui/Badge';
 
 const initialState: LoginResult = {
 	message: '',
@@ -9,9 +11,11 @@ const initialState: LoginResult = {
 };
 
 export default function LoginForm({
-	searchParams
+	searchParams,
+	health
 }: {
 	searchParams: Promise<{ expired: boolean | undefined }>;
+	health: HealthStatus;
 }) {
 	const params = use(searchParams);
 	const expired = params.expired;
@@ -23,26 +27,33 @@ export default function LoginForm({
 	}, [expired]);
 	const [state, formAction] = useActionState(loginAction, initialState);
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gray-900 px-4">
-			<div className="w-full max-w-md space-y-8 rounded-lg bg-gray-800 p-8 shadow-lg">
+		<div className="flex min-h-screen items-center justify-center bg-base px-4">
+			<div className="w-full max-w-md space-y-6 rounded-lg border border-border bg-canvas p-8 shadow-xl">
 				<div className="text-center">
-					<h1 className="text-3xl font-bold text-white">ACC Server Manager</h1>
-					<p className="mt-2 text-gray-400">Sign in to manage your servers</p>
+					<h1 className="text-xl font-bold text-primary">ACC Server Manager</h1>
+					<p className="mt-1 text-sm text-muted">Sign in to manage your servers</p>
+					<div className="mt-2 flex justify-center">
+						{health.healthy ? (
+							<Badge variant="green">API v{health.version}</Badge>
+						) : (
+							<Badge variant="red">API unreachable</Badge>
+						)}
+					</div>
 				</div>
 				{expired && (
-					<div className="rounded-md border border-yellow-700 bg-yellow-900/50 p-3 text-sm text-yellow-200">
+					<div className="rounded-md border border-yellow/30 bg-yellow-bg px-3 py-2 text-sm text-yellow">
 						Your session has expired. Please sign in again.
 					</div>
 				)}
 				{state?.success ? null : (
-					<div className="rounded-md border border-red-700 bg-red-900/50 p-3 text-sm text-red-200">
+					<div className="rounded-md border border-red/30 bg-red-bg px-3 py-2 text-sm text-red">
 						{state?.message}
 					</div>
 				)}
 
-				<form action={formAction} className="space-y-6">
+				<form action={formAction} className="space-y-4">
 					<div>
-						<label htmlFor="username" className="mb-2 block text-sm font-medium text-gray-300">
+						<label htmlFor="username" className="mb-1.5 block text-sm font-medium text-secondary">
 							Username
 						</label>
 						<input
@@ -51,12 +62,12 @@ export default function LoginForm({
 							type="text"
 							autoComplete="username"
 							required
-							className="form-input w-full"
+							className="form-input"
 						/>
 					</div>
 
 					<div>
-						<label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-300">
+						<label htmlFor="password" className="mb-1.5 block text-sm font-medium text-secondary">
 							Password
 						</label>
 						<input
@@ -65,13 +76,13 @@ export default function LoginForm({
 							type="password"
 							autoComplete="current-password"
 							required
-							className="form-input w-full"
+							className="form-input"
 						/>
 					</div>
 
 					<button
 						type="submit"
-						className="w-full rounded-md bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+						className="w-full rounded-md bg-btn-green border border-btn-green px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover focus:outline-none focus:ring-2 focus:ring-blue focus:ring-offset-2 focus:ring-offset-base"
 					>
 						Sign in
 					</button>

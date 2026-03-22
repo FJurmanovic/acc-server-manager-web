@@ -30,9 +30,7 @@ export async function fetchServerAPI<T>(
 		if (response.status == 401) {
 			redirect('/login?expired=true');
 		}
-		throw new Error(
-			`API Error: ${response.statusText} - ${method} - ${BASE_URL}${endpoint} - ${token}`
-		);
+		throw new Error(`API Error: ${response.statusText} - ${method} - ${BASE_URL}${endpoint}`);
 	}
 
 	if (response.headers.get('Content-Type')?.includes('application/json')) {

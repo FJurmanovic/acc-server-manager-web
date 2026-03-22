@@ -2,10 +2,11 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireAuth } from '@/lib/auth/server';
-import { updateServerConfiguration } from '@/lib/api/server/configuration';
+import { updateServerConfiguration, bulkUpdateServerConfigurations } from '@/lib/api/server/configuration';
 import {
 	assistRulesSchema,
 	ConfigFile,
+	configurationsSchema,
 	eventConfigSchema,
 	eventRulesSchema,
 	serverSettingsSchema
@@ -13,6 +14,7 @@ import {
 import type {
 	Configuration,
 	AssistRules,
+	Configurations,
 	EventConfig,
 	EventRules,
 	ServerSettings
@@ -229,6 +231,31 @@ export async function updateEventRulesAction(serverId: string, formData: FormDat
 		return {
 			success: false,
 			message: error instanceof Error ? error.message : 'Failed to update event rules'
+		};
+	}
+}
+
+export async function bulkUpdateConfigurationsAction(
+	serverId: string,
+	configs: Configurations,
+	restart: boolean
+) {
+	try {
+		const session = await requireAuth();
+
+		const validated = configurationsSchema.safeParse(configs);
+		if (!validated.success) {
+			return { success: false, message: validated.error.message };
+		}
+
+		await bulkUpdateServerConfigurations(session.token!, serverId, validated.data, restart);
+		revalidatePath(`/dashboard/server/${serverId}`);
+
+		return { success: true, message: 'All configurations updated successfully' };
+	} catch (error) {
+		return {
+			success: false,
+			message: error instanceof Error ? error.message : 'Failed to update configurations'
 		};
 	}
 }

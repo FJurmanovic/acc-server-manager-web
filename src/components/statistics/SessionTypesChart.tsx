@@ -15,12 +15,10 @@ interface SessionTypesChartProps {
 }
 
 const colors = [
-	'#3b82f6', // blue
-	'#10b981', // emerald
-	'#f59e0b', // amber
-	'#ef4444', // red
-	'#8b5cf6', // violet
-	'#06b6d4' // cyan
+	'#3fb950', // green
+	'#58a6ff', // blue
+	'#f78166', // red
+	'#d29922'  // yellow
 ];
 
 export function SessionTypesChart({ data }: SessionTypesChartProps) {
@@ -43,7 +41,7 @@ export function SessionTypesChart({ data }: SessionTypesChartProps) {
 			legend: {
 				position: 'bottom' as const,
 				labels: {
-					color: '#e5e7eb',
+					color: '#e6edf3',
 					padding: 20
 				}
 			},

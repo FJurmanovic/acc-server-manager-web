@@ -14,21 +14,21 @@ interface StatisticsDashboardProps {
 export function StatisticsDashboard({ stats }: StatisticsDashboardProps) {
 	if (!stats) {
 		return (
-			<div className="py-12 text-center">
-				<div className="mb-4 text-6xl">📊</div>
-				<h3 className="mb-2 text-xl font-semibold text-white">No Statistics Available</h3>
-				<p className="text-gray-400">No data found for the selected date range.</p>
+			<div className="py-16 text-center">
+				<div className="mb-3 text-5xl">📊</div>
+				<h3 className="mb-1 text-base font-semibold text-primary">No Statistics Available</h3>
+				<p className="text-sm text-muted">No data found for the selected date range.</p>
 			</div>
 		);
 	}
 
 	return (
-		<div className="space-y-6">
-			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+		<div className="flex flex-col gap-4">
+			<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
 				<StatCard title="Total Sessions" value={stats.totalSessions ?? 0} icon="🏁" />
 				<StatCard
 					title="Total Playtime"
-					value={`${Math.round(stats.totalPlaytime ?? 0 / 60)}h`}
+					value={`${Math.round((stats.totalPlaytime ?? 0) / 60)}h`}
 					icon="⏱️"
 				/>
 				<StatCard
@@ -39,27 +39,24 @@ export function StatisticsDashboard({ stats }: StatisticsDashboardProps) {
 				<StatCard title="Peak Players" value={stats.peakPlayers ?? 0} icon="🔥" />
 			</div>
 
-			{/* Charts */}
-			<div className="grid grid-cols-12 gap-4">
-				<div className="col-span-9 rounded-lg bg-gray-800 p-6">
-					<h3 className="mb-4 text-lg font-medium text-white">Player Count Over Time</h3>
+			<div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+				<div className="lg:col-span-2 rounded-lg border border-border bg-canvas p-4">
+					<h3 className="mb-3 text-sm font-semibold text-primary">Player Count Over Time</h3>
 					<PlayerCountChart data={stats.playerCountOverTime ?? []} />
 				</div>
-
-				<div className="col-span-3 rounded-lg bg-gray-800 p-6">
-					<h3 className="mb-4 text-lg font-medium text-white">Session Types</h3>
+				<div className="rounded-lg border border-border bg-canvas p-4">
+					<h3 className="mb-3 text-sm font-semibold text-primary">Session Types</h3>
 					<SessionTypesChart data={stats.sessionTypes ?? []} />
 				</div>
 			</div>
 
-			<div className="rounded-lg bg-gray-800 p-6">
-				<h3 className="mb-4 text-lg font-medium text-white">Daily Activity</h3>
+			<div className="rounded-lg border border-border bg-canvas p-4">
+				<h3 className="mb-3 text-sm font-semibold text-primary">Daily Activity</h3>
 				<DailyActivityChart data={stats.dailyActivity ?? []} />
 			</div>
 
-			{/* Recent Sessions */}
-			<div className="rounded-lg bg-gray-800 p-6">
-				<h3 className="mb-4 text-lg font-medium text-white">Recent Sessions</h3>
+			<div className="overflow-hidden rounded-lg border border-border bg-canvas">
+				<div className="border-b border-border-muted px-4 py-3 text-sm font-semibold text-primary">Recent Sessions</div>
 				<RecentSessions sessions={stats.recentSessions ?? []} />
 			</div>
 		</div>

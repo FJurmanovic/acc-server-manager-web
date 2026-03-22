@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { User } from '@/lib/schemas';
 import { deleteUserAction } from '@/lib/actions/membership';
+import { Button } from '@/components/ui/Button';
 
 interface DeleteUserModalProps {
 	user: User;
@@ -37,36 +38,29 @@ export function DeleteUserModal({ user, onClose }: DeleteUserModalProps) {
 	};
 
 	return (
-		<div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-			<div className="w-full max-w-md rounded-lg bg-gray-800 p-6">
-				<h3 className="mb-4 text-lg font-semibold text-white">Delete User</h3>
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+			<div className="w-full max-w-md rounded-lg border border-border bg-canvas p-6 shadow-xl">
+				<h2 className="mb-4 text-base font-semibold text-primary">Delete User</h2>
 
 				{error && (
-					<div className="mb-4 rounded-md bg-red-900 p-3 text-sm text-red-300">{error}</div>
+					<div className="mb-4 rounded-md border border-red/20 bg-red-bg p-3 text-sm text-red">
+						{error}
+					</div>
 				)}
 
-				<p className="mb-6 text-gray-300">
+				<p className="mb-6 text-sm text-secondary">
 					Are you sure you want to delete the user &quot;{user.username}&quot;? This action cannot
 					be undone.
 				</p>
 
 				<form onSubmit={handleSubmit}>
-					<div className="flex justify-end space-x-2">
-						<button
-							type="button"
-							onClick={onClose}
-							disabled={isSubmitting}
-							className="rounded-md bg-gray-600 px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-700 disabled:opacity-50"
-						>
+					<div className="flex justify-end gap-2">
+						<Button type="button" variant="ghost" onClick={onClose} disabled={isSubmitting}>
 							Cancel
-						</button>
-						<button
-							type="submit"
-							disabled={isSubmitting}
-							className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium transition-colors hover:bg-red-700 disabled:opacity-50"
-						>
+						</Button>
+						<Button type="submit" variant="danger-solid" disabled={isSubmitting}>
 							{isSubmitting ? 'Deleting...' : 'Delete User'}
-						</button>
+						</Button>
 					</div>
 				</form>
 			</div>
