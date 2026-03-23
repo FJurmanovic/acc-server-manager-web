@@ -27,6 +27,5 @@ export async function getActivityLog(
 ): Promise<ActivityLog[]> {
 	const query = buildQuery(filter);
 	const response = await fetchServerAPI<ActivityLog[]>(`/activity-log${query}`, token);
-	console.log(response.data);
 	return activityLogSchema.array().parse(response.data);
 }
