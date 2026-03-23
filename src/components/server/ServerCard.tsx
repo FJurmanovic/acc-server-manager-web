@@ -56,7 +56,7 @@ export function ServerCard({ server }: ServerCardProps) {
 
 	return (
 		<div className="flex flex-col overflow-hidden rounded-lg border border-border bg-canvas transition-colors hover:border-blue/40">
-			<Link href={`/dashboard/server/${server.id}`} className="flex-1 p-4">
+			<Link href={`/dashboard/server/${server.id}`} className="flex flex-1 flex-col p-4">
 				<div className="flex items-start justify-between">
 					<span className="text-sm font-semibold text-primary">{server.name}</span>
 					<StatusDot status={server.status} />
@@ -77,7 +77,7 @@ export function ServerCard({ server }: ServerCardProps) {
 					</div>
 				</div>
 
-				<div className="mt-3 flex items-center justify-between gap-2">
+				<div className="mt-auto pt-3 flex items-center justify-between gap-2">
 					<Badge variant={statusBadgeVariant(server.status)}>
 						{serviceStatusToString(server.status)}
 					</Badge>
