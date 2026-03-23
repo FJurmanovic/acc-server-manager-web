@@ -10,9 +10,18 @@ export const actionTypeSchema = z.enum([
 
 export type ActionType = z.infer<typeof actionTypeSchema>;
 
+// Minimal server shape embedded in activity log responses (avoids circular import with server.ts)
+const embeddedServerSchema = z.object({
+	id: z.string(),
+	name: z.string()
+}).passthrough();
+
+export type EmbeddedServer = z.infer<typeof embeddedServerSchema>;
+
 export const activityLogSchema = z.object({
 	id: z.string(),
 	serverId: z.string(),
+	server: embeddedServerSchema.optional(),
 	userId: z.string(),
 	username: z.string(),
 	action: actionTypeSchema,
@@ -36,6 +45,7 @@ export const activityLogFilterSchema = z.object({
 	sort_by: z.string().optional(),
 	sort_desc: z.boolean().optional(),
 	user_id: z.string().optional(),
+	server_id: z.string().optional(),
 	action: actionTypeSchema.optional(),
 	start_date: z.string().optional(),
 	end_date: z.string().optional()

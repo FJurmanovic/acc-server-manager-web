@@ -8,8 +8,14 @@ import { Button } from '@/components/ui/Button';
 
 const PAGE_SIZE = 10;
 
+interface ServerOption {
+	id: string;
+	name: string;
+}
+
 interface ActivityLogTableProps {
 	serverId?: string;
+	servers?: ServerOption[];
 }
 
 function formatDate(iso: string): string {
@@ -47,7 +53,7 @@ const ACTION_BADGE: Record<ActionType, string> = {
 	leaderboard_update: 'bg-overlay text-muted'
 };
 
-export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
+export function ActivityLogTable({ serverId, servers }: ActivityLogTableProps) {
 	const [logs, setLogs] = useState<ActivityLog[]>([]);
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(true);
@@ -55,6 +61,7 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 	const [error, setError] = useState<string | null>(null);
 
 	const [filterAction, setFilterAction] = useState<ActionType | ''>('');
+	const [filterServerId, setFilterServerId] = useState('');
 	const [filterStartDate, setFilterStartDate] = useState('');
 	const [filterEndDate, setFilterEndDate] = useState('');
 
@@ -65,9 +72,8 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 			setIsLoading(true);
 			setError(null);
 			const params = { ...filter, page: currentPage, page_size: PAGE_SIZE };
-			const result = serverId
-				? await getActivityLogAction(serverId, params)
-				: await getGlobalActivityLogAction(params);
+			if (serverId) params.server_id = serverId;
+			const result = await getActivityLogAction(params);
 			setIsLoading(false);
 			if (!result.success) {
 				setError(result.message);
@@ -86,6 +92,7 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 	const applyFilters = () => {
 		const filter: ActivityLogFilter = {};
 		if (filterAction) filter.action = filterAction as ActionType;
+		if (filterServerId) filter.server_id = filterServerId;
 		if (filterStartDate) filter.start_date = new Date(filterStartDate).toISOString();
 		if (filterEndDate) filter.end_date = new Date(filterEndDate).toISOString();
 		setAppliedFilter(filter);
@@ -96,6 +103,7 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 
 	const clearFilters = () => {
 		setFilterAction('');
+		setFilterServerId('');
 		setFilterStartDate('');
 		setFilterEndDate('');
 		setAppliedFilter({});
@@ -112,9 +120,9 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 
 	return (
 		<div className="flex flex-col gap-4">
-			<div className="flex flex-wrap items-end gap-3 rounded-lg border border-border bg-canvas p-4">
+			<div className="border-border bg-canvas flex flex-wrap items-end gap-3 rounded-lg border p-4">
 				<div className="flex flex-col gap-1">
-					<label className="text-xs text-subtle">Action type</label>
+					<label className="text-subtle text-xs">Action type</label>
 					<select
 						value={filterAction}
 						onChange={(e) => setFilterAction(e.target.value as ActionType | '')}
@@ -128,8 +136,25 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 						))}
 					</select>
 				</div>
+				{servers && servers.length > 0 && (
+					<div className="flex flex-col gap-1">
+						<label className="text-subtle text-xs">Server</label>
+						<select
+							value={filterServerId}
+							onChange={(e) => setFilterServerId(e.target.value)}
+							className="form-input w-48 text-sm"
+						>
+							<option value="">All servers</option>
+							{servers.map((s) => (
+								<option key={s.id} value={s.id}>
+									{s.name}
+								</option>
+							))}
+						</select>
+					</div>
+				)}
 				<div className="flex flex-col gap-1">
-					<label className="text-xs text-subtle">From</label>
+					<label className="text-subtle text-xs">From</label>
 					<input
 						type="date"
 						value={filterStartDate}
@@ -138,7 +163,7 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<label className="text-xs text-subtle">To</label>
+					<label className="text-subtle text-xs">To</label>
 					<input
 						type="date"
 						value={filterEndDate}
@@ -154,31 +179,34 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 				</Button>
 			</div>
 
-			{error && (
-				<p className="text-sm text-red">{error}</p>
-			)}
+			{error && <p className="text-red text-sm">{error}</p>}
 
-			<div className="overflow-hidden rounded-lg border border-border bg-canvas">
+			<div className="border-border bg-canvas overflow-hidden rounded-lg border">
 				{logs.length === 0 && !isLoading ? (
 					<div className="px-4 py-12 text-center">
 						<div className="mb-3 text-4xl">📋</div>
-						<p className="text-sm text-muted">No activity logged yet.</p>
+						<p className="text-muted text-sm">No activity logged yet.</p>
 					</div>
 				) : (
 					<div className="overflow-x-auto">
 						<table className="min-w-full">
 							<thead>
-								<tr className="border-b border-border-muted bg-base">
-									<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
+								<tr className="border-border-muted bg-base border-b">
+									<th className="text-subtle px-4 py-2 text-left text-xs font-medium tracking-wider uppercase">
 										Time
 									</th>
-									<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
+									<th className="text-subtle px-4 py-2 text-left text-xs font-medium tracking-wider uppercase">
 										User
 									</th>
-									<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
+									{!serverId && (
+										<th className="text-subtle px-4 py-2 text-left text-xs font-medium tracking-wider uppercase">
+											Server
+										</th>
+									)}
+									<th className="text-subtle px-4 py-2 text-left text-xs font-medium tracking-wider uppercase">
 										Action
 									</th>
-									<th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-subtle">
+									<th className="text-subtle px-4 py-2 text-left text-xs font-medium tracking-wider uppercase">
 										Details
 									</th>
 								</tr>
@@ -187,14 +215,17 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 								{logs.map((log) => (
 									<tr
 										key={log.id}
-										className="border-b border-border-muted transition-colors hover:bg-hover last:border-0"
+										className="border-border-muted hover:bg-hover border-b transition-colors last:border-0"
 									>
-										<td className="whitespace-nowrap px-4 py-3 text-sm text-muted">
+										<td className="text-muted px-4 py-3 text-sm whitespace-nowrap">
 											{formatDate(log.createdAt)}
 										</td>
-										<td className="px-4 py-3 text-sm text-secondary">
-											{log.username}
-										</td>
+										<td className="text-secondary px-4 py-3 text-sm">{log.username}</td>
+										{!serverId && (
+											<td className="text-secondary px-4 py-3 text-sm">
+												{log.server?.name ?? log.serverId}
+											</td>
+										)}
 										<td className="px-4 py-3">
 											<span
 												className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${ACTION_BADGE[log.action] ?? 'bg-canvas text-muted'}`}
@@ -202,9 +233,7 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 												{ACTION_TYPE_LABELS[log.action] ?? log.action}
 											</span>
 										</td>
-										<td className="px-4 py-3 text-sm text-muted">
-											{parseDetails(log.details)}
-										</td>
+										<td className="text-muted px-4 py-3 text-sm">{parseDetails(log.details)}</td>
 									</tr>
 								))}
 							</tbody>
@@ -212,12 +241,10 @@ export function ActivityLogTable({ serverId }: ActivityLogTableProps) {
 					</div>
 				)}
 
-				{isLoading && (
-					<div className="px-4 py-4 text-center text-sm text-muted">Loading…</div>
-				)}
+				{isLoading && <div className="text-muted px-4 py-4 text-center text-sm">Loading…</div>}
 
 				{hasMore && !isLoading && logs.length > 0 && (
-					<div className="border-t border-border-muted px-4 py-3 text-center">
+					<div className="border-border-muted border-t px-4 py-3 text-center">
 						<Button variant="ghost" size="sm" onClick={loadMore}>
 							Load more
 						</Button>
