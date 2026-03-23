@@ -44,6 +44,13 @@ export const completeDataSchema = z.object({
 
 export type CompleteData = z.infer<typeof completeDataSchema>;
 
+// Log line data schema
+export const logLineDataSchema = z.object({
+	line: z.string()
+});
+
+export type LogLineData = z.infer<typeof logLineDataSchema>;
+
 // WebSocket message schema using discriminated union
 export const webSocketMessageSchema = z.discriminatedUnion('type', [
 	z.object({
@@ -69,6 +76,12 @@ export const webSocketMessageSchema = z.discriminatedUnion('type', [
 		server_id: z.string(),
 		timestamp: z.number(),
 		data: completeDataSchema
+	}),
+	z.object({
+		type: z.literal('log_line'),
+		server_id: z.string(),
+		timestamp: z.number(),
+		data: logLineDataSchema
 	})
 ]);
 

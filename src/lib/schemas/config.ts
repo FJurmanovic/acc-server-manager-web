@@ -17,7 +17,8 @@ export enum ServerTab {
 	eventRules = 'eventRules',
 	settings = 'settings',
 	leaderboard = 'leaderboard',
-	activityLog = 'activityLog'
+	activityLog = 'activityLog',
+	logs = 'logs'
 }
 export const serverTabSchema = z.enum(ServerTab);
 
