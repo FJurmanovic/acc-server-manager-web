@@ -60,7 +60,7 @@ export function ServerListWithActions({ servers, user }: ServerListWithActionsPr
 				{/* Card grid — desktop only */}
 				<div
 					className="hidden gap-3 md:grid"
-					style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))' }}
+					style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(420px, 1fr))' }}
 				>
 					{servers.map((server) => (
 						<ServerCard key={server.id} server={server} />

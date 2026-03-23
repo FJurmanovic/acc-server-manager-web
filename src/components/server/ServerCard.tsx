@@ -55,8 +55,8 @@ export function ServerCard({ server }: ServerCardProps) {
 	const isRunning = server.status === ServiceStatus.Running;
 
 	return (
-		<div className="overflow-hidden rounded-lg border border-border bg-canvas transition-colors hover:border-blue/40">
-			<Link href={`/dashboard/server/${server.id}`} className="block p-4">
+		<div className="flex flex-col overflow-hidden rounded-lg border border-border bg-canvas transition-colors hover:border-blue/40">
+			<Link href={`/dashboard/server/${server.id}`} className="flex-1 p-4">
 				<div className="flex items-start justify-between">
 					<span className="text-sm font-semibold text-primary">{server.name}</span>
 					<StatusDot status={server.status} />
