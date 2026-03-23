@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { getActivityLogAction, getGlobalActivityLogAction } from '@/lib/actions/activityLog';
+import { getActivityLogAction } from '@/lib/actions/activityLog';
 import type { ActivityLog, ActivityLogFilter, ActionType } from '@/lib/schemas/activityLog';
 import { ACTION_TYPE_LABELS, actionTypeSchema } from '@/lib/schemas/activityLog';
 import { Button } from '@/components/ui/Button';
