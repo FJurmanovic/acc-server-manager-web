@@ -4,3 +4,4 @@ export * from './config';
 export * from './statistics';
 export * from './lookups';
 export * from './leaderboard';
+export * from './activityLog';

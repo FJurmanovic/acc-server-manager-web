@@ -77,10 +77,15 @@ export function ServerCard({ server }: ServerCardProps) {
 					</div>
 				</div>
 
-				<div className="mt-3">
+				<div className="mt-3 flex items-center justify-between gap-2">
 					<Badge variant={statusBadgeVariant(server.status)}>
 						{serviceStatusToString(server.status)}
 					</Badge>
+					{server.lastActivity && (
+						<span className="truncate text-xs text-subtle">
+							by {server.lastActivity.username}
+						</span>
+					)}
 				</div>
 			</Link>
 

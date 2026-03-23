@@ -44,10 +44,25 @@ function UsersIcon({ active }: { active: boolean }) {
 	);
 }
 
+function ActivityLogIcon({ active }: { active: boolean }) {
+	return (
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth={2}
+			className={cn('h-5 w-5', active ? 'text-blue' : 'text-subtle')}
+		>
+			<path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z" />
+		</svg>
+	);
+}
+
 export function Sidebar({ showUsers }: SidebarProps) {
 	const pathname = usePathname();
 	const isServers = pathname === '/dashboard' || pathname.startsWith('/dashboard/server');
 	const isUsers = pathname.startsWith('/dashboard/membership');
+	const isActivityLog = pathname.startsWith('/dashboard/activity-log');
 
 	const navItems = [
 		{
@@ -55,6 +70,12 @@ export function Sidebar({ showUsers }: SidebarProps) {
 			label: 'Servers',
 			active: isServers,
 			icon: <ServerIcon active={isServers} />
+		},
+		{
+			href: '/dashboard/activity-log',
+			label: 'Activity Log',
+			active: isActivityLog,
+			icon: <ActivityLogIcon active={isActivityLog} />
 		},
 		...(showUsers
 			? [

@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { lastActivityInfoSchema } from './activityLog';
 
 export enum ServiceStatus {
 	Unknown,
@@ -57,7 +58,8 @@ export const serverSchema = z.object({
 	id: z.uuid(),
 	name: z.string().min(1),
 	status: z.enum(ServiceStatus),
-	state: stateSchema.optional().nullable()
+	state: stateSchema.optional().nullable(),
+	lastActivity: lastActivityInfoSchema.optional().nullable()
 });
 
 export type Server = z.infer<typeof serverSchema>;

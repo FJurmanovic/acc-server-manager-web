@@ -8,6 +8,7 @@ import { EventRulesEditor } from '@/components/configuration/EventRulesEditor';
 import { ServerSettingsEditor } from '@/components/configuration/ServerSettingsEditor';
 import { StatisticsDashboard } from '@/components/statistics/StatisticsDashboard';
 import { LeaderboardManager } from '@/components/leaderboard/LeaderboardManager';
+import { ActivityLogTable } from '@/components/activityLog/ActivityLogTable';
 import { useState } from 'react';
 import { StateHistoryStats } from '@/lib/schemas';
 import { Leaderboard } from '@/lib/schemas/leaderboard';
@@ -26,7 +27,8 @@ const tabs = [
 	{ id: ServerTab.event, name: 'Event Config', icon: '🏁' },
 	{ id: ServerTab.eventRules, name: 'Event Rules', icon: '📋' },
 	{ id: ServerTab.settings, name: 'Server Settings', icon: '🔧' },
-	{ id: ServerTab.leaderboard, name: 'Leaderboard', icon: '🏆' }
+	{ id: ServerTab.leaderboard, name: 'Leaderboard', icon: '🏆' },
+	{ id: ServerTab.activityLog, name: 'History', icon: '📋' }
 ];
 
 const configTabs = new Set([
@@ -137,6 +139,9 @@ export function ServerConfigurationTabs({
 
 			case ServerTab.leaderboard:
 				return <LeaderboardManager serverId={serverId} initialData={leaderboard} />;
+
+			case ServerTab.activityLog:
+				return <ActivityLogTable serverId={serverId} />;
 
 			default:
 				return (
