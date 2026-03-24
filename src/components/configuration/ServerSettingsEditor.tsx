@@ -42,7 +42,7 @@ const numberFields = [
 	{
 		key: 'trackMedalsRequirement' as keyof ServerSettings,
 		label: 'Track Medals Requirement',
-		min: -1,
+		min: 0,
 		max: 3
 	},
 	{

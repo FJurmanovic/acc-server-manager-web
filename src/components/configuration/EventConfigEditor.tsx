@@ -88,7 +88,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 							value={formData.preRaceWaitingTimeSeconds}
 							onChange={(e) => handleInputChange('preRaceWaitingTimeSeconds', e.target.value)}
 							className="form-input w-full"
-							min="0"
+							min="30"
 						/>
 					</div>
 

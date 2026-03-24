@@ -10,12 +10,6 @@ interface EventRulesEditorProps {
 
 const numberFields = [
 	{
-		key: 'qualifyStandingType' as keyof EventRules,
-		label: 'Qualify Standing Type',
-		min: -1,
-		max: 1
-	},
-	{
 		key: 'pitWindowLengthSec' as keyof EventRules,
 		label: 'Pit Window Length (seconds)',
 		min: -1
@@ -28,7 +22,7 @@ const numberFields = [
 	{
 		key: 'mandatoryPitstopCount' as keyof EventRules,
 		label: 'Mandatory Pitstop Count',
-		min: -1,
+		min: 0,
 		max: 5
 	},
 	{
@@ -83,6 +77,18 @@ export function EventRulesEditor({ formData, disabled, onFormDataChange }: Event
 			<div className="space-y-6">
 				<h3 className="border-b border-border-muted pb-2 text-sm font-semibold text-primary">Race Rules</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<div>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">Qualify Standing Type</label>
+						<select
+							disabled={disabled}
+							value={formData.qualifyStandingType}
+							onChange={(e) => handleInputChange('qualifyStandingType', parseInt(e.target.value))}
+							className="form-select w-full"
+						>
+							<option value={1}>Fastest Lap</option>
+							<option value={2}>Average Lap</option>
+						</select>
+					</div>
 					{numberFields.map(({ key, label, min, max }) => (
 						<div key={key}>
 							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
