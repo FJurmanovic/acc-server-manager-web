@@ -1,6 +1,6 @@
 'use client';
 
-import { Configurations, ServerTab } from '@/lib/schemas/config';
+import { type Configurations, ServerTab } from '@/lib/schemas/config';
 import { ConfigurationEditor } from '@/components/configuration/ConfigurationEditor';
 import { AssistRulesEditor } from '@/components/configuration/AssistRulesEditor';
 import { EventConfigEditor } from '@/components/configuration/EventConfigEditor';
@@ -54,30 +54,34 @@ export function ServerConfigurationTabs({
 	const [eventData, setEventData] = useState(configurations.event);
 	const [eventRulesData, setEventRulesData] = useState(configurations.eventRules);
 	const [settingsData, setSettingsData] = useState(configurations.settings);
+	const [dirtyConfigs, setDirtyConfigs] = useState<Set<keyof Configurations>>(new Set());
 
 	const [restart, setRestart] = useState(true);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [saveError, setSaveError] = useState<string | null>(null);
 	const [saveSuccess, setSaveSuccess] = useState(false);
 
+	const markDirty = (key: keyof Configurations) =>
+		setDirtyConfigs((prev) => new Set(prev).add(key));
+
 	const handleSaveAll = async () => {
+		if (dirtyConfigs.size === 0) return;
+
 		setIsSubmitting(true);
 		setSaveError(null);
 		setSaveSuccess(false);
 
-		const result = await bulkUpdateConfigurationsAction(
-			serverId,
-			{
-				configuration: configData,
-				assistRules: assistData,
-				event: eventData,
-				eventRules: eventRulesData,
-				settings: settingsData
-			},
-			restart
-		);
+		const payload: Partial<Configurations> = {};
+		if (dirtyConfigs.has('configuration')) payload.configuration = configData;
+		if (dirtyConfigs.has('assistRules')) payload.assistRules = assistData;
+		if (dirtyConfigs.has('event')) payload.event = eventData;
+		if (dirtyConfigs.has('eventRules')) payload.eventRules = eventRulesData;
+		if (dirtyConfigs.has('settings')) payload.settings = settingsData;
+
+		const result = await bulkUpdateConfigurationsAction(serverId, payload, restart);
 
 		if (result.success) {
+			setDirtyConfigs(new Set());
 			setSaveSuccess(true);
 			setTimeout(() => setSaveSuccess(false), 3000);
 		} else {
@@ -99,7 +103,7 @@ export function ServerConfigurationTabs({
 					<ConfigurationEditor
 						formData={configData}
 						disabled={isSubmitting}
-						onFormDataChange={setConfigData}
+						onFormDataChange={(data) => { setConfigData(data); markDirty('configuration'); }}
 					/>
 				);
 
@@ -108,7 +112,7 @@ export function ServerConfigurationTabs({
 					<AssistRulesEditor
 						formData={assistData}
 						disabled={isSubmitting}
-						onFormDataChange={setAssistData}
+						onFormDataChange={(data) => { setAssistData(data); markDirty('assistRules'); }}
 					/>
 				);
 
@@ -117,7 +121,7 @@ export function ServerConfigurationTabs({
 					<EventConfigEditor
 						formData={eventData}
 						disabled={isSubmitting}
-						onFormDataChange={setEventData}
+						onFormDataChange={(data) => { setEventData(data); markDirty('event'); }}
 					/>
 				);
 
@@ -126,7 +130,7 @@ export function ServerConfigurationTabs({
 					<EventRulesEditor
 						formData={eventRulesData}
 						disabled={isSubmitting}
-						onFormDataChange={setEventRulesData}
+						onFormDataChange={(data) => { setEventRulesData(data); markDirty('eventRules'); }}
 					/>
 				);
 
@@ -135,7 +139,7 @@ export function ServerConfigurationTabs({
 					<ServerSettingsEditor
 						formData={settingsData}
 						disabled={isSubmitting}
-						onFormDataChange={setSettingsData}
+						onFormDataChange={(data) => { setSettingsData(data); markDirty('settings'); }}
 					/>
 				);
 
@@ -203,7 +207,7 @@ export function ServerConfigurationTabs({
 						</label>
 						<button
 							onClick={handleSaveAll}
-							disabled={isSubmitting}
+							disabled={isSubmitting || dirtyConfigs.size === 0}
 							className="rounded-md bg-btn-green border border-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
 						>
 							{isSubmitting ? 'Saving…' : 'Save All'}

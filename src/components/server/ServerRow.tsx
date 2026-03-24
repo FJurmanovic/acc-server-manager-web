@@ -4,6 +4,7 @@ import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Server, ServiceStatus } from '@/lib/schemas';
+import { getTrackDisplayName } from '@/lib/constants/tracks';
 import {
 	startServerEventAction,
 	restartServerEventAction,
@@ -51,7 +52,7 @@ export function ServerRow({ server }: ServerRowProps) {
 				<div className="min-w-0">
 					<div className="truncate text-sm font-semibold text-primary">{server.name}</div>
 					<div className="truncate text-xs text-muted">
-						{server.state?.track ?? 'No track'} · {server.state?.playerCount ?? 0} players
+						{server.state?.track ? getTrackDisplayName(server.state.track) : 'No track'} · {server.state?.playerCount ?? 0} players
 					</div>
 				</div>
 			</Link>

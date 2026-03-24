@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { Server, serviceStatusToString, ServiceStatus } from '@/lib/schemas/server';
+import { getTrackDisplayName } from '@/lib/constants/tracks';
 import {
 	startServerEventAction,
 	restartServerEventAction,
@@ -72,7 +73,7 @@ export function ServerHeader({ server, user }: ServerHeaderProps) {
 
 			<div className="flex flex-wrap gap-6 border-b border-border-muted px-5 py-3">
 				{[
-					{ label: 'Track', value: server.state?.track ?? 'N/A' },
+					{ label: 'Track', value: server.state?.track ? getTrackDisplayName(server.state.track) : 'N/A' },
 					{ label: 'Players', value: `${server.state?.playerCount ?? 0} / ${server.state?.maxConnections ?? 0}` },
 					{ label: 'Session', value: server.state?.session ?? 'N/A' },
 				].map(({ label, value }) => (

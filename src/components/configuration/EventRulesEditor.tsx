@@ -37,6 +37,12 @@ const numberFields = [
 		min: -1
 	},
 	{
+		key: 'maxDriversCount' as keyof EventRules,
+		label: 'Max Drivers Count',
+		min: 1,
+		max: 10
+	},
+	{
 		key: 'tyreSetCount' as keyof EventRules,
 		label: 'Tyre Set Count',
 		min: 0,

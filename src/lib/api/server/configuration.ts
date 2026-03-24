@@ -67,7 +67,7 @@ export async function updateServerConfiguration(
 export async function bulkUpdateServerConfigurations(
 	token: string,
 	serverId: string,
-	configs: Configurations,
+	configs: Partial<Configurations>,
 	restart = false
 ): Promise<void> {
 	await fetchServerAPI<ConfigAuditRecord[]>(

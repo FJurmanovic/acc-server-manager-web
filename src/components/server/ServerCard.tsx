@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useTransition } from 'react';
 import { Server, ServiceStatus, serviceStatusToString } from '@/lib/schemas';
+import { getTrackDisplayName } from '@/lib/constants/tracks';
 import {
 	startServerEventAction,
 	restartServerEventAction,
@@ -72,7 +73,7 @@ export function ServerCard({ server }: ServerCardProps) {
 					<div>
 						<div className="text-xs text-subtle">Track</div>
 						<div className="truncate text-sm font-semibold text-primary">
-							{server.state?.track || 'N/A'}
+							{server.state?.track ? getTrackDisplayName(server.state.track) : 'N/A'}
 						</div>
 					</div>
 				</div>

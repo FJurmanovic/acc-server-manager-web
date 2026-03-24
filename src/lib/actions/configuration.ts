@@ -114,6 +114,7 @@ export async function updateServerSettingsAction(serverId: string, formData: For
 			centralEntryListPath: formData.get('centralEntryListPath') as string,
 			allowAutoDQ: parseInt(formData.get('allowAutoDQ') as string),
 			shortFormationLap: parseInt(formData.get('shortFormationLap') as string),
+			dumpEntryList: parseInt(formData.get('dumpEntryList') as string),
 			formationLapType: parseInt(formData.get('formationLapType') as string),
 			ignorePrematureDisconnects: parseInt(formData.get('ignorePrematureDisconnects') as string)
 		};
@@ -201,6 +202,7 @@ export async function updateEventRulesAction(serverId: string, formData: FormDat
 			driverStintTimeSec: parseInt(formData.get('driverStintTimeSec') as string),
 			mandatoryPitstopCount: parseInt(formData.get('mandatoryPitstopCount') as string),
 			maxTotalDrivingTime: parseInt(formData.get('maxTotalDrivingTime') as string),
+			maxDriversCount: parseInt(formData.get('maxDriversCount') as string),
 			isRefuellingAllowedInRace: boolToInt(formData.get('isRefuellingAllowedInRace') === 'true'),
 			isRefuellingTimeFixed: boolToInt(formData.get('isRefuellingTimeFixed') === 'true'),
 			isMandatoryPitstopRefuellingRequired:
@@ -237,13 +239,13 @@ export async function updateEventRulesAction(serverId: string, formData: FormDat
 
 export async function bulkUpdateConfigurationsAction(
 	serverId: string,
-	configs: Configurations,
+	configs: Partial<Configurations>,
 	restart: boolean
 ) {
 	try {
 		const session = await requireAuth();
 
-		const validated = configurationsSchema.safeParse(configs);
+		const validated = configurationsSchema.partial().safeParse(configs);
 		if (!validated.success) {
 			return { success: false, message: validated.error.message };
 		}

@@ -1,3 +1,5 @@
+import { getTrackDisplayName } from '@/lib/constants/tracks';
+
 interface RecentSession {
 	id: string;
 	date: string;
@@ -70,7 +72,7 @@ export function RecentSessions({ sessions }: RecentSessionsProps) {
 									{session.type === 'R' ? 'Race' : session.type === 'Q' ? 'Qualify' : 'Practice'}
 								</span>
 							</td>
-							<td className="px-4 py-3 text-sm text-secondary">{session.track}</td>
+							<td className="px-4 py-3 text-sm text-secondary">{getTrackDisplayName(session.track)}</td>
 							<td className="px-4 py-3 text-sm text-muted">
 								{formatDuration(session.duration)}
 							</td>

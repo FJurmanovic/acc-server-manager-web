@@ -81,6 +81,10 @@ const selectFields = [
 		label: 'Short Formation Lap'
 	},
 	{
+		key: 'dumpEntryList' as keyof ServerSettings,
+		label: 'Dump Entry List'
+	},
+	{
 		key: 'ignorePrematureDisconnects' as keyof ServerSettings,
 		label: 'Ignore Premature Disconnects'
 	}
