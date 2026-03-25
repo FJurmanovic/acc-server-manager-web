@@ -51,7 +51,7 @@ export const serverSettingsSchema = z.object({
 	serverName: z.string().min(3).max(150),
 	adminPassword: z.string().min(6).max(50).or(z.literal('').nullable()),
 	carGroup: z.string().min(1).max(50),
-	trackMedalsRequirement: z.number().min(0).max(3),
+	trackMedalsRequirement: z.number().min(-1).max(3),
 	safetyRatingRequirement: z.number().min(-1).max(99),
 	racecraftRatingRequirement: z.number().min(-1).max(99),
 	password: z.string().max(50).optional().or(z.literal('')),
@@ -98,7 +98,12 @@ export const eventConfigSchema = z.object({
 export type EventConfig = z.infer<typeof eventConfigSchema>;
 
 export const eventRulesSchema = z.object({
-	qualifyStandingType: z.number().min(1).max(2).default(1),
+	qualifyStandingType: z.preprocess((val) => {
+		if (val == '') {
+			return 1;
+		}
+		return val;
+	}, z.number().min(1).max(2).default(1)),
 	pitWindowLengthSec: z.number().min(-1).max(3600).default(-1),
 	driverStintTimeSec: z.number().min(-1).max(7200).default(-1),
 	mandatoryPitstopCount: z.number().min(0).max(5).default(0),

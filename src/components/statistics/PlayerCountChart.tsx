@@ -45,7 +45,8 @@ export function PlayerCountChart({ data }: PlayerCountChartProps) {
 				})),
 				borderColor: '#58a6ff',
 				backgroundColor: '#58a6ff1a',
-				tension: 0.4
+				tension: 0.4,
+				cubicInterpolationMode: 'monotone' as const
 			}
 		]
 	};
