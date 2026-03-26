@@ -35,6 +35,7 @@ export default async function ServerPage({ params }: ServerPageProps) {
 				configurations={configurations}
 				statistics={statistics}
 				leaderboard={leaderboard}
+				user={session.user!}
 			/>
 		</div>
 	);

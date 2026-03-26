@@ -24,7 +24,7 @@ export type EmbeddedServer = z.infer<typeof embeddedServerSchema>;
 
 export const activityLogSchema = z.object({
 	id: z.string(),
-	serverId: z.string(),
+	serverId: z.string().nullable(),
 	server: embeddedServerSchema.optional(),
 	userId: z.string(),
 	username: z.string(),

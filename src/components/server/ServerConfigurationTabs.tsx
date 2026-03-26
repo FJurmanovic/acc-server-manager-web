@@ -13,7 +13,7 @@ import { ServerLogViewer } from '@/components/server/ServerLogViewer';
 import { PresetPickerModal } from '@/components/server/PresetPickerModal';
 import { SavePresetModal } from '@/components/server/SavePresetModal';
 import { useState } from 'react';
-import { StateHistoryStats } from '@/lib/schemas';
+import { StateHistoryStats, hasPermission, type User } from '@/lib/schemas';
 import { Leaderboard } from '@/lib/schemas/leaderboard';
 import {
 	bulkUpdateConfigurationsAction,
@@ -25,6 +25,7 @@ interface ServerConfigurationTabsProps {
 	configurations: Configurations;
 	statistics: StateHistoryStats;
 	leaderboard: Leaderboard;
+	user: User;
 }
 const tabs = [
 	{ id: ServerTab.statistics, name: 'Statistics', icon: '📊' },
@@ -50,8 +51,11 @@ export function ServerConfigurationTabs({
 	serverId,
 	configurations,
 	statistics,
-	leaderboard
+	leaderboard,
+	user
 }: ServerConfigurationTabsProps) {
+	const canViewPresets = hasPermission(user, 'preset.view');
+	const canCreatePresets = hasPermission(user, 'preset.create');
 	const [currentTab, setCurrentTab] = useState(ServerTab.statistics);
 
 	const [configData, setConfigData] = useState(configurations.configuration);
@@ -243,20 +247,24 @@ export function ServerConfigurationTabs({
 							/>
 							Restart after saving
 						</label>
-						<button
-							onClick={() => setIsSavePresetModalOpen(true)}
-							disabled={isSubmitting}
-							className="border-border text-secondary hover:bg-hover rounded-md border px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-						>
-							Save as Preset
-						</button>
-						<button
-							onClick={() => setIsPresetModalOpen(true)}
-							disabled={isSubmitting}
-							className="border-border text-secondary hover:bg-hover rounded-md border px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40"
-						>
-							Load Preset
-						</button>
+						{canCreatePresets && (
+							<button
+								onClick={() => setIsSavePresetModalOpen(true)}
+								disabled={isSubmitting}
+								className="border-border text-secondary hover:bg-hover rounded-md border px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+							>
+								Save as Preset
+							</button>
+						)}
+						{canViewPresets && (
+							<button
+								onClick={() => setIsPresetModalOpen(true)}
+								disabled={isSubmitting}
+								className="border-border text-secondary hover:bg-hover rounded-md border px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+							>
+								Load Preset
+							</button>
+						)}
 						<button
 							onClick={handleSaveAll}
 							disabled={isSubmitting || dirtyConfigs.size === 0}
