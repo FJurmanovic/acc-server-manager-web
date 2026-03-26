@@ -49,18 +49,18 @@ export function ServerHeader({ server, user }: ServerHeaderProps) {
 
 	return (
 		<>
-			<header className="flex h-12 items-center justify-between border-b border-border-muted px-5">
+			<header className="flex flex-col gap-2 border-b border-border-muted px-5 py-2 sm:h-12 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:py-0">
 				<div className="flex items-center gap-2 text-sm">
 					<Link href="/dashboard" className="text-blue hover:underline">Servers</Link>
 					<span className="text-subtle">/</span>
 					<span className="font-semibold text-primary">{server.name}</span>
 				</div>
-				<div className="flex items-center gap-2">
+				<div className="flex flex-wrap items-center gap-2">
 					<Badge variant={
 						server.status === ServiceStatus.Running ? 'green' :
 						server.status === ServiceStatus.Stopped ? 'gray' : 'yellow'
 					}>
-						● {serviceStatusToString(server.status)}
+						● <span className="hidden sm:inline">{serviceStatusToString(server.status)}</span>
 					</Badge>
 					<Button variant="ghost" size="sm" onClick={startServer} disabled={server.status === ServiceStatus.Running || disabled || isPending}>Start</Button>
 					<Button variant="ghost" size="sm" onClick={restartServer} disabled={server.status === ServiceStatus.Stopped || disabled || isPending}>Restart</Button>
