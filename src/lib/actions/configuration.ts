@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireAuth } from '@/lib/auth/server';
-import { updateServerConfiguration, bulkUpdateServerConfigurations } from '@/lib/api/server/configuration';
+import { getServerConfigurations, updateServerConfiguration, bulkUpdateServerConfigurations } from '@/lib/api/server/configuration';
 import {
 	assistRulesSchema,
 	ConfigFile,
@@ -19,6 +19,21 @@ import type {
 	EventRules,
 	ServerSettings
 } from '@/lib/schemas/config';
+
+export async function getConfigurationsAction(
+	serverId: string
+): Promise<{ success: true; data: Configurations } | { success: false; message: string }> {
+	try {
+		const session = await requireAuth();
+		const data = await getServerConfigurations(session.token!, serverId);
+		return { success: true, data };
+	} catch (error) {
+		return {
+			success: false,
+			message: error instanceof Error ? error.message : 'Failed to fetch configurations'
+		};
+	}
+}
 import { boolToInt } from '@/lib/utils';
 
 export async function updateConfigurationAction(serverId: string, formData: FormData) {
@@ -72,7 +87,7 @@ export async function updateAssistRulesAction(serverId: string, formData: FormDa
 
 		const config = assistRulesSchema.safeParse(rawConfig);
 		if (!config.success) {
-			return { success: false, message: config.error.message };
+			return { success: false, message: config.error.issues[0]?.message ?? 'Validation failed' };
 		}
 
 		await updateServerConfiguration(
@@ -120,7 +135,7 @@ export async function updateServerSettingsAction(serverId: string, formData: For
 		};
 		const config = serverSettingsSchema.safeParse(rawConfig);
 		if (!config.success) {
-			return { success: false, message: config.error.message };
+			return { success: false, message: config.error.issues[0]?.message ?? 'Validation failed' };
 		}
 
 		await updateServerConfiguration(
@@ -167,7 +182,7 @@ export async function updateEventConfigAction(serverId: string, formData: FormDa
 		};
 		const config = eventConfigSchema.safeParse(rawConfig);
 		if (!config.success) {
-			return { success: false, message: config.error.message };
+			return { success: false, message: config.error.issues[0]?.message ?? 'Validation failed' };
 		}
 
 		await updateServerConfiguration(
@@ -216,7 +231,7 @@ export async function updateEventRulesAction(serverId: string, formData: FormDat
 
 		const config = eventRulesSchema.safeParse(rawConfig);
 		if (!config.success) {
-			return { success: false, message: config.error.message };
+			return { success: false, message: config.error.issues[0]?.message ?? 'Validation failed' };
 		}
 
 		await updateServerConfiguration(
@@ -247,7 +262,7 @@ export async function bulkUpdateConfigurationsAction(
 
 		const validated = configurationsSchema.partial().safeParse(configs);
 		if (!validated.success) {
-			return { success: false, message: validated.error.message };
+			return { success: false, message: validated.error.issues[0]?.message ?? 'Validation failed' };
 		}
 
 		await bulkUpdateServerConfigurations(session.token!, serverId, validated.data, restart);

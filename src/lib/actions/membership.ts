@@ -15,7 +15,7 @@ export async function createUserAction(formData: FormData) {
 		const rawData = { username, password, role };
 		const data = userCreateSchema.safeParse(rawData);
 		if (!data.success) {
-			return { success: false, message: data.error.message };
+			return { success: false, message: data.error.issues[0]?.message ?? 'Validation failed' };
 		}
 
 		await createUser(session.token!, data.data);

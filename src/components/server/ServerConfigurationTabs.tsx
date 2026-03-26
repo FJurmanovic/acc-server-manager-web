@@ -10,10 +10,15 @@ import { StatisticsDashboard } from '@/components/statistics/StatisticsDashboard
 import { LeaderboardManager } from '@/components/leaderboard/LeaderboardManager';
 import { ActivityLogTable } from '@/components/activityLog/ActivityLogTable';
 import { ServerLogViewer } from '@/components/server/ServerLogViewer';
+import { PresetPickerModal } from '@/components/server/PresetPickerModal';
+import { SavePresetModal } from '@/components/server/SavePresetModal';
 import { useState } from 'react';
 import { StateHistoryStats } from '@/lib/schemas';
 import { Leaderboard } from '@/lib/schemas/leaderboard';
-import { bulkUpdateConfigurationsAction } from '@/lib/actions/configuration';
+import {
+	bulkUpdateConfigurationsAction,
+	getConfigurationsAction
+} from '@/lib/actions/configuration';
 
 interface ServerConfigurationTabsProps {
 	serverId: string;
@@ -56,10 +61,23 @@ export function ServerConfigurationTabs({
 	const [settingsData, setSettingsData] = useState(configurations.settings);
 	const [dirtyConfigs, setDirtyConfigs] = useState<Set<keyof Configurations>>(new Set());
 
-	const [restart, setRestart] = useState(true);
+	const [restart, setRestart] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [saveError, setSaveError] = useState<string | null>(null);
 	const [saveSuccess, setSaveSuccess] = useState(false);
+	const [isPresetModalOpen, setIsPresetModalOpen] = useState(false);
+	const [isSavePresetModalOpen, setIsSavePresetModalOpen] = useState(false);
+
+	const reloadConfigs = async () => {
+		const result = await getConfigurationsAction(serverId);
+		if (!result.success) return;
+		setConfigData(result.data.configuration);
+		setAssistData(result.data.assistRules);
+		setEventData(result.data.event);
+		setEventRulesData(result.data.eventRules);
+		setSettingsData(result.data.settings);
+		setDirtyConfigs(new Set());
+	};
 
 	const markDirty = (key: keyof Configurations) =>
 		setDirtyConfigs((prev) => new Set(prev).add(key));
@@ -103,7 +121,10 @@ export function ServerConfigurationTabs({
 					<ConfigurationEditor
 						formData={configData}
 						disabled={isSubmitting}
-						onFormDataChange={(data) => { setConfigData(data); markDirty('configuration'); }}
+						onFormDataChange={(data) => {
+							setConfigData(data);
+							markDirty('configuration');
+						}}
 					/>
 				);
 
@@ -112,7 +133,10 @@ export function ServerConfigurationTabs({
 					<AssistRulesEditor
 						formData={assistData}
 						disabled={isSubmitting}
-						onFormDataChange={(data) => { setAssistData(data); markDirty('assistRules'); }}
+						onFormDataChange={(data) => {
+							setAssistData(data);
+							markDirty('assistRules');
+						}}
 					/>
 				);
 
@@ -121,7 +145,10 @@ export function ServerConfigurationTabs({
 					<EventConfigEditor
 						formData={eventData}
 						disabled={isSubmitting}
-						onFormDataChange={(data) => { setEventData(data); markDirty('event'); }}
+						onFormDataChange={(data) => {
+							setEventData(data);
+							markDirty('event');
+						}}
 					/>
 				);
 
@@ -130,7 +157,10 @@ export function ServerConfigurationTabs({
 					<EventRulesEditor
 						formData={eventRulesData}
 						disabled={isSubmitting}
-						onFormDataChange={(data) => { setEventRulesData(data); markDirty('eventRules'); }}
+						onFormDataChange={(data) => {
+							setEventRulesData(data);
+							markDirty('eventRules');
+						}}
 					/>
 				);
 
@@ -139,7 +169,10 @@ export function ServerConfigurationTabs({
 					<ServerSettingsEditor
 						formData={settingsData}
 						disabled={isSubmitting}
-						onFormDataChange={(data) => { setSettingsData(data); markDirty('settings'); }}
+						onFormDataChange={(data) => {
+							setSettingsData(data);
+							markDirty('settings');
+						}}
 					/>
 				);
 
@@ -165,7 +198,10 @@ export function ServerConfigurationTabs({
 
 	return (
 		<div className="flex flex-1 flex-col overflow-hidden">
-			<nav className="flex overflow-x-auto border-b border-border-muted px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Tabs">
+			<nav
+				className="border-border-muted flex overflow-x-auto border-b px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+				aria-label="Tabs"
+			>
 				{tabs.map((tab) => {
 					const isActive = currentTab === tab.id;
 					return (
@@ -175,7 +211,7 @@ export function ServerConfigurationTabs({
 							className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
 								isActive
 									? 'border-orange text-primary'
-									: 'border-transparent text-muted hover:text-primary'
+									: 'text-muted hover:text-primary border-transparent'
 							}`}
 						>
 							<span className="text-sm">{tab.icon}</span>
@@ -186,29 +222,39 @@ export function ServerConfigurationTabs({
 			</nav>
 
 			{isConfigTab && (
-				<div className="flex items-center justify-between border-b border-border-muted bg-overlay px-5 py-3">
+				<div className="border-border-muted bg-overlay flex items-center justify-between border-b px-5 py-3">
 					<div className="flex items-center gap-3">
-						{saveError && (
-							<p className="text-sm text-red">{saveError}</p>
-						)}
-						{saveSuccess && (
-							<p className="text-sm text-green">All configurations saved.</p>
-						)}
+						{saveError && <p className="text-red text-sm">{saveError}</p>}
+						{saveSuccess && <p className="text-green text-sm">All configurations saved.</p>}
 					</div>
 					<div className="flex items-center gap-4">
-						<label className="flex items-center gap-2 text-sm text-muted">
+						<label className="text-muted flex items-center gap-2 text-sm">
 							<input
 								type="checkbox"
 								checked={restart}
 								onChange={(e) => setRestart(e.target.checked)}
-								className="h-4 w-4 rounded border-border bg-overlay accent-green focus:ring-1 focus:ring-blue"
+								className="border-border bg-overlay accent-green focus:ring-blue h-4 w-4 rounded focus:ring-1"
 							/>
 							Restart after saving
 						</label>
 						<button
+							onClick={() => setIsSavePresetModalOpen(true)}
+							disabled={isSubmitting}
+							className="border-border text-secondary hover:bg-hover rounded-md border px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+						>
+							Save as Preset
+						</button>
+						<button
+							onClick={() => setIsPresetModalOpen(true)}
+							disabled={isSubmitting}
+							className="border-border text-secondary hover:bg-hover rounded-md border px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+						>
+							Load Preset
+						</button>
+						<button
 							onClick={handleSaveAll}
 							disabled={isSubmitting || dirtyConfigs.size === 0}
-							className="rounded-md bg-btn-green border border-btn-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-btn-green-hover disabled:cursor-not-allowed disabled:opacity-40"
+							className="bg-btn-green border-btn-green hover:bg-btn-green-hover rounded-md border px-5 py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-40"
 						>
 							{isSubmitting ? 'Saving…' : 'Save All'}
 						</button>
@@ -217,6 +263,29 @@ export function ServerConfigurationTabs({
 			)}
 
 			<div className="flex-1 overflow-y-auto p-5">{renderTabContent()}</div>
+
+			<SavePresetModal
+				isOpen={isSavePresetModalOpen}
+				onClose={() => setIsSavePresetModalOpen(false)}
+				configurations={{
+					configuration: configData,
+					assistRules: assistData,
+					event: eventData,
+					eventRules: eventRulesData,
+					settings: settingsData
+				}}
+			/>
+
+			<PresetPickerModal
+				isOpen={isPresetModalOpen}
+				onClose={() => setIsPresetModalOpen(false)}
+				serverId={serverId}
+				onApplied={async () => {
+					await reloadConfigs();
+					setSaveSuccess(true);
+					setTimeout(() => setSaveSuccess(false), 3000);
+				}}
+			/>
 		</div>
 	);
 }

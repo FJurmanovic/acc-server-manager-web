@@ -19,7 +19,7 @@ export async function loginAction(prevState: LoginResult, formData: FormData) {
 		if (!loginData.success) {
 			return {
 				success: false,
-				message: loginData.error.message
+				message: loginData.error.issues[0]?.message ?? 'Validation failed'
 			};
 		}
 

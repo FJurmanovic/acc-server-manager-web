@@ -10,7 +10,7 @@ export async function saveLeaderboardAction(serverId: string, data: Leaderboard)
 		const session = await requireAuth();
 		const validated = leaderboardSchema.safeParse(data);
 		if (!validated.success) {
-			return { success: false, message: validated.error.message };
+			return { success: false, message: validated.error.issues[0]?.message ?? 'Validation failed' };
 		}
 		await fetchServerAPI(`/server/${serverId}/leaderboard`, session.token!, 'PUT', validated.data);
 		revalidatePath(`/dashboard/server/${serverId}`);
