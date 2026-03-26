@@ -5,16 +5,20 @@ export const actionTypeSchema = z.enum([
 	'server_start',
 	'server_stop',
 	'server_restart',
-	'leaderboard_update'
+	'leaderboard_update',
+	'preset_create',
+	'preset_apply'
 ]);
 
 export type ActionType = z.infer<typeof actionTypeSchema>;
 
 // Minimal server shape embedded in activity log responses (avoids circular import with server.ts)
-const embeddedServerSchema = z.object({
-	id: z.string(),
-	name: z.string()
-}).passthrough();
+const embeddedServerSchema = z
+	.object({
+		id: z.string(),
+		name: z.string()
+	})
+	.passthrough();
 
 export type EmbeddedServer = z.infer<typeof embeddedServerSchema>;
 
@@ -58,5 +62,7 @@ export const ACTION_TYPE_LABELS: Record<ActionType, string> = {
 	server_start: 'Server Start',
 	server_stop: 'Server Stop',
 	server_restart: 'Server Restart',
-	leaderboard_update: 'Leaderboard Update'
+	leaderboard_update: 'Leaderboard Update',
+	preset_create: 'Preset Create',
+	preset_apply: 'Preset Apply'
 };

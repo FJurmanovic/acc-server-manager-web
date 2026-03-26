@@ -1,6 +1,7 @@
 'use client';
 
 import type { AssistRules } from '@/lib/schemas/config';
+import { FIELD_LABELS } from '@/lib/schemas/config';
 
 interface AssistRulesEditorProps {
 	formData: AssistRules;
@@ -8,52 +9,16 @@ interface AssistRulesEditorProps {
 	onFormDataChange: (data: AssistRules) => void;
 }
 
-const assistFields = [
-	{
-		key: 'stabilityControlLevelMax' as keyof AssistRules,
-		label: 'Stability Control Level Max',
-		type: 'number'
-	},
-	{
-		key: 'disableAutosteer' as keyof AssistRules,
-		label: 'Disable Autosteer',
-		type: 'select'
-	},
-	{
-		key: 'disableAutoLights' as keyof AssistRules,
-		label: 'Disable Auto Lights',
-		type: 'select'
-	},
-	{
-		key: 'disableAutoWiper' as keyof AssistRules,
-		label: 'Disable Auto Wiper',
-		type: 'select'
-	},
-	{
-		key: 'disableAutoEngineStart' as keyof AssistRules,
-		label: 'Disable Auto Engine Start',
-		type: 'select'
-	},
-	{
-		key: 'disableAutoPitLimiter' as keyof AssistRules,
-		label: 'Disable Auto Pit Limiter',
-		type: 'select'
-	},
-	{
-		key: 'disableAutoGear' as keyof AssistRules,
-		label: 'Disable Auto Gear',
-		type: 'select'
-	},
-	{
-		key: 'disableAutoClutch' as keyof AssistRules,
-		label: 'Disable Auto Clutch',
-		type: 'select'
-	},
-	{
-		key: 'disableIdealLine' as keyof AssistRules,
-		label: 'Disable Ideal Line',
-		type: 'select'
-	}
+const assistFields: { key: keyof AssistRules; type: 'number' | 'select' }[] = [
+	{ key: 'stabilityControlLevelMax', type: 'number' },
+	{ key: 'disableAutosteer', type: 'select' },
+	{ key: 'disableAutoLights', type: 'select' },
+	{ key: 'disableAutoWiper', type: 'select' },
+	{ key: 'disableAutoEngineStart', type: 'select' },
+	{ key: 'disableAutoPitLimiter', type: 'select' },
+	{ key: 'disableAutoGear', type: 'select' },
+	{ key: 'disableAutoClutch', type: 'select' },
+	{ key: 'disableIdealLine', type: 'select' }
 ];
 
 export function AssistRulesEditor({ formData, disabled, onFormDataChange }: AssistRulesEditorProps) {
@@ -67,9 +32,9 @@ export function AssistRulesEditor({ formData, disabled, onFormDataChange }: Assi
 	return (
 		<div className="max-w-3xl space-y-6">
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-				{assistFields.map(({ key, label, type }) => (
+				{assistFields.map(({ key, type }) => (
 					<div key={key}>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS[key]}</label>
 						{type === 'number' ? (
 							<input
 								type="number"

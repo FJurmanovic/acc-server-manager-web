@@ -138,3 +138,76 @@ export const configSchemaMap = {
 };
 
 export type Config = Configuration | AssistRules | EventConfig | EventRules | ServerSettings;
+
+export const SECTION_LABELS: Record<string, string> = {
+	configuration: 'Configuration',
+	assistRules: 'Assist Rules',
+	event: 'Event Config',
+	eventRules: 'Event Rules',
+	settings: 'Server Settings'
+};
+
+export const FIELD_LABELS: Record<string, string> = {
+	// configuration.json
+	udpPort: 'UDP Port',
+	tcpPort: 'TCP Port',
+	maxConnections: 'Max Connections',
+	lanDiscovery: 'LAN Discovery',
+	registerToLobby: 'Register To Lobby',
+	configVersion: 'Config Version',
+	// assistRules.json
+	stabilityControlLevelMax: 'Stability Control Level Max',
+	disableAutosteer: 'Disable Autosteer',
+	disableAutoLights: 'Disable Auto Lights',
+	disableAutoWiper: 'Disable Auto Wiper',
+	disableAutoEngineStart: 'Disable Auto Engine Start',
+	disableAutoPitLimiter: 'Disable Auto Pit Limiter',
+	disableAutoGear: 'Disable Auto Gear',
+	disableAutoClutch: 'Disable Auto Clutch',
+	disableIdealLine: 'Disable Ideal Line',
+	// event.json
+	track: 'Track',
+	preRaceWaitingTimeSeconds: 'Pre-Race Waiting Time (seconds)',
+	sessionOverTimeSeconds: 'Session Over Time (seconds)',
+	ambientTemp: 'Ambient Temperature (°C)',
+	cloudLevel: 'Cloud Level (0.0-1.0)',
+	rain: 'Rain (0.0-1.0)',
+	weatherRandomness: 'Weather Randomness',
+	postQualySeconds: 'Post Qualify Seconds',
+	postRaceSeconds: 'Post Race Seconds',
+	simracerWeatherConditions: 'Simracer Weather Conditions',
+	isFixedConditionQualification: 'Fixed Condition Qualification',
+	sessions: 'Sessions',
+	// eventRules.json
+	qualifyStandingType: 'Qualify Standing Type',
+	pitWindowLengthSec: 'Pit Window Length (seconds)',
+	driverStintTimeSec: 'Driver Stint Time (seconds)',
+	mandatoryPitstopCount: 'Mandatory Pitstop Count',
+	maxTotalDrivingTime: 'Max Total Driving Time (seconds)',
+	maxDriversCount: 'Max Drivers Count',
+	isRefuellingAllowedInRace: 'Refuelling Allowed in Race',
+	isRefuellingTimeFixed: 'Refuelling Time Fixed',
+	isMandatoryPitstopRefuellingRequired: 'Mandatory Pitstop Refuelling Required',
+	isMandatoryPitstopTyreChangeRequired: 'Mandatory Pitstop Tyre Change Required',
+	isMandatoryPitstopSwapDriverRequired: 'Mandatory Pitstop Swap Driver Required',
+	tyreSetCount: 'Tyre Set Count',
+	// settings.json
+	serverName: 'Server Name',
+	adminPassword: 'Admin Password',
+	carGroup: 'Car Group',
+	trackMedalsRequirement: 'Track Medals Requirement',
+	safetyRatingRequirement: 'Safety Rating Requirement',
+	racecraftRatingRequirement: 'Racecraft Rating Requirement',
+	password: 'Password',
+	spectatorPassword: 'Spectator Password',
+	maxCarSlots: 'Max Car Slots',
+	dumpLeaderboards: 'Dump Leaderboards',
+	isRaceLocked: 'Race Locked',
+	randomizeTrackWhenEmpty: 'Randomize Track When Empty',
+	centralEntryListPath: 'Central Entry List Path',
+	allowAutoDQ: 'Allow Auto DQ',
+	shortFormationLap: 'Short Formation Lap',
+	dumpEntryList: 'Dump Entry List',
+	formationLapType: 'Formation Lap Type',
+	ignorePrematureDisconnects: 'Ignore Premature Disconnects'
+};

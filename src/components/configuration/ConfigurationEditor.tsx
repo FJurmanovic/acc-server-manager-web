@@ -1,6 +1,7 @@
 'use client';
 
 import type { Configuration } from '@/lib/schemas/config';
+import { FIELD_LABELS } from '@/lib/schemas/config';
 
 interface ConfigurationEditorProps {
 	formData: Configuration;
@@ -20,7 +21,7 @@ export function ConfigurationEditor({ formData, disabled, onFormDataChange }: Co
 		<div className="max-w-3xl space-y-6">
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-secondary">UDP Port</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.udpPort}</label>
 					<input
 						type="number"
 						disabled={disabled}
@@ -31,7 +32,7 @@ export function ConfigurationEditor({ formData, disabled, onFormDataChange }: Co
 				</div>
 
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-secondary">TCP Port</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.tcpPort}</label>
 					<input
 						type="number"
 						disabled={disabled}
@@ -42,7 +43,7 @@ export function ConfigurationEditor({ formData, disabled, onFormDataChange }: Co
 				</div>
 
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-secondary">Max Connections</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.maxConnections}</label>
 					<input
 						type="number"
 						disabled={disabled}
@@ -53,7 +54,7 @@ export function ConfigurationEditor({ formData, disabled, onFormDataChange }: Co
 				</div>
 
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-secondary">LAN Discovery</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.lanDiscovery}</label>
 					<select
 						disabled={disabled}
 						value={formData.lanDiscovery}
@@ -66,7 +67,7 @@ export function ConfigurationEditor({ formData, disabled, onFormDataChange }: Co
 				</div>
 
 				<div>
-					<label className="mb-1.5 block text-sm font-medium text-secondary">Register To Lobby</label>
+					<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.registerToLobby}</label>
 					<select
 						disabled={disabled}
 						value={formData.registerToLobby}

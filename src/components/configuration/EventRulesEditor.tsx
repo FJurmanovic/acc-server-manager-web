@@ -1,6 +1,7 @@
 'use client';
 
 import type { EventRules } from '@/lib/schemas/config';
+import { FIELD_LABELS } from '@/lib/schemas/config';
 
 interface EventRulesEditorProps {
 	formData: EventRules;
@@ -8,63 +9,21 @@ interface EventRulesEditorProps {
 	onFormDataChange: (data: EventRules) => void;
 }
 
-const numberFields = [
-	{
-		key: 'pitWindowLengthSec' as keyof EventRules,
-		label: 'Pit Window Length (seconds)',
-		min: -1
-	},
-	{
-		key: 'driverStintTimeSec' as keyof EventRules,
-		label: 'Driver Stint Time (seconds)',
-		min: -1
-	},
-	{
-		key: 'mandatoryPitstopCount' as keyof EventRules,
-		label: 'Mandatory Pitstop Count',
-		min: 0,
-		max: 5
-	},
-	{
-		key: 'maxTotalDrivingTime' as keyof EventRules,
-		label: 'Max Total Driving Time (seconds)',
-		min: -1
-	},
-	{
-		key: 'maxDriversCount' as keyof EventRules,
-		label: 'Max Drivers Count',
-		min: 1,
-		max: 10
-	},
-	{
-		key: 'tyreSetCount' as keyof EventRules,
-		label: 'Tyre Set Count',
-		min: 0,
-		max: 50
-	}
+const numberFields: { key: keyof EventRules; min: number; max?: number }[] = [
+	{ key: 'pitWindowLengthSec', min: -1 },
+	{ key: 'driverStintTimeSec', min: -1 },
+	{ key: 'mandatoryPitstopCount', min: 0, max: 5 },
+	{ key: 'maxTotalDrivingTime', min: -1 },
+	{ key: 'maxDriversCount', min: 1, max: 10 },
+	{ key: 'tyreSetCount', min: 0, max: 50 }
 ];
 
-const booleanFields = [
-	{
-		key: 'isRefuellingAllowedInRace' as keyof EventRules,
-		label: 'Refuelling Allowed in Race'
-	},
-	{
-		key: 'isRefuellingTimeFixed' as keyof EventRules,
-		label: 'Refuelling Time Fixed'
-	},
-	{
-		key: 'isMandatoryPitstopRefuellingRequired' as keyof EventRules,
-		label: 'Mandatory Pitstop Refuelling Required'
-	},
-	{
-		key: 'isMandatoryPitstopTyreChangeRequired' as keyof EventRules,
-		label: 'Mandatory Pitstop Tyre Change Required'
-	},
-	{
-		key: 'isMandatoryPitstopSwapDriverRequired' as keyof EventRules,
-		label: 'Mandatory Pitstop Swap Driver Required'
-	}
+const booleanFields: { key: keyof EventRules }[] = [
+	{ key: 'isRefuellingAllowedInRace' },
+	{ key: 'isRefuellingTimeFixed' },
+	{ key: 'isMandatoryPitstopRefuellingRequired' },
+	{ key: 'isMandatoryPitstopTyreChangeRequired' },
+	{ key: 'isMandatoryPitstopSwapDriverRequired' }
 ];
 
 export function EventRulesEditor({ formData, disabled, onFormDataChange }: EventRulesEditorProps) {
@@ -78,7 +37,7 @@ export function EventRulesEditor({ formData, disabled, onFormDataChange }: Event
 				<h3 className="border-b border-border-muted pb-2 text-sm font-semibold text-primary">Race Rules</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">Qualify Standing Type</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.qualifyStandingType}</label>
 						<select
 							disabled={disabled}
 							value={formData.qualifyStandingType}
@@ -89,9 +48,9 @@ export function EventRulesEditor({ formData, disabled, onFormDataChange }: Event
 							<option value={2}>Average Lap</option>
 						</select>
 					</div>
-					{numberFields.map(({ key, label, min, max }) => (
+					{numberFields.map(({ key, min, max }) => (
 						<div key={key}>
-							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS[key]}</label>
 							<input
 								type="number"
 								disabled={disabled}
@@ -111,9 +70,9 @@ export function EventRulesEditor({ formData, disabled, onFormDataChange }: Event
 					Pitstop & Refuelling Rules
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-					{booleanFields.map(({ key, label }) => (
+					{booleanFields.map(({ key }) => (
 						<div key={key}>
-							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS[key]}</label>
 							<select
 								disabled={disabled}
 								value={formData[key] ? 'true' : 'false'}

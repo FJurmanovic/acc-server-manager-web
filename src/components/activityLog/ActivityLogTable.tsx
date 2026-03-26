@@ -39,6 +39,9 @@ function parseDetails(raw: string): string {
 		if (obj.driver_count !== undefined && obj.race_count !== undefined) {
 			return `${obj.driver_count} drivers, ${obj.race_count} races`;
 		}
+		if (obj.preset_id) {
+			return `Preset: ${obj.preset_name} - Sections applied: ${obj.sections_applied}`;
+		}
 		return raw;
 	} catch {
 		return raw;
@@ -50,7 +53,9 @@ const ACTION_BADGE: Record<ActionType, string> = {
 	server_start: 'bg-green-bg text-green',
 	server_stop: 'bg-red-bg text-red',
 	server_restart: 'bg-yellow-bg text-yellow',
-	leaderboard_update: 'bg-overlay text-muted'
+	leaderboard_update: 'bg-overlay text-muted',
+	preset_create: 'bg-green-bg text-green',
+	preset_apply: 'bg-blue-bg text-blue'
 };
 
 export function ActivityLogTable({ serverId, servers }: ActivityLogTableProps) {

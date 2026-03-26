@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { loginUser, getOpenToken } from '@/lib/api/server/auth';
 import { login, logout } from '@/lib/auth/server';
+import { formatZodIssues } from '@/lib/utils';
 import { loginSchema, loginResponseSchema } from '../schemas';
 
 export type LoginResult = {
@@ -19,7 +20,7 @@ export async function loginAction(prevState: LoginResult, formData: FormData) {
 		if (!loginData.success) {
 			return {
 				success: false,
-				message: loginData.error.issues[0]?.message ?? 'Validation failed'
+				message: formatZodIssues(loginData.error.issues)
 			};
 		}
 

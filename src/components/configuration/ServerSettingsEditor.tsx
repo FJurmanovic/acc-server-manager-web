@@ -1,6 +1,7 @@
 'use client';
 
 import type { ServerSettings } from '@/lib/schemas/config';
+import { FIELD_LABELS } from '@/lib/schemas/config';
 
 interface ServerSettingsEditorProps {
 	formData: ServerSettings;
@@ -8,86 +9,31 @@ interface ServerSettingsEditorProps {
 	onFormDataChange: (data: ServerSettings) => void;
 }
 
-const textFields = [
-	{
-		key: 'serverName' as keyof ServerSettings,
-		label: 'Server Name',
-		type: 'text'
-	},
-	{
-		key: 'adminPassword' as keyof ServerSettings,
-		label: 'Admin Password',
-		type: 'password'
-	},
-	{
-		key: 'password' as keyof ServerSettings,
-		label: 'Password',
-		type: 'password'
-	},
-	{
-		key: 'spectatorPassword' as keyof ServerSettings,
-		label: 'Spectator Password',
-		type: 'password'
-	},
-	{
-		key: 'centralEntryListPath' as keyof ServerSettings,
-		label: 'Central Entry List Path',
-		type: 'text'
-	}
+const textFields: { key: keyof ServerSettings; type: 'text' | 'password' }[] = [
+	{ key: 'serverName', type: 'text' },
+	{ key: 'adminPassword', type: 'password' },
+	{ key: 'password', type: 'password' },
+	{ key: 'spectatorPassword', type: 'password' },
+	{ key: 'centralEntryListPath', type: 'text' }
 ];
 
 const carGroups = ['FreeForAll', 'GT3', 'GT4', 'GT2', 'GTC', 'TCX'];
 
-const numberFields = [
-	{
-		key: 'trackMedalsRequirement' as keyof ServerSettings,
-		label: 'Track Medals Requirement',
-		min: 0,
-		max: 3
-	},
-	{
-		key: 'safetyRatingRequirement' as keyof ServerSettings,
-		label: 'Safety Rating Requirement',
-		min: -1,
-		max: 99
-	},
-	{
-		key: 'racecraftRatingRequirement' as keyof ServerSettings,
-		label: 'Racecraft Rating Requirement',
-		min: -1,
-		max: 99
-	},
-	{
-		key: 'maxCarSlots' as keyof ServerSettings,
-		label: 'Max Car Slots',
-		min: 1,
-		max: 30
-	}
+const numberFields: { key: keyof ServerSettings; min: number; max: number }[] = [
+	{ key: 'trackMedalsRequirement', min: 0, max: 3 },
+	{ key: 'safetyRatingRequirement', min: -1, max: 99 },
+	{ key: 'racecraftRatingRequirement', min: -1, max: 99 },
+	{ key: 'maxCarSlots', min: 1, max: 30 }
 ];
 
-const selectFields = [
-	{
-		key: 'dumpLeaderboards' as keyof ServerSettings,
-		label: 'Dump Leaderboards'
-	},
-	{ key: 'isRaceLocked' as keyof ServerSettings, label: 'Race Locked' },
-	{
-		key: 'randomizeTrackWhenEmpty' as keyof ServerSettings,
-		label: 'Randomize Track When Empty'
-	},
-	{ key: 'allowAutoDQ' as keyof ServerSettings, label: 'Allow Auto DQ' },
-	{
-		key: 'shortFormationLap' as keyof ServerSettings,
-		label: 'Short Formation Lap'
-	},
-	{
-		key: 'dumpEntryList' as keyof ServerSettings,
-		label: 'Dump Entry List'
-	},
-	{
-		key: 'ignorePrematureDisconnects' as keyof ServerSettings,
-		label: 'Ignore Premature Disconnects'
-	}
+const selectFields: { key: keyof ServerSettings }[] = [
+	{ key: 'dumpLeaderboards' },
+	{ key: 'isRaceLocked' },
+	{ key: 'randomizeTrackWhenEmpty' },
+	{ key: 'allowAutoDQ' },
+	{ key: 'shortFormationLap' },
+	{ key: 'dumpEntryList' },
+	{ key: 'ignorePrematureDisconnects' }
 ];
 
 export function ServerSettingsEditor({ formData, disabled, onFormDataChange }: ServerSettingsEditorProps) {
@@ -102,9 +48,9 @@ export function ServerSettingsEditor({ formData, disabled, onFormDataChange }: S
 					Basic Settings
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-					{textFields.map(({ key, label, type }) => (
+					{textFields.map(({ key, type }) => (
 						<div key={key}>
-							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS[key]}</label>
 							<input
 								type={type}
 								disabled={disabled}
@@ -116,7 +62,7 @@ export function ServerSettingsEditor({ formData, disabled, onFormDataChange }: S
 					))}
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">Car Group</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.carGroup}</label>
 						<select
 							disabled={disabled}
 							value={formData.carGroup}
@@ -138,9 +84,9 @@ export function ServerSettingsEditor({ formData, disabled, onFormDataChange }: S
 					Requirements & Limits
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{numberFields.map(({ key, label, min, max }) => (
+					{numberFields.map(({ key, min, max }) => (
 						<div key={key}>
-							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS[key]}</label>
 							<input
 								type="number"
 								disabled={disabled}
@@ -160,9 +106,9 @@ export function ServerSettingsEditor({ formData, disabled, onFormDataChange }: S
 					Race Options
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{selectFields.map(({ key, label }) => (
+					{selectFields.map(({ key }) => (
 						<div key={key}>
-							<label className="mb-1.5 block text-sm font-medium text-secondary">{label}</label>
+							<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS[key]}</label>
 							<select
 								disabled={disabled}
 								value={formData[key] as number}
@@ -176,9 +122,7 @@ export function ServerSettingsEditor({ formData, disabled, onFormDataChange }: S
 					))}
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Formation Lap Type
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.formationLapType}</label>
 						<select
 							disabled={disabled}
 							value={formData.formationLapType}

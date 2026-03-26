@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { requireAuth } from '@/lib/auth/server';
 import { fetchServerAPI } from '@/lib/api/server/base';
+import { formatZodIssues } from '@/lib/utils';
 import { leaderboardSchema, type Leaderboard } from '@/lib/schemas/leaderboard';
 
 export async function saveLeaderboardAction(serverId: string, data: Leaderboard) {
@@ -10,7 +11,7 @@ export async function saveLeaderboardAction(serverId: string, data: Leaderboard)
 		const session = await requireAuth();
 		const validated = leaderboardSchema.safeParse(data);
 		if (!validated.success) {
-			return { success: false, message: validated.error.issues[0]?.message ?? 'Validation failed' };
+			return { success: false, message: formatZodIssues(validated.error.issues) };
 		}
 		await fetchServerAPI(`/server/${serverId}/leaderboard`, session.token!, 'PUT', validated.data);
 		revalidatePath(`/dashboard/server/${serverId}`);

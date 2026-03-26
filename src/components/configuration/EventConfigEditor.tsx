@@ -1,6 +1,7 @@
 'use client';
 
 import type { EventConfig, Session } from '@/lib/schemas/config';
+import { FIELD_LABELS } from '@/lib/schemas/config';
 import { TRACKS } from '@/lib/constants/tracks';
 
 interface EventConfigEditorProps {
@@ -63,7 +64,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">Track</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.track}</label>
 						<select
 							disabled={disabled}
 							value={formData.track}
@@ -79,9 +80,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Pre-Race Waiting Time (seconds)
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.preRaceWaitingTimeSeconds}</label>
 						<input
 							type="number"
 							disabled={disabled}
@@ -93,9 +92,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Session Over Time (seconds)
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.sessionOverTimeSeconds}</label>
 						<input
 							type="number"
 							disabled={disabled}
@@ -107,9 +104,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Post Qualify Seconds
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.postQualySeconds}</label>
 						<input
 							type="number"
 							disabled={disabled}
@@ -121,9 +116,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Post Race Seconds
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.postRaceSeconds}</label>
 						<input
 							type="number"
 							disabled={disabled}
@@ -142,9 +135,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 				</h3>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Ambient Temperature (°C)
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.ambientTemp}</label>
 						<input
 							type="number"
 							disabled={disabled}
@@ -157,9 +148,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Cloud Level (0.0-1.0)
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.cloudLevel}</label>
 						<input
 							type="number"
 							disabled={disabled}
@@ -173,7 +162,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">Rain (0.0-1.0)</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.rain}</label>
 						<input
 							type="number"
 							disabled={disabled}
@@ -187,9 +176,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Weather Randomness
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.weatherRandomness}</label>
 						<input
 							type="number"
 							disabled={disabled}
@@ -202,9 +189,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Simracer Weather Conditions
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.simracerWeatherConditions}</label>
 						<select
 							disabled={disabled}
 							value={formData.simracerWeatherConditions}
@@ -217,9 +202,7 @@ export function EventConfigEditor({ formData, disabled, onFormDataChange }: Even
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-secondary">
-							Fixed Condition Qualification
-						</label>
+						<label className="mb-1.5 block text-sm font-medium text-secondary">{FIELD_LABELS.isFixedConditionQualification}</label>
 						<select
 							disabled={disabled}
 							value={formData.isFixedConditionQualification}

@@ -224,7 +224,13 @@ export function ServerConfigurationTabs({
 			{isConfigTab && (
 				<div className="border-border-muted bg-overlay flex items-center justify-between border-b px-5 py-3">
 					<div className="flex items-center gap-3">
-						{saveError && <p className="text-red text-sm">{saveError}</p>}
+						{saveError && (
+						<ul className="flex flex-col gap-0.5">
+							{saveError.split('\n').map((line, i) => (
+								<li key={i} className="text-red text-sm">• {line}</li>
+							))}
+						</ul>
+					)}
 						{saveSuccess && <p className="text-green text-sm">All configurations saved.</p>}
 					</div>
 					<div className="flex items-center gap-4">

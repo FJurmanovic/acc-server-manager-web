@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { requireAuth } from '@/lib/auth/server';
 import { getServerConfigurations, updateServerConfiguration, bulkUpdateServerConfigurations } from '@/lib/api/server/configuration';
+import { boolToInt, formatZodIssues } from '@/lib/utils';
 import {
 	assistRulesSchema,
 	ConfigFile,
@@ -34,7 +35,6 @@ export async function getConfigurationsAction(
 		};
 	}
 }
-import { boolToInt } from '@/lib/utils';
 
 export async function updateConfigurationAction(serverId: string, formData: FormData) {
 	try {
@@ -87,7 +87,7 @@ export async function updateAssistRulesAction(serverId: string, formData: FormDa
 
 		const config = assistRulesSchema.safeParse(rawConfig);
 		if (!config.success) {
-			return { success: false, message: config.error.issues[0]?.message ?? 'Validation failed' };
+			return { success: false, message: formatZodIssues(config.error.issues) };
 		}
 
 		await updateServerConfiguration(
@@ -135,7 +135,7 @@ export async function updateServerSettingsAction(serverId: string, formData: For
 		};
 		const config = serverSettingsSchema.safeParse(rawConfig);
 		if (!config.success) {
-			return { success: false, message: config.error.issues[0]?.message ?? 'Validation failed' };
+			return { success: false, message: formatZodIssues(config.error.issues) };
 		}
 
 		await updateServerConfiguration(
@@ -182,7 +182,7 @@ export async function updateEventConfigAction(serverId: string, formData: FormDa
 		};
 		const config = eventConfigSchema.safeParse(rawConfig);
 		if (!config.success) {
-			return { success: false, message: config.error.issues[0]?.message ?? 'Validation failed' };
+			return { success: false, message: formatZodIssues(config.error.issues) };
 		}
 
 		await updateServerConfiguration(
@@ -231,7 +231,7 @@ export async function updateEventRulesAction(serverId: string, formData: FormDat
 
 		const config = eventRulesSchema.safeParse(rawConfig);
 		if (!config.success) {
-			return { success: false, message: config.error.issues[0]?.message ?? 'Validation failed' };
+			return { success: false, message: formatZodIssues(config.error.issues) };
 		}
 
 		await updateServerConfiguration(
@@ -262,7 +262,7 @@ export async function bulkUpdateConfigurationsAction(
 
 		const validated = configurationsSchema.partial().safeParse(configs);
 		if (!validated.success) {
-			return { success: false, message: validated.error.issues[0]?.message ?? 'Validation failed' };
+			return { success: false, message: formatZodIssues(validated.error.issues) };
 		}
 
 		await bulkUpdateServerConfigurations(session.token!, serverId, validated.data, restart);

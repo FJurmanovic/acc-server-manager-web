@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { requireAuth } from '@/lib/auth/server';
 import { createUser, deleteUser } from '@/lib/api/server/membership';
+import { formatZodIssues } from '@/lib/utils';
 import { userCreateSchema } from '../schemas';
 
 export async function createUserAction(formData: FormData) {
@@ -15,7 +16,7 @@ export async function createUserAction(formData: FormData) {
 		const rawData = { username, password, role };
 		const data = userCreateSchema.safeParse(rawData);
 		if (!data.success) {
-			return { success: false, message: data.error.issues[0]?.message ?? 'Validation failed' };
+			return { success: false, message: formatZodIssues(data.error.issues) };
 		}
 
 		await createUser(session.token!, data.data);
